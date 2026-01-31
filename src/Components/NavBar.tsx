@@ -1,11 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 
 const Header: React.FC = () => {
-    const [scrolled, setScrolled] = useState(false);
 
     useEffect(() => {
         const handleScroll = () => {
-            setScrolled(window.scrollY > 50);
+            // setScrolled(window.scrollY > 50);
         };
         window.addEventListener('scroll', handleScroll);
         return () => window.removeEventListener('scroll', handleScroll);
@@ -42,10 +41,10 @@ const Header: React.FC = () => {
                             </div>
                         </a>
 
-                        <button 
-                            className="navbar-toggler border-0" 
-                            type="button" 
-                            data-bs-toggle="collapse" 
+                        <button
+                            className="navbar-toggler border-0"
+                            type="button"
+                            data-bs-toggle="collapse"
                             data-bs-target="#navbarNav"
                         >
                             <span className="navbar-toggler-icon"></span>
