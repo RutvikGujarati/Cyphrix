@@ -1,0 +1,37 @@
+:root {
+  --cy-bg: #030303;
+  --cy-cyan: #00f2ff;
+  --cy-glass: rgba(255, 255, 255, 0.03);
+  --cy-border: rgba(255, 255, 255, 0.1);
+}
+
+body {
+  background-color: var(--cy-bg);
+  color: #ffffff;
+  font-family: 'Inter', sans-serif;
+}
+
+/* Glassmorphism Card Style */
+.glass-card {
+  background: var(--cy-glass);
+  backdrop-filter: blur(12px);
+  border: 1px solid var(--cy-border);
+  border-radius: 20px;
+  transition: all 0.3s ease-in-out;
+}
+
+.glass-card:hover {
+  border-color: var(--cy-cyan);
+  transform: translateY(-8px);
+  box-shadow: 0 10px 30px rgba(0, 242, 255, 0.1);
+}
+
+.text-cyan { color: var(--cy-cyan); }
+
+.bg-cyan { background-color: var(--cy-cyan); }
+
+.navbar-glass {
+  background: rgba(3, 3, 3, 0.8);
+  backdrop-filter: blur(15px);
+  border-bottom: 1px solid var(--cy-border);
+}
