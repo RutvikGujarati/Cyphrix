@@ -5,7 +5,12 @@ const LOGO_VIEWBOX = 2500;
 const LOGO_WORLD_SCALE = 1000 / 1250;
 const SCROLL_RANGE = 700;
 
-const HeroVisual = () => {
+interface HeroVisualProps {
+  /** Drives logo transition (0–1) during scroll-jack; when set, page does not scroll. */
+  logoProgress?: number;
+}
+
+const HeroVisual = ({ logoProgress }: HeroVisualProps) => {
   const mountRef = useRef<HTMLDivElement>(null);
   const ripples = useRef<Array<{ x: number; z: number; time: number; power: number }>>([]);
   const mouseWorld = useRef({ x: 0, z: 0 });
@@ -14,6 +19,11 @@ const HeroVisual = () => {
   const scrollProgress = useRef(0);
   const smoothScroll = useRef(0);
   const logoPositions = useRef<Float32Array | null>(null);
+  const logoProgressRef = useRef<number | undefined>(undefined);
+
+  useEffect(() => {
+    logoProgressRef.current = logoProgress;
+  }, [logoProgress]);
 
   useEffect(() => {
     const mount = mountRef.current;
@@ -160,7 +170,9 @@ const HeroVisual = () => {
     };
 
     const onScroll = () => {
-      scrollProgress.current = Math.min(1, window.scrollY / SCROLL_RANGE);
+      if (logoProgressRef.current === undefined) {
+        scrollProgress.current = Math.min(1, window.scrollY / SCROLL_RANGE);
+      }
     };
 
     window.addEventListener('mousemove', onMouseMove);
@@ -182,6 +194,11 @@ const HeroVisual = () => {
       const dt = 0.016;
       time += 0.008;
 
+      if (logoProgressRef.current !== undefined) {
+        scrollProgress.current = Math.max(0, Math.min(1, logoProgressRef.current));
+      } else {
+        scrollProgress.current = Math.min(1, window.scrollY / SCROLL_RANGE);
+      }
       smoothMouse.current.x += (mouseWorld.current.x - smoothMouse.current.x) * mouseLerp;
       smoothMouse.current.z += (mouseWorld.current.z - smoothMouse.current.z) * mouseLerp;
       smoothScroll.current += (scrollProgress.current - smoothScroll.current) * scrollLerp;

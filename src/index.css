@@ -5,10 +5,19 @@
   --cy-border: rgba(255, 255, 255, 0.1);
 }
 
+html {
+  scrollbar-width: none;
+}
+
+html::-webkit-scrollbar {
+  display: none;
+}
+
 body {
   background-color: var(--cy-bg);
   color: #ffffff;
   font-family: 'Inter', sans-serif;
+  -ms-overflow-style: none;
 }
 
 /* Glassmorphism Card Style */
