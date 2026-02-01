@@ -1,134 +1,192 @@
-import  { useEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import * as THREE from 'three';
 
 const HeroVisual = () => {
   const mountRef = useRef<HTMLDivElement>(null);
-  const scrollY = useRef(0);
+  const ripples = useRef<Array<{ x: number; z: number; time: number; power: number }>>([]);
+  const mouseWorld = useRef({ x: 0, z: 0 });
+  const smoothMouse = useRef({ x: 0, z: 0 });
+  const mouseActive = useRef(false);
 
   useEffect(() => {
-    if (!mountRef.current) return;
+    const mount = mountRef.current;
+    if (!mount) return;
 
     const width = window.innerWidth;
     const height = window.innerHeight;
     const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(55, width / height, 1, 2000);
-    camera.position.set(0, 150, 600);
+
+    const camera = new THREE.PerspectiveCamera(60, width / height, 1, 3000);
+    camera.position.set(0, 550, 850);
+    camera.lookAt(0, 0, 0);
 
     const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
     renderer.setSize(width, height);
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1));
-    mountRef.current.appendChild(renderer.domElement);
+    renderer.setPixelRatio(window.devicePixelRatio);
+    mount.appendChild(renderer.domElement);
 
-    const numParticles = 30000;
+    // Raycaster for mouse -> world position on y=0 plane
+    const mouse = new THREE.Vector2();
+    const raycaster = new THREE.Raycaster();
+    const plane = new THREE.Plane(new THREE.Vector3(0, 1, 0), 0);
+    const intersect = new THREE.Vector3();
+
+    const numParticles = 40000;
     const positions = new Float32Array(numParticles * 3);
-    const planePositions = new Float32Array(numParticles * 3);
-    const ethPositions = new Float32Array(numParticles * 3);
+    const basePositions = new Float32Array(numParticles * 3);
+    const velocities = new Float32Array(numParticles);
+
+    const gridSize = Math.sqrt(numParticles);
+    const spacing = 32;
 
     for (let i = 0; i < numParticles; i++) {
       const i3 = i * 3;
-      
-      // 1. PLANE STATE
-      planePositions[i3] = (Math.random() - 0.5) * 1800;
-      planePositions[i3 + 1] = 0;
-      planePositions[i3 + 2] = (Math.random() - 0.5) * 1200;
+      const x = (i % gridSize - gridSize / 2) * spacing;
+      const z = (Math.floor(i / gridSize) - gridSize / 2) * spacing;
 
-      // 2. REFINED COMPACT ETHEREUM STATE
-      const side = Math.random() > 0.5 ? 1 : -1;
-      const r1 = Math.random();
-      const r2 = Math.random();
-      const a = 1 - Math.sqrt(r1);
-      const b = Math.sqrt(r1) * (1 - r2);
-      const c = Math.sqrt(r1) * r2;
+      basePositions[i3] = x;
+      basePositions[i3 + 1] = 0;
+      basePositions[i3 + 2] = z;
 
-      // Reduced size for a more sophisticated, "small" look
-      const size = 120; // Halved from previous version
-      const heightOffset = 180; // Adjusted for perspective
-
-      const v0 = new THREE.Vector3(0, side * size * 1.8, 0); // Taller tip for sharper diamond
-      const v1 = new THREE.Vector3(size, 0, 0);
-      const v2 = new THREE.Vector3(0, 0, size);
-      const v3 = new THREE.Vector3(-size, 0, 0);
-      const v4 = new THREE.Vector3(0, 0, -size);
-
-      const facePick = Math.floor(Math.random() * 4);
-      let targetPos = new THREE.Vector3();
-      
-      if (facePick === 0) targetPos.addScaledVector(v0, a).addScaledVector(v1, b).addScaledVector(v2, c);
-      else if (facePick === 1) targetPos.addScaledVector(v0, a).addScaledVector(v2, b).addScaledVector(v3, c);
-      else if (facePick === 2) targetPos.addScaledVector(v0, a).addScaledVector(v3, b).addScaledVector(v4, c);
-      else targetPos.addScaledVector(v0, a).addScaledVector(v4, b).addScaledVector(v1, c);
-
-      ethPositions[i3] = targetPos.x;
-      ethPositions[i3 + 1] = targetPos.y + heightOffset;
-      ethPositions[i3 + 2] = targetPos.z;
-
-      positions[i3] = planePositions[i3];
-      positions[i3 + 1] = planePositions[i3 + 1];
-      positions[i3 + 2] = planePositions[i3 + 2];
+      positions[i3] = x;
+      positions[i3 + 1] = 0;
+      positions[i3 + 2] = z;
+      velocities[i] = 0;
     }
 
     const geometry = new THREE.BufferGeometry();
     geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+
     const material = new THREE.PointsMaterial({
-      color: 0x999999, // Muted grey like Offground, switch to Cyan on progress
-      size: 1.1,
+      color: 0x00f2ff,
+      size: 4.2,
       transparent: true,
-      opacity: 0.4,
+      opacity: 0.8,
+      blending: THREE.AdditiveBlending,
     });
+
     const particles = new THREE.Points(geometry, material);
     scene.add(particles);
 
-    const onScroll = () => { scrollY.current = window.scrollY; };
-    window.addEventListener('scroll', onScroll);
+    const getWorldFromMouse = (clientX: number, clientY: number) => {
+      mouse.x = (clientX / width) * 2 - 1;
+      mouse.y = -(clientY / height) * 2 + 1;
+      raycaster.setFromCamera(mouse, camera);
+      raycaster.ray.intersectPlane(plane, intersect);
+      return { x: intersect.x, z: intersect.z };
+    };
 
-    let count = 0;
+    const onMouseMove = (e: MouseEvent) => {
+      const w = getWorldFromMouse(e.clientX, e.clientY);
+      mouseWorld.current.x = w.x;
+      mouseWorld.current.z = w.z;
+      mouseActive.current = true;
+    };
+
+    const onMouseLeave = () => {
+      mouseActive.current = false;
+    };
+
+    const onClick = (e: MouseEvent) => {
+      const w = getWorldFromMouse(e.clientX, e.clientY);
+      ripples.current.push({
+        x: w.x,
+        z: w.z,
+        time: 0,
+        power: 200,
+      });
+    };
+
+    window.addEventListener('mousemove', onMouseMove);
+    window.addEventListener('mouseleave', onMouseLeave);
+    window.addEventListener('mousedown', onClick);
+
+    const hoverRadius = 380;
+    const hoverStrength = 65;
+    const mouseLerp = 0.06;
+    const waveSpeed = 320;
+    const waveWidth = 280;
+
+    let time = 0;
     const animate = () => {
       requestAnimationFrame(animate);
-      count += 0.01;
-      
+      const dt = 0.016;
+      time += 0.008;
+
+      // Smooth mouse follow
+      smoothMouse.current.x += (mouseWorld.current.x - smoothMouse.current.x) * mouseLerp;
+      smoothMouse.current.z += (mouseWorld.current.z - smoothMouse.current.z) * mouseLerp;
+
       const posAttr = particles.geometry.attributes.position;
       const currentArr = posAttr.array as Float32Array;
-      const progress = Math.min(scrollY.current / 800, 1);
 
-      // Dynamic color shift on morph
-      if (progress > 0.5) {
-        material.color.setHex(0x0dcaf0); // Cyan glow when forming
-        material.opacity = 0.6;
-      } else {
-        material.color.setHex(0x999999);
-        material.opacity = 0.4;
-      }
+      ripples.current = ripples.current.filter(r => {
+        r.time += dt * 1.2;
+        return r.time < 7;
+      });
 
       for (let i = 0; i < numParticles; i++) {
         const i3 = i * 3;
-        const waveY = (Math.sin((planePositions[i3] * 0.01) + count) * 20);
+        const x = basePositions[i3];
+        const z = basePositions[i3 + 2];
 
-        // Linear interpolation for position
-        const targetX = THREE.MathUtils.lerp(planePositions[i3], ethPositions[i3], progress);
-        const targetY = THREE.MathUtils.lerp(planePositions[i3 + 1] + waveY, ethPositions[i3 + 1], progress);
-        const targetZ = THREE.MathUtils.lerp(planePositions[i3 + 2], ethPositions[i3 + 2], progress);
+        // Base wave motion
+        let targetY = Math.sin(x * 0.004 + time) * 8 + Math.cos(z * 0.004 + time) * 8;
 
-        currentArr[i3] += (targetX - currentArr[i3]) * 0.07;
-        currentArr[i3 + 1] += (targetY - currentArr[i3 + 1]) * 0.07;
-        currentArr[i3 + 2] += (targetZ - currentArr[i3 + 2]) * 0.07;
+        // Hover: smooth bump that follows cursor (gaussian-like falloff)
+        if (mouseActive.current) {
+          const dx = x - smoothMouse.current.x;
+          const dz = z - smoothMouse.current.z;
+          const dist = Math.sqrt(dx * dx + dz * dz);
+          if (dist < hoverRadius) {
+            const t = dist / hoverRadius;
+            const falloff = Math.pow(1 - t * t, 1.2);
+            targetY += hoverStrength * falloff;
+          }
+        }
+
+        // Click: smooth expanding wave (smooth sine profile)
+        ripples.current.forEach(r => {
+          const dx = x - r.x;
+          const dz = z - r.z;
+          const dist = Math.sqrt(dx * dx + dz * dz);
+          const currentRadius = r.time * waveSpeed;
+          const distFromWave = Math.abs(dist - currentRadius);
+
+          if (distFromWave < waveWidth) {
+            const decay = Math.pow(1 - r.time / 7, 1.5);
+            const t = distFromWave / waveWidth;
+            const wave = Math.sin(t * Math.PI) * r.power * decay;
+            targetY += wave;
+          }
+        });
+
+        // Smooth spring physics
+        const spring = 0.07;
+        const damping = 0.91;
+        velocities[i] += (targetY - currentArr[i3 + 1]) * spring;
+        velocities[i] *= damping;
+        currentArr[i3 + 1] += velocities[i];
       }
-
-      // Small constant rotation for a "hovering" feel
-      particles.rotation.y += 0.002;
 
       posAttr.needsUpdate = true;
       renderer.render(scene, camera);
     };
 
     animate();
+
     return () => {
-      window.removeEventListener('scroll', onScroll);
-      mountRef.current?.removeChild(renderer.domElement);
+      window.removeEventListener('mousemove', onMouseMove);
+      window.removeEventListener('mouseleave', onMouseLeave);
+      window.removeEventListener('mousedown', onClick);
+      mount.removeChild(renderer.domElement);
     };
   }, []);
 
-  return <div ref={mountRef} className="position-fixed top-0 start-0 w-100 h-100 z-0" 
-         style={{ background: 'radial-gradient(circle at 50% 10%, #0c2024 0%, #000 90%)', pointerEvents: 'none' }} />;
+  return (
+    <div ref={mountRef} className="position-fixed top-0 start-0 w-100 h-100 z-0"
+      style={{ background: 'radial-gradient(circle at 50% 50%, #001214 0%, #000 100%)', cursor: 'crosshair' }} />
+  );
 };
 
 export default HeroVisual;

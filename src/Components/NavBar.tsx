@@ -1,76 +1,47 @@
-import React, { useEffect } from 'react';
+import React from 'react';
+import logo from "/Cyphrix.svg";
 
 const Header: React.FC = () => {
-
-    useEffect(() => {
-        const handleScroll = () => {
-            // setScrolled(window.scrollY > 50);
-        };
-        window.addEventListener('scroll', handleScroll);
-        return () => window.removeEventListener('scroll', handleScroll);
-    }, []);
-
-    const navStyle = {
-        background: 'rgba(10, 10, 20, 0.9)',
-        backdropFilter: 'blur(10px)',
-        transition: 'all 0.3s ease'
-    };
-
-    const logoBoxStyle = {
-        width: '42px',
-        height: '42px',
-        background: 'linear-gradient(135deg, #00f2ff 0%, #0066ff 100%)',
-        color: '#000'
-    };
-
     return (
-        <header className="fixed-top py-3" style={{ zIndex: 1000 }}>
+        <header className="fixed-top py-4 shadow-none">
             <div className="container">
-                <nav className="navbar navbar-expand-lg navbar-dark rounded-4 px-3 py-2 border border-info border-opacity-25" style={navStyle}>
-                    <div className="container-fluid">
-                        {/* Logo */}
-                        <a className="navbar-brand d-flex align-items-center me-auto" href="#home">
-                            <div className="rounded-3 d-flex align-items-center justify-content-center me-3" style={logoBoxStyle}>
-                                <span className="fw-bold h5 mb-0">C</span>
+                {/* Advanced Glassmorphism using Bootstrap classes */}
+                <nav className="navbar navbar-dark rounded-pill px-4 py-2 border border-info border-opacity-25 bg-black bg-opacity-75 shadow-lg">
+                    <div className="container-fluid d-flex align-items-center justify-content-between">
+                        
+                        {/* 1. LOGO: Using negative margins to break the border */}
+                        <a className="navbar-brand d-flex align-items-center m-0 p-0" href="#home">
+                            <div className="position-relative mt-n3 mb-n3" style={{ width: '64px' }}>
+                                <img 
+                                    src={logo} 
+                                    alt="Cyphrix" 
+                                    className="img-fluid" 
+                                />
                             </div>
-                            <div className="d-flex flex-column">
-                                <span className="fw-bold text-white">CYPHRIXTECH</span>
-                                <small className="text-info" style={{ fontSize: '0.65rem', letterSpacing: '2px' }}>
+                            <div className="ms-3 d-none d-sm-block">
+                                <span className="fw-bold text-white lh-1 h5 mb-0 d-block">CYPHRIXTECH</span>
+                                <small className="text-info font-monospace opacity-75" style={{ fontSize: '0.65rem' }}>
                                     TRUST. ENCRYPTED.
                                 </small>
                             </div>
                         </a>
 
-                        <button
-                            className="navbar-toggler border-0"
-                            type="button"
-                            data-bs-toggle="collapse"
-                            data-bs-target="#navbarNav"
-                        >
-                            <span className="navbar-toggler-icon"></span>
-                        </button>
-
-                        <div className="collapse navbar-collapse" id="navbarNav">
-                            <ul className="navbar-nav ms-auto mb-2 mb-lg-0 align-items-center gap-2">
-                                <li className="nav-item">
-                                    <a className="nav-link text-white-50 fw-semibold px-3" href="#home">Home</a>
-                                </li>
-                                <li className="nav-item">
-                                    <a className="nav-link text-white-50 fw-semibold px-3" href="#services">Services</a>
-                                </li>
-                                <li className="nav-item">
-                                    <a className="nav-link text-white-50 fw-semibold px-3" href="#audit">Process</a>
-                                </li>
-                                <li className="nav-item">
-                                    <a className="nav-link text-white-50 fw-semibold px-3" href="#about">About</a>
-                                </li>
-                                <li className="nav-item ms-lg-3">
-                                    <button className="btn btn-outline-info btn-sm rounded-pill px-4 fw-semibold">
-                                        Request Audit
-                                    </button>
-                                </li>
-                            </ul>
+                        {/* 2. DUAL ACTION BUTTONS */}
+                        <div className="d-flex align-items-center">
+                            {/* Connect Us: Muted style */}
+                            <button className="btn btn-link text-white text-decoration-none small fw-bold text-uppercase d-none d-md-inline-block px-3 border-0">
+                                Connect Us
+                            </button>
+                            
+                            {/* Vertical Divider */}
+                            <div className="vr bg-white opacity-25 mx-3 d-none d-md-block" style={{ height: '20px' }}></div>
+                            
+                            {/* Request Audit: High-contrast CTA */}
+                            <button className="btn btn-info rounded-pill px-4 py-2 fw-bold text-uppercase small text-dark border-0">
+                                Request Audit
+                            </button>
                         </div>
+
                     </div>
                 </nav>
             </div>
