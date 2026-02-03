@@ -105,7 +105,7 @@ function App() {
       <main className="position-relative z-1">
         <div className="vh-100" />
         {!isLocked && (
-          <div className="min-vh-100 bg-black animate-in">
+          <div className="min-vh-100 bg-black" style={{ animation: 'fadeIn 1s ease-in-out' }}>
             <BeyondSection />
           </div>
         )}
