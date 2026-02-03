@@ -101,9 +101,7 @@ const BeyondVisual = () => {
     };
     window.addEventListener('scroll', onScroll, { passive: true });
 
-    let frameId: number;
     const animate = () => {
-      frameId = requestAnimationFrame(animate);
       shaderMat.uniforms.uTime.value += 0.01;
       
       // Infinite slow star drift
