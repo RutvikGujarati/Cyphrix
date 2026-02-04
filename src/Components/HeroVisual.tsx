@@ -2,20 +2,18 @@ import { useEffect, useRef } from 'react';
 import * as THREE from 'three';
 
 const LOGO_VIEWBOX = 2500;
-// Reduce logo size and adjust aspect for vertical orientation
-// Further refine aspect ratio for a perfect hexagon
-const LOGO_WORLD_SCALE_X = 0.25; // best fit for hexagon width
-const LOGO_WORLD_SCALE_Y = 0.22; // best fit for hexagon height
+const LOGO_WORLD_SCALE_X = 0.25;
+const LOGO_WORLD_SCALE_Y = 0.22;
 const LOGO_WORLD_SCALE_Z = 0.25;
 
 const SCROLL_RANGE = 600;
 
 interface HeroVisualProps {
-  /** Drives logo transition (0–1) during scroll-jack; when set, page does not scroll. */
   logoProgress?: number;
+  onVisualComplete?: () => void;
 }
 
-const HeroVisual = ({ logoProgress }: HeroVisualProps) => {
+const HeroVisual = ({ logoProgress, onVisualComplete }: HeroVisualProps) => {
   const numParticles = 40000;
   const mountRef = useRef<HTMLDivElement>(null);
   const ripples = useRef<Array<{ x: number; z: number; time: number; power: number }>>([]);
@@ -29,7 +27,11 @@ const HeroVisual = ({ logoProgress }: HeroVisualProps) => {
   const bangProgress = useRef(0);
   const bangStarted = useRef(false);
   const bangDelay = useRef(0);
+  const shakeProgress = useRef(0);
   const randomDirs = useRef(new Float32Array(numParticles * 3));
+  const particleVelocities = useRef(new Float32Array(numParticles * 3));
+  const particleColors = useRef(new Float32Array(numParticles * 3));
+  const hasTriggeredComplete = useRef(false);
 
   useEffect(() => {
     logoProgressRef.current = logoProgress;
@@ -52,15 +54,14 @@ const HeroVisual = ({ logoProgress }: HeroVisualProps) => {
     renderer.setPixelRatio(window.devicePixelRatio);
     mount.appendChild(renderer.domElement);
 
-    // Raycaster for mouse -> world position on y=0 plane
     const mouse = new THREE.Vector2();
     const raycaster = new THREE.Raycaster();
     const plane = new THREE.Plane(new THREE.Vector3(0, 1, 0), 0);
     const intersect = new THREE.Vector3();
 
-
     const positions = new Float32Array(numParticles * 3);
     const basePositions = new Float32Array(numParticles * 3);
+    const colors = new Float32Array(numParticles * 3);
 
     const gridSize = Math.sqrt(numParticles);
     const spacing = 32;
@@ -77,32 +78,57 @@ const HeroVisual = ({ logoProgress }: HeroVisualProps) => {
       positions[i3] = x;
       positions[i3 + 1] = 0;
       positions[i3 + 2] = z;
+
+      colors[i3] = 0.0;
+      colors[i3 + 1] = 0.78;
+      colors[i3 + 2] = 0.98;
     }
 
     const geometry = new THREE.BufferGeometry();
     geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+    geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
 
     for (let i = 0; i < numParticles; i++) {
       const i3 = i * 3;
       const theta = Math.random() * Math.PI * 2;
       const phi = Math.acos(2 * Math.random() - 1);
-      const r = 800 + Math.random() * 400; // Expansion radius
+      const r = 1800 + Math.random() * 1200;
 
       randomDirs.current[i3] = Math.sin(phi) * Math.cos(theta) * r;
       randomDirs.current[i3 + 1] = Math.sin(phi) * Math.sin(theta) * r;
       randomDirs.current[i3 + 2] = Math.cos(phi) * r;
+
+      particleVelocities.current[i3] = (Math.random() - 0.5) * 0.3;
+      particleVelocities.current[i3 + 1] = (Math.random() - 0.5) * 0.3;
+      particleVelocities.current[i3 + 2] = (Math.random() - 0.5) * 0.3;
+
+      const hue = Math.random();
+      if (hue < 0.35) {
+        particleColors.current[i3] = 1.0;
+        particleColors.current[i3 + 1] = 0.2 + Math.random() * 0.2;
+        particleColors.current[i3 + 2] = 0.0;
+      } else if (hue < 0.7) {
+        particleColors.current[i3] = 1.0;
+        particleColors.current[i3 + 1] = 0.5 + Math.random() * 0.4;
+        particleColors.current[i3 + 2] = 0.0;
+      } else {
+        particleColors.current[i3] = 1.0;
+        particleColors.current[i3 + 1] = 1.0;
+        particleColors.current[i3 + 2] = 0.9 + Math.random() * 0.1;
+      }
     }
-    // Create a custom blue gradient texture for particles (logo stays blue themed)
+
     function createBlueGradientTexture() {
       const size = 128;
       const canvas = document.createElement('canvas');
       canvas.width = size;
       canvas.height = size;
       const ctx = canvas.getContext('2d')!;
-      const gradient = ctx.createLinearGradient(0, 0, size, size);
-      gradient.addColorStop(0, '#00c6fb'); // blue
-      gradient.addColorStop(0.5, '#005bea'); // deeper blue
-      gradient.addColorStop(1, '#00f2ff'); // cyan
+      const gradient = ctx.createRadialGradient(size / 2, size / 2, 0, size / 2, size / 2, size / 2);
+      gradient.addColorStop(0, '#ffffff');
+      gradient.addColorStop(0.2, '#00f2ff');
+      gradient.addColorStop(0.5, '#005bea');
+      gradient.addColorStop(1, 'rgba(0,198,251,0)');
       ctx.fillStyle = gradient;
       ctx.fillRect(0, 0, size, size);
       const texture = new THREE.Texture(canvas);
@@ -113,18 +139,40 @@ const HeroVisual = ({ logoProgress }: HeroVisualProps) => {
     const material = new THREE.PointsMaterial({
       size: 5.2,
       transparent: true,
-      opacity: 0.62,
+      opacity: 0.72,
       blending: THREE.AdditiveBlending,
       map: createBlueGradientTexture(),
       depthWrite: false,
+      vertexColors: true,
     });
-    // Add a blue ambient light for the overall scene
+
     const ambient = new THREE.AmbientLight(0x1a3cff, 0.45);
     scene.add(ambient);
+
+    const logoLight = new THREE.PointLight(0x00c6fb, 0, 500);
+    logoLight.position.set(0, 0, 0);
+    scene.add(logoLight);
 
     const particles = new THREE.Points(geometry, material);
     scene.add(particles);
 
+    const starCount = 2000;
+    const starGeo = new THREE.BufferGeometry();
+    const starPos = new Float32Array(starCount * 3);
+    for (let i = 0; i < starCount; i++) {
+      starPos[i * 3] = (Math.random() - 0.5) * 3000;
+      starPos[i * 3 + 1] = (Math.random() - 0.5) * 3000;
+      starPos[i * 3 + 2] = -1000 + Math.random() * -3000;
+    }
+    starGeo.setAttribute('position', new THREE.BufferAttribute(starPos, 3));
+    const starMat = new THREE.PointsMaterial({
+      size: 2.5,
+      color: 0xffffff,
+      transparent: true,
+      opacity: 0.5
+    });
+    const stars = new THREE.Points(starGeo, starMat);
+    scene.add(stars);
 
     const sampleLogoPoints = (img: HTMLImageElement): Float32Array => {
       const res = 400;
@@ -151,10 +199,8 @@ const HeroVisual = ({ logoProgress }: HeroVisualProps) => {
       if (points.length === 0) return out;
       for (let i = 0; i < numParticles; i++) {
         const p = points[i % points.length];
-        // Center and scale logo, and transform in y-axis for vertical orientation
         const wx = (p.x - center) * LOGO_WORLD_SCALE_X;
-        // Center logo vertically (reduce upward offset)
-        const wy = (center - p.y) * LOGO_WORLD_SCALE_Y - 30; // -30 centers logo better
+        const wy = (center - p.y) * LOGO_WORLD_SCALE_Y - 30;
         const wz = 0 * LOGO_WORLD_SCALE_Z;
         out[i * 3] = wx;
         out[i * 3 + 1] = wy;
@@ -237,8 +283,8 @@ const HeroVisual = ({ logoProgress }: HeroVisualProps) => {
     const mouseLerp = 0.06;
     const waveSpeed = 320;
     const waveWidth = 280;
-    const scrollLerp = 0.04;
-    const positionLerp = 0.06;
+    const scrollLerp = 0.025;
+    const positionLerp = 0.035;
 
     let time = 0;
     const animate = () => {
@@ -252,23 +298,30 @@ const HeroVisual = ({ logoProgress }: HeroVisualProps) => {
         scrollProgress.current = Math.min(1, window.scrollY / SCROLL_RANGE);
       }
 
-      // Reset bang if scrolling back
-      if (scrollProgress.current < 1) {
+      if (scrollProgress.current < 0.98) {
         bangStarted.current = false;
         bangProgress.current = 0;
         bangDelay.current = 0;
+        shakeProgress.current = 0;
+        hasTriggeredComplete.current = false;
       }
 
-      // Trigger bang after logo transformation completes with a short delay
-      if (scrollProgress.current >= 1) {
+      if (scrollProgress.current >= 0.98 && smoothScroll.current > 0.99) {
         bangDelay.current += dt;
-        if (bangDelay.current > 0.5 && !bangStarted.current) { // 0.5 second delay
+
+        // Wait 1.0s (Hold) + 0.8s (Shake) = 1.8s total before explode
+        if (bangDelay.current > 1.8 && !bangStarted.current) {
           bangStarted.current = true;
           bangProgress.current = 0;
         }
         if (bangStarted.current) {
-          bangProgress.current += dt * 1.5;
+          bangProgress.current += dt * 0.25;
           bangProgress.current = Math.min(1, bangProgress.current);
+
+          if (bangProgress.current >= 1 && onVisualComplete && !hasTriggeredComplete.current) {
+            hasTriggeredComplete.current = true;
+            onVisualComplete();
+          }
         }
       }
 
@@ -277,7 +330,9 @@ const HeroVisual = ({ logoProgress }: HeroVisualProps) => {
       smoothScroll.current += (scrollProgress.current - smoothScroll.current) * scrollLerp;
 
       const posAttr = particles.geometry.attributes.position;
+      const colorAttr = particles.geometry.attributes.color;
       const currentArr = posAttr.array as Float32Array;
+      const colorArr = colorAttr.array as Float32Array;
       const logo = logoPositions.current;
 
       ripples.current = ripples.current.filter(r => {
@@ -286,7 +341,22 @@ const HeroVisual = ({ logoProgress }: HeroVisualProps) => {
       });
 
       const s = smoothScroll.current;
-      const waveInfluence = 1 - s;
+      const easedS = s < 0.5 ? 2 * s * s : 1 - Math.pow(-2 * s + 2, 2) / 2;
+      const waveInfluence = 1 - easedS;
+
+      const logoFormed = easedS > 0.97;
+      const sunBrightness = logoFormed ? Math.min(1, (easedS - 0.97) / 0.03) : 0;
+
+      logoLight.intensity = sunBrightness * 8;
+      material.opacity = 0.72 + sunBrightness * 0.28;
+
+      if (logoFormed && bangDelay.current < 1.8) {
+        if (bangDelay.current > 1.0) {
+          shakeProgress.current = Math.min(1, (bangDelay.current - 1.0) / 0.8);
+        } else {
+          shakeProgress.current = 0;
+        }
+      }
 
       for (let i = 0; i < numParticles; i++) {
         const i3 = i * 3;
@@ -295,18 +365,17 @@ const HeroVisual = ({ logoProgress }: HeroVisualProps) => {
 
         let targetX: number, targetY: number, targetZ: number;
 
-        // Modern waveform: more dynamic, flowing, and layered
         const waveBase = Math.sin(baseX * 0.008 + time * 1.2) * 18 + Math.cos(baseZ * 0.008 + time * 1.1) * 18;
         const waveLayer = Math.sin((baseX + baseZ) * 0.004 + time * 0.7) * 8;
 
-        if (logo && s > 0.001) {
+        if (logo && easedS > 0.001) {
           const lx = logo[i3];
           const ly = logo[i3 + 1];
           const lz = logo[i3 + 2];
-          targetX = baseX * waveInfluence + lx * s;
-          targetZ = baseZ * waveInfluence + lz * s;
+          targetX = baseX * waveInfluence + lx * easedS;
+          targetZ = baseZ * waveInfluence + lz * easedS;
           let waveY = (waveBase + waveLayer) * waveInfluence;
-          targetY = waveY + ly * s;
+          targetY = waveY + ly * easedS;
         } else {
           targetX = baseX;
           targetZ = baseZ;
@@ -337,22 +406,47 @@ const HeroVisual = ({ logoProgress }: HeroVisualProps) => {
           });
         }
 
-        // Big Bang dispersion after logo completes
+        if (shakeProgress.current > 0 && bangProgress.current === 0) {
+          const shake = shakeProgress.current;
+          const intensity = 8 * shake;
+          const freq = 40;
+          const shakeX = Math.sin(time * freq + i * 0.1) * intensity;
+          const shakeY = Math.cos(time * freq * 1.3 + i * 0.15) * intensity;
+          const shakeZ = Math.sin(time * freq * 0.8 + i * 0.12) * intensity;
+
+          targetX += shakeX;
+          targetY += shakeY;
+          targetZ += shakeZ;
+        }
+
         if (bangProgress.current > 0) {
-          const bang = bangProgress.current;
+          const bang = Math.pow(bangProgress.current, 1.3);
 
-          // Instead of pushing from center, we lerp toward random spherical targets
-          // This creates an explosion that fills the 3D space uniformly
-          targetX += randomDirs.current[i3] * bang;
-          targetY += randomDirs.current[i3 + 1] * bang;
-          targetZ += randomDirs.current[i3 + 2] * bang;
+          const explosionX = randomDirs.current[i3];
+          const explosionY = randomDirs.current[i3 + 1];
+          const explosionZ = randomDirs.current[i3 + 2];
 
-          // Optional: Add a subtle spinning turbulence to the bang expansion
-          const swirl = bang * 2.0;
+          targetX += explosionX * bang;
+          targetY += explosionY * bang;
+          targetZ += explosionZ * bang;
+
+          const swirl = bang * 2.2;
           const sX = targetX;
           const sZ = targetZ;
           targetX = sX * Math.cos(swirl) - sZ * Math.sin(swirl);
           targetZ = sX * Math.sin(swirl) + sZ * Math.cos(swirl);
+
+          const fireR = particleColors.current[i3];
+          const fireG = particleColors.current[i3 + 1];
+          const fireB = particleColors.current[i3 + 2];
+
+          colorArr[i3] = (1 - bang) * (0.0 + sunBrightness * 1.0) + bang * fireR;
+          colorArr[i3 + 1] = (1 - bang) * (0.78 + sunBrightness * 0.22) + bang * fireG;
+          colorArr[i3 + 2] = (1 - bang) * (0.98 + sunBrightness * 0.02) + bang * fireB;
+        } else {
+          colorArr[i3] = 0.0 + sunBrightness * 1.0;
+          colorArr[i3 + 1] = 0.78 + sunBrightness * 0.22;
+          colorArr[i3 + 2] = 0.98 + sunBrightness * 0.02;
         }
 
         currentArr[i3] += (targetX - currentArr[i3]) * positionLerp;
@@ -361,6 +455,12 @@ const HeroVisual = ({ logoProgress }: HeroVisualProps) => {
       }
 
       posAttr.needsUpdate = true;
+      colorAttr.needsUpdate = true;
+
+      if (stars) {
+        stars.rotation.z += 0.0002;
+      }
+
       renderer.render(scene, camera);
     };
 
@@ -373,9 +473,8 @@ const HeroVisual = ({ logoProgress }: HeroVisualProps) => {
       window.removeEventListener('scroll', onScroll);
       mount.removeChild(renderer.domElement);
     };
-  }, []);
+  }, [onVisualComplete]);
 
-  // Add a shining half-sun effect using a CSS radial gradient overlay
   return (
     <div style={{ position: 'fixed', inset: 0, width: '100vw', height: '100vh', zIndex: 0 }}>
       <div
@@ -388,7 +487,6 @@ const HeroVisual = ({ logoProgress }: HeroVisualProps) => {
           cursor: 'crosshair',
         }}
       />
-      {/* Shining half-sun effect in the top left corner */}
       <div
         style={{
           pointerEvents: 'none',

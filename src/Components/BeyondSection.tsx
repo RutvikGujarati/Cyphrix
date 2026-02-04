@@ -3,23 +3,37 @@ import * as THREE from 'three';
 
 const BeyondVisual = () => {
   const mountRef = useRef<HTMLDivElement>(null);
+  const rendererRef = useRef<THREE.WebGLRenderer | null>(null);
+  const sceneRef = useRef<THREE.Scene | null>(null);
+  const frameIdRef = useRef<number | null>(null);
 
   useEffect(() => {
     const mount = mountRef.current;
     if (!mount) return;
 
+    // Clean up any existing renderer first
+    if (rendererRef.current) {
+      if (mount.contains(rendererRef.current.domElement)) {
+        mount.removeChild(rendererRef.current.domElement);
+      }
+      rendererRef.current.dispose();
+      rendererRef.current = null;
+    }
+
     const width = mount.clientWidth;
     const height = mount.clientHeight;
     const scene = new THREE.Scene();
+    sceneRef.current = scene;
+
     const camera = new THREE.PerspectiveCamera(60, width / height, 0.1, 100);
     camera.position.z = 5;
 
     const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+    rendererRef.current = renderer;
     renderer.setSize(width, height);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     mount.appendChild(renderer.domElement);
 
-    // --- COSMIC COMBO SHADER (Nebula + Pulse) ---
     const shaderMat = new THREE.ShaderMaterial({
       uniforms: {
         uTime: { value: 0 },
@@ -59,7 +73,6 @@ const BeyondVisual = () => {
           vec2 uv = vUv;
           float t = uTime * 0.1;
           
-          // Layered nebula clouds
           float n = noise(uv * 2.0 + t);
           n += noise(uv * 4.0 - t * 0.5) * 0.5;
           
@@ -67,7 +80,6 @@ const BeyondVisual = () => {
           vec3 deepPurple = vec3(0.5, 0.0, 1.0);
           vec3 spaceGold = vec3(1.0, 0.8, 0.4);
 
-          // Morphing colors based on scroll
           vec3 base = mix(cyan, deepPurple, uScroll);
           vec3 finalColor = mix(base, spaceGold, n * 0.3);
           
@@ -81,14 +93,13 @@ const BeyondVisual = () => {
     const plane = new THREE.Mesh(new THREE.PlaneGeometry(2, 2), shaderMat);
     scene.add(plane);
 
-    // --- COMBO STARFIELD (Depth Stars) ---
     const starCount = 2000;
     const starGeo = new THREE.BufferGeometry();
     const starPos = new Float32Array(starCount * 3);
-    for(let i=0; i<starCount; i++) {
-      starPos[i*3] = (Math.random() - 0.5) * 20;
-      starPos[i*3+1] = (Math.random() - 0.5) * 20;
-      starPos[i*3+2] = Math.random() * -50;
+    for (let i = 0; i < starCount; i++) {
+      starPos[i * 3] = (Math.random() - 0.5) * 20;
+      starPos[i * 3 + 1] = (Math.random() - 0.5) * 20;
+      starPos[i * 3 + 2] = Math.random() * -50;
     }
     starGeo.setAttribute('position', new THREE.BufferAttribute(starPos, 3));
     const starMat = new THREE.PointsMaterial({ size: 0.03, color: 0xffffff, transparent: true, opacity: 0.5 });
@@ -102,9 +113,9 @@ const BeyondVisual = () => {
     window.addEventListener('scroll', onScroll, { passive: true });
 
     const animate = () => {
+      frameIdRef.current = requestAnimationFrame(animate);
       shaderMat.uniforms.uTime.value += 0.01;
-      
-      // Infinite slow star drift
+
       stars.position.z += 0.01 + (shaderMat.uniforms.uScroll.value * 0.05);
       if (stars.position.z > 10) stars.position.z = 0;
 
@@ -113,6 +124,7 @@ const BeyondVisual = () => {
     animate();
 
     const resize = () => {
+      if (!mount || !renderer) return;
       renderer.setSize(mount.clientWidth, mount.clientHeight);
       shaderMat.uniforms.uResolution.value.set(mount.clientWidth, mount.clientHeight);
     };
@@ -121,7 +133,26 @@ const BeyondVisual = () => {
     return () => {
       window.removeEventListener('resize', resize);
       window.removeEventListener('scroll', onScroll);
-      mount.removeChild(renderer.domElement);
+
+      if (frameIdRef.current !== null) {
+        cancelAnimationFrame(frameIdRef.current);
+        frameIdRef.current = null;
+      }
+
+      plane.geometry.dispose();
+      shaderMat.dispose();
+      starGeo.dispose();
+      starMat.dispose();
+
+      if (renderer) {
+        renderer.dispose();
+        if (mount && mount.contains(renderer.domElement)) {
+          mount.removeChild(renderer.domElement);
+        }
+      }
+
+      sceneRef.current = null;
+      rendererRef.current = null;
     };
   }, []);
 
@@ -130,14 +161,14 @@ const BeyondVisual = () => {
 
 export default function BeyondSection() {
   return (
-    <section className="beyond-section position-relative bg-black" style={{ minHeight: '350vh' }}>
+    <section className="beyond-section position-relative bg-black" style={{ minHeight: '150vh' }}>
       {/* BACKGROUND COMBO VISUAL */}
       <div className="position-fixed top-0 start-0 w-100 vh-100 z-0">
         <BeyondVisual />
       </div>
 
       {/* SERVICE 1: BLOCKCHAIN INFRASTRUCTURE */}
-      <div className="position-relative vh-100 d-flex align-items-center z-1 px-4 px-lg-5">
+      <div className="position-relative min-vh-50 d-flex align-items-center z-1 px-4 px-lg-5 py-5">
         <div className="col-lg-6">
           <p className="text-info small tracking-widest text-uppercase fw-bold mb-3">[ 01_INFRASTRUCTURE ]</p>
           <h2 className="display-3 fw-bold text-white mb-4">Smart Contract Auditing</h2>
@@ -150,43 +181,43 @@ export default function BeyondSection() {
       </div>
 
       {/* SERVICE 2: SECURITY AGENCY */}
-      <div className="position-relative vh-100 d-flex align-items-center justify-content-end z-1 px-4 px-lg-5">
+      <div className="position-relative min-vh-50 d-flex align-items-center justify-content-end z-1 px-4 px-lg-5 py-5">
         <div className="col-lg-6 text-lg-end">
-          <p className="text-purple small tracking-widest text-uppercase fw-bold mb-3" style={{ color: '#a070ff' }}>[ 02_SECURITY_AGENCY ]</p>
-          <h2 className="display-3 fw-bold text-white mb-4">Penetration Testing</h2>
-          <p className="lead text-white-50 mb-4">Simulating sophisticated cyber-attacks to identify vulnerabilities before they can be exploited by malicious actors.</p>
+          <p className="text-purple small tracking-widest text-uppercase fw-bold mb-3" style={{ color: '#a070ff' }}>[ 02_PROTOCOL_INTEGRITY ]</p>
+          <h2 className="display-3 fw-bold text-white mb-4">Consensus Security</h2>
+          <p className="lead text-white-50 mb-4">Architecting resilient cryptographic primitives and consensus mechanisms to ensure zero-trust ledger immutability.</p>
           <div className="d-flex gap-4 justify-content-lg-end opacity-75 small">
-             <span>THREAT MODELING</span>
-             <span className="text-info">/</span>
-             <span>ZERO-DAY DEFENSE</span>
+            <span>CRYPTOGRAPHIC PROOFS</span>
+            <span className="text-info">/</span>
+            <span>BYZANTINE FAULT TOLERANCE</span>
           </div>
         </div>
       </div>
 
       {/* SERVICE 3: INTEGRATED ECOSYSTEM */}
-      <div className="position-relative vh-100 d-flex align-items-center justify-content-center z-1 px-4 px-lg-5 text-center">
+      <div className="position-relative min-vh-50 d-flex align-items-center justify-content-center z-1 px-4 px-lg-5 text-center py-5">
         <div className="col-lg-8">
           <p className="text-warning small tracking-widest text-uppercase fw-bold mb-3">[ 03_SYNERGY ]</p>
           <h2 className="display-3 fw-bold text-white mb-4">Web3 Ecosystem Defense</h2>
           <p className="lead text-white-50 mb-5">A comprehensive shield merging blockchain transparency with enterprise-grade cybersecurity protocols.</p>
           <div className="row g-4 text-start">
             <div className="col-md-4">
-               <div className="p-3 border border-white border-opacity-10 rounded-4">
-                  <h5 className="text-white h6">DeFi Security</h5>
-                  <p className="small text-white mb-0">Protecting liquidity pools and cross-chain bridges from arbitrage and flash loan exploits.</p>
-               </div>
+              <div className="p-3 border border-white border-opacity-10 rounded-4 h-100">
+                <h5 className="text-white h6">DeFi Security</h5>
+                <p className="small text-white mb-0">Protecting liquidity pools and cross-chain bridges from market manipulation and logic errors.</p>
+              </div>
             </div>
             <div className="col-md-4">
-               <div className="p-3 border border-white border-opacity-10 rounded-4">
-                  <h5 className="text-white h6">Incidence Response</h5>
-                  <p className="small text-white mb-0">24/7 rapid response monitoring for real-time asset recovery and threat mitigation.</p>
-               </div>
+              <div className="p-3 border border-white border-opacity-10 rounded-4 h-100">
+                <h5 className="text-white h6">On-Chain Forensics</h5>
+                <p className="small text-white mb-0">Real-time monitoring of transaction flows to detect anomalies and trace illicit funds.</p>
+              </div>
             </div>
             <div className="col-md-4">
-               <div className="p-3 border border-white border-opacity-10 rounded-4">
-                  <h5 className="text-white h6">DAOs & Governance</h5>
-                  <p className="small text-white mb-0">Auditing voting protocols and governance structures to ensure democratic integrity.</p>
-               </div>
+              <div className="p-3 border border-white border-opacity-10 rounded-4 h-100">
+                <h5 className="text-white h6">DAOs & Governance</h5>
+                <p className="small text-white mb-0">Auditing voting protocols and governance structures to ensure democratic integrity.</p>
+              </div>
             </div>
           </div>
         </div>
