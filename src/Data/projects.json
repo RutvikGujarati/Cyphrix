@@ -1,0 +1,77 @@
+[
+  {
+    "id": 1,
+    "title": "Decentralized Exchange Infrastructure",
+    "tagline": "On-Chain Trading & Liquidity Primitives",
+    "description": "A modular decentralized exchange architecture featuring swap modules, limit orders, balance management, and oracle-driven pricing. Designed with upgradeability, security testing, and gas efficiency in mind.",
+    "techStack": [
+      "Solidity",
+      "Ethereum",
+      "Ethers.js",
+      "Foundry",
+      "OpenZeppelin"
+    ],
+    "image": "dex-infra.jpg",
+    "color": "#00c2ff",
+    "stats": [
+      {
+        "label": "Architecture",
+        "value": "Modular"
+      },
+      {
+        "label": "Focus",
+        "value": "Security-First"
+      }
+    ]
+  },
+  {
+    "id": 2,
+    "title": "Blockchain Backend & Indexing Services",
+    "tagline": "Reliable Data for Web3 Applications",
+    "description": "Backend services for blockchain applications including event indexing, balance tracking, transaction orchestration, and API layers. Built for scalability, observability, and real-time data access.",
+    "techStack": [
+      "Node.js",
+      "TypeScript",
+      "PostgreSQL",
+      "Redis",
+      "Docker"
+    ],
+    "image": "blockchain-backend.jpg",
+    "color": "#ff7a00",
+    "stats": [
+      {
+        "label": "Data Model",
+        "value": "Event-Driven"
+      },
+      {
+        "label": "Deployment",
+        "value": "Containerized"
+      }
+    ]
+  },
+  {
+    "id": 3,
+    "title": "Smart Contract Security & Testing",
+    "tagline": "Preventing Bugs Before Mainnet",
+    "description": "A collection of smart contract security patterns, testing suites, and vulnerability analysis tools. Includes reentrancy protection, invariant testing, and audit-style validations using modern Solidity tooling.",
+    "techStack": [
+      "Solidity",
+      "Foundry",
+      "Hardhat",
+      "Slither",
+      "Echidna"
+    ],
+    "image": "contract-security.jpg",
+    "color": "#8b0000",
+    "stats": [
+      {
+        "label": "Testing Style",
+        "value": "Invariant-Based"
+      },
+      {
+        "label": "Risk Focus",
+        "value": "High-Severity"
+      }
+    ]
+  }
+]

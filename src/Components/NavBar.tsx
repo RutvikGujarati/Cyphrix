@@ -2,7 +2,7 @@ import React from 'react';
 import logo from "/Cyphrix.svg";
 
 interface HeaderProps {
-    onNavigate: (page: 'home' | 'contact') => void;
+    onNavigate: (page: 'home' | 'projects' | 'contact') => void;
 }
 
 const Header: React.FC<HeaderProps> = ({ onNavigate }) => {
@@ -36,6 +36,13 @@ const Header: React.FC<HeaderProps> = ({ onNavigate }) => {
 
                         {/* 2. DUAL ACTION BUTTONS */}
                         <div className="d-flex align-items-center">
+                            <button
+                                onClick={() => onNavigate('projects')}
+                                className="btn btn-link text-white text-decoration-none small fw-bold text-uppercase d-none d-md-inline-block px-3 border-0"
+                            >
+                                Projects
+                            </button>
+
                             {/* Connect Us / Inquire */}
                             <button
                                 onClick={() => onNavigate('contact')}

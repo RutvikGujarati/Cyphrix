@@ -3,6 +3,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import Header from './Components/NavBar';
 import HomePage from './Components/HomePage';
 import ContactPage from './Components/ContactPage';
+import ProjectsPage from './Components/ProjectsPage';
 import { useEffect } from 'react';
 
 // Wrapper to inject navigation into Header pending refactor
@@ -15,8 +16,9 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
     window.scrollTo(0, 0);
   }, [location.pathname]);
 
-  const handleNavigate = (page: 'home' | 'contact') => {
+  const handleNavigate = (page: 'home' | 'projects' | 'contact') => {
     if (page === 'home') navigate('/');
+    if (page === 'projects') navigate('/projects');
     if (page === 'contact') navigate('/inquiry');
   };
 
@@ -36,6 +38,7 @@ function App() {
       <Layout>
         <Routes>
           <Route path="/" element={<HomePage />} />
+          <Route path="/projects" element={<ProjectsPage />} />
           <Route path="/inquiry" element={<ContactPage />} />
         </Routes>
       </Layout>
