@@ -23,12 +23,12 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
   };
 
   return (
-    <>
+    <div className="app-container">
       <div className="position-fixed top-0 start-0 w-100 z-3">
         <Header onNavigate={handleNavigate} />
       </div>
       {children}
-    </>
+    </div>
   );
 };
 
