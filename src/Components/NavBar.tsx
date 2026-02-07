@@ -41,7 +41,7 @@ const Header: React.FC<HeaderProps> = ({ onNavigate }) => {
                                 onClick={() => onNavigate('contact')}
                                 className="btn btn-link text-white text-decoration-none small fw-bold text-uppercase d-none d-md-inline-block px-3 border-0"
                             >
-                                Inquire
+                                Contact Us
                             </button>
 
                             {/* Vertical Divider */}

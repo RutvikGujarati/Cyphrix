@@ -9,136 +9,107 @@ const ContactVisual = () => {
         const mount = mountRef.current;
         if (!mount) return;
 
-        const width = mount.clientWidth;
-        const height = mount.clientHeight;
+        let width = mount.clientWidth;
+        let height = mount.clientHeight;
+
         const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(45, width / height, 1, 1000);
+        camera.position.set(0, 80, 200);
+        camera.lookAt(0, 0, 0);
 
-        const camera = new THREE.PerspectiveCamera(50, width / height, 1, 1000);
-        camera.position.z = 400;
+        const renderer = new THREE.WebGLRenderer({
+            antialias: true,
+            alpha: true
+        });
 
-        const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
         renderer.setSize(width, height);
         renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
         mount.appendChild(renderer.domElement);
 
-        // --- DENSE NETWORK GLOBE ---
-        // Increase density for "accurate" tech look
-        const particleCount = 400;
-        const r = 160;
-        const geometry = new THREE.BufferGeometry();
-        const positions = new Float32Array(particleCount * 3);
-
-        // Fibonacci Sphere distribution for even spread
-        const phi = Math.PI * (3 - Math.sqrt(5));
-        for (let i = 0; i < particleCount; i++) {
-            const y = 1 - (i / (particleCount - 1)) * 2; // y goes from 1 to -1
-            const radius = Math.sqrt(1 - y * y);
-            const theta = phi * i;
-
-            const x = Math.cos(theta) * radius;
-            const z = Math.sin(theta) * radius;
-
-            positions[i * 3] = x * r;
-            positions[i * 3 + 1] = y * r;
-            positions[i * 3 + 2] = z * r;
-        }
-
-        geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-
-        const material = new THREE.PointsMaterial({
-            color: 0x00f2ff, // Brighter Cyan
-            size: 2.5,
+        const ringGeo = new THREE.RingGeometry(20, 22, 128);
+        const ringMat = new THREE.MeshBasicMaterial({
+            color: 0x00f2ff,
             transparent: true,
-            opacity: 0.9,
+            opacity: 0.4,
+            side: THREE.DoubleSide,
             blending: THREE.AdditiveBlending
         });
 
-        const particles = new THREE.Points(geometry, material);
-        scene.add(particles);
+        const scanRing = new THREE.Mesh(ringGeo, ringMat);
+        scanRing.rotation.x = -Math.PI / 2;
+        scene.add(scanRing);
 
-        // Connections
-        const lineMaterial = new THREE.LineBasicMaterial({
+        const streamCount = 80;
+        const streamGeo = new THREE.BufferGeometry();
+        const positions = new Float32Array(streamCount * 6);
+
+        for (let i = 0; i < streamCount; i++) {
+            const x = (Math.random() - 0.5) * 300;
+            const z = (Math.random() - 0.5) * 300;
+            const yTop = Math.random() * 120 + 40;
+            positions.set([x, 0, z, x, yTop, z], i * 6);
+        }
+
+        streamGeo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+        const streamMat = new THREE.LineBasicMaterial({
             color: 0x00c6fb,
             transparent: true,
-            opacity: 0.2,
+            opacity: 0.35,
             blending: THREE.AdditiveBlending
         });
 
-        const lineGeo = new THREE.BufferGeometry();
-        // Dynamic line buffer? No, let's precompute neighbors to save perf.
-        // We only connect close neighbors.
-        const linePositions: number[] = [];
+        const streams = new THREE.LineSegments(streamGeo, streamMat);
+        scene.add(streams);
 
-        for (let i = 0; i < particleCount; i++) {
-            // Check all other particles? O(N^2) for 400 is 160,000 checks. Fine for init.
-            let connections = 0;
-            for (let j = i + 1; j < particleCount; j++) {
-                const dx = positions[i * 3] - positions[j * 3];
-                const dy = positions[i * 3 + 1] - positions[j * 3 + 1];
-                const dz = positions[i * 3 + 2] - positions[j * 3 + 2];
-                const distSq = dx * dx + dy * dy + dz * dz;
-
-                // Distance threshold ~35 units
-                if (distSq < 35 * 35 && connections < 4) {
-                    linePositions.push(
-                        positions[i * 3], positions[i * 3 + 1], positions[i * 3 + 2],
-                        positions[j * 3], positions[j * 3 + 1], positions[j * 3 + 2]
-                    );
-                    connections++;
-                }
-            }
-        }
-        lineGeo.setAttribute('position', new THREE.Float32BufferAttribute(linePositions, 3));
-        const lines = new THREE.LineSegments(lineGeo, lineMaterial);
-        scene.add(lines);
-
-        // Add an inner "core" sphere for depth
-        const coreGeo = new THREE.IcosahedronGeometry(r * 0.4, 1);
-        const coreMat = new THREE.MeshBasicMaterial({
-            color: 0x000000,
-            wireframe: true,
-            transparent: true,
-            opacity: 0.1
-        });
-        const core = new THREE.Mesh(coreGeo, coreMat);
-        scene.add(core);
+        let ringScale = 1;
+        let frameId: number;
 
         const animate = () => {
-            requestAnimationFrame(animate);
+            frameId = requestAnimationFrame(animate);
+            ringScale += 0.015;
+            scanRing.scale.set(ringScale, ringScale, ringScale);
+            scanRing.material.opacity = Math.max(0, 0.5 - ringScale * 0.05);
 
-            particles.rotation.y += 0.0015;
-            lines.rotation.y += 0.0015;
-            core.rotation.y -= 0.002;
-            core.rotation.x += 0.001;
-
-            // Subtle bob
-            const time = Date.now() * 0.0005;
-            scene.rotation.z = Math.sin(time) * 0.1;
-
+            if (ringScale > 8) {
+                ringScale = 1;
+                scanRing.material.opacity = 0.4;
+            }
+            streams.rotation.y += 0.0006;
             renderer.render(scene, camera);
         };
+
         animate();
 
         const resize = () => {
             if (!mount) return;
-            renderer.setSize(mount.clientWidth, mount.clientHeight);
-            camera.aspect = mount.clientWidth / mount.clientHeight;
+            width = mount.clientWidth;
+            height = mount.clientHeight;
+            renderer.setSize(width, height);
+            camera.aspect = width / height;
             camera.updateProjectionMatrix();
         };
+
         window.addEventListener('resize', resize);
 
         return () => {
             window.removeEventListener('resize', resize);
+            cancelAnimationFrame(frameId);
             mount.removeChild(renderer.domElement);
             renderer.dispose();
-            geometry.dispose();
-            lineGeo.dispose();
-            material.dispose();
-            lineMaterial.dispose();
+            ringGeo.dispose();
+            ringMat.dispose();
+            streamGeo.dispose();
+            streamMat.dispose();
         };
     }, []);
 
-    return <div ref={mountRef} className="w-100 h-100 position-absolute top-0 start-0 z-0" style={{ pointerEvents: 'none' }} />;
+    return (
+        <div
+            ref={mountRef}
+            className="w-100 h-100 position-absolute top-0 start-0 z-0"
+            style={{ pointerEvents: 'none' }}
+        />
+    );
 };
 
 const ContactForm = () => {
@@ -158,8 +129,6 @@ const ContactForm = () => {
         e.preventDefault();
         setStatus('sending');
 
-        // EMAILJS CONFIGURATION
-        // REPLACE THESE WITH YOUR ACTUAL KEYS FROM https://www.emailjs.com/
         const SERVICE_ID = import.meta.env.VITE_EMAILJS_SERVICE_ID;
         const TEMPLATE_ID = import.meta.env.VITE_EMAILJS_TEMPLATE_ID;
         const PUBLIC_KEY = import.meta.env.VITE_EMAILJS_PUBLIC_KEY;
@@ -186,27 +155,27 @@ const ContactForm = () => {
 
     return (
         <form className="d-flex flex-column gap-3" onSubmit={handleSubmit}>
-            <div className="row">
-                <div className="col-md-6">
+            <div className="row g-3">
+                <div className="col-12 col-md-6">
                     <label className="form-label small text-white-50">Name</label>
                     <input
                         type="text"
                         name="name"
                         value={formData.name}
                         onChange={handleChange}
-                        className="form-control bg-dark border-secondary text-white rounded-2 py-2"
+                        className="form-control bg-dark border-secondary text-white rounded-2 py-2 shadow-none"
                         placeholder="John Doe"
                         required
                     />
                 </div>
-                <div className="col-md-6">
+                <div className="col-12 col-md-6">
                     <label className="form-label small text-white-50">Company</label>
                     <input
                         type="text"
                         name="company"
                         value={formData.company}
                         onChange={handleChange}
-                        className="form-control bg-dark border-secondary text-white rounded-2 py-2"
+                        className="form-control bg-dark border-secondary text-white rounded-2 py-2 shadow-none"
                         placeholder="Acme Corp"
                     />
                 </div>
@@ -218,7 +187,7 @@ const ContactForm = () => {
                     name="email"
                     value={formData.email}
                     onChange={handleChange}
-                    className="form-control bg-dark border-secondary text-white rounded-2 py-2"
+                    className="form-control bg-dark border-secondary text-white rounded-2 py-2 shadow-none"
                     placeholder="john@acme.com"
                     required
                 />
@@ -229,22 +198,21 @@ const ContactForm = () => {
                     name="message"
                     value={formData.message}
                     onChange={handleChange}
-                    className="form-control bg-dark border-secondary text-white rounded-2 py-2"
+                    className="form-control bg-dark border-secondary text-white rounded-2 py-2 shadow-none"
                     rows={4}
                     placeholder="How can we help you?"
                     required
                 ></textarea>
             </div>
-
-            <div className="d-flex align-items-center gap-3 mt-2">
+            <div className="d-flex flex-column flex-sm-row align-items-sm-center gap-3 mt-2">
                 <button
                     type="submit"
                     disabled={status === 'sending' || status === 'success'}
-                    className={`btn ${status === 'success' ? 'btn-success' : 'btn-info text-dark'} fw-bold py-2 px-4 rounded-pill transition-all`}
+                    className={`btn ${status === 'success' ? 'btn-success' : 'btn-info text-dark'} fw-bold py-2 px-4 rounded-pill transition-all w-100 w-sm-auto`}
                 >
                     {status === 'sending' ? 'Sending...' : status === 'success' ? 'Message Sent!' : 'Send Message'}
                 </button>
-                {status === 'error' && <span className="text-danger small">Transmission Failed. Check console.</span>}
+                {status === 'error' && <span className="text-danger small text-center text-sm-start">Transmission Failed.</span>}
             </div>
         </form>
     );
@@ -252,31 +220,21 @@ const ContactForm = () => {
 
 export default function ContactPage() {
     return (
-        <div className="vh-100 w-100 position-relative bg-black text-white d-flex align-items-center justify-content-center overflow-hidden" style={{ paddingTop: '80px' }}>
+        <div className="min-vh-100 w-100 position-relative bg-black text-white d-flex align-items-center py-5 overflow-hidden">
             <ContactVisual />
-            <div className="container position-relative z-1">
-                <div className="row align-items-center">
-                    <div className="col-lg-5 mb-5 mb-lg-0">
+            <div className="container position-relative z-1 py-5">
+                <div className="row align-items-center g-5">
+                    <div className="col-lg-5 text-center text-lg-start">
                         <div className="mb-4">
                             <span className="badge border border-info text-info rounded-pill px-3 py-2 mb-3 bg-transparent">SECURE CHANNEL OPEN</span>
-                            <h1 className="display-3 fw-bold mb-4">Initialize<br />Contact</h1>
-                            <p className="lead text-white-50">
+                            <h1 className="display-4 display-md-3 fw-bold mb-4">Initialize<br className="d-none d-lg-block" /> Contact</h1>
+                            <p className="lead text-white-50 mx-auto mx-lg-0" style={{ maxWidth: '500px' }}>
                                 Ready to secure your infrastructure? Our elite team of auditors and security architects is standing by.
                             </p>
                         </div>
-                        <div className="d-flex flex-column gap-3 border-start border-white border-opacity-10 ps-4">
-                            <div>
-                                <h6 className="text-uppercase small text-white-50 mb-1">Secure Comms</h6>
-                                <p className="mb-0">establish@cyphrix.tech</p>
-                            </div>
-                            <div>
-                                <h6 className="text-uppercase small text-white-50 mb-1">PGP Key</h6>
-                                <p className="font-monospace small opacity-50 mb-0">0x4D 8A 2F 91 C3 ...</p>
-                            </div>
-                        </div>
                     </div>
                     <div className="col-lg-6 offset-lg-1">
-                        <div className="p-4 border border-white border-opacity-10 bg-black bg-opacity-50 backdrop-blur-md rounded-4">
+                        <div className="p-3 p-sm-4 border border-white border-opacity-10 bg-black bg-opacity-50 rounded-4" style={{ backdropFilter: 'blur(12px)' }}>
                             <ContactForm />
                         </div>
                     </div>
