@@ -3,6 +3,8 @@ import * as THREE from 'three';
 import { motion } from 'framer-motion';
 import projectsData from '../Data/projects.json';
 import { ArrowRight, Activity, ShieldCheck, Cpu } from 'lucide-react';
+import AuditList from './AuditList';
+import Testimonials from './Testimonials';
 
 const ProjectsPage: React.FC = () => {
     const mountRef = useRef<HTMLDivElement>(null);
@@ -36,12 +38,17 @@ const ProjectsPage: React.FC = () => {
         const camera = new THREE.PerspectiveCamera(65, window.innerWidth / window.innerHeight, 0.1, 1000);
         camera.position.z = 8;
 
+        // Safety check: clear any existing canvas to prevent duplicates
+        while (mountRef.current.firstChild) {
+            mountRef.current.removeChild(mountRef.current.firstChild);
+        }
+
         const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
         renderer.setSize(window.innerWidth, window.innerHeight);
-        renderer.setPixelRatio(window.devicePixelRatio);
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2)); // Limit pixel ratio for performance
         mountRef.current.appendChild(renderer.domElement);
 
-        const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+        const ambientLight = new THREE.AmbientLight(0xffffff, 0.8); // Increased from 0.5
         scene.add(ambientLight);
 
         const pointLight = new THREE.PointLight(0x00f2ff, 1.5, 50);
@@ -51,38 +58,6 @@ const ProjectsPage: React.FC = () => {
         const secondaryLight = new THREE.PointLight(0xff0066, 1.5, 50);
         secondaryLight.position.set(-5, -10, 5);
         scene.add(secondaryLight);
-
-        const objects: THREE.Mesh[] = [];
-        // Reverting to abstract geometric shapes for premium tech feel
-        const geometries = [
-            new THREE.TorusKnotGeometry(1.4, 0.45, 120, 30),
-            new THREE.IcosahedronGeometry(2.0, 0),
-            new THREE.OctahedronGeometry(2.0, 0),
-            new THREE.TetrahedronGeometry(2.0, 0)
-        ];
-
-        projectsData.forEach((project, index) => {
-            const geometry = geometries[index % geometries.length];
-            const material = new THREE.MeshStandardMaterial({
-                color: project.color || 0x00f2ff,
-                metalness: 0.95,
-                roughness: 0.15,
-                emissive: new THREE.Color(project.color).multiplyScalar(0.15),
-                wireframe: false
-            });
-            const mesh = new THREE.Mesh(geometry, material);
-            mesh.position.y = -index * OBJECT_SPACING;
-
-            // Push objects to the side opposite the content
-            mesh.position.x = index % 2 === 0 ? 5 : -5;
-
-            // Random initial rotation
-            mesh.rotation.x = Math.random() * Math.PI;
-            mesh.rotation.y = Math.random() * Math.PI;
-
-            scene.add(mesh);
-            objects.push(mesh);
-        });
 
         let scrollY = window.scrollY;
 
@@ -103,13 +78,6 @@ const ProjectsPage: React.FC = () => {
 
             camera.position.y += (targetCameraY - camera.position.y) * 0.1;
 
-            objects.forEach((obj, i) => {
-                obj.rotation.x += 0.002;
-                obj.rotation.y += 0.003;
-                // Subtle float
-                obj.position.y = (-i * OBJECT_SPACING) + Math.sin(Date.now() * 0.001 + i) * 0.2;
-            });
-
             renderer.render(scene, camera);
         };
 
@@ -128,7 +96,7 @@ const ProjectsPage: React.FC = () => {
             if (mountRef.current && renderer.domElement) {
                 mountRef.current.removeChild(renderer.domElement);
             }
-            geometries.forEach(g => g.dispose());
+            // Cleanup
             starGeometry.dispose();
             renderer.dispose();
         };
@@ -262,6 +230,17 @@ const ProjectsPage: React.FC = () => {
                         </div>
                     </section>
                 ))}
+
+                {/* New Sections: Audits & Feedback */}
+                <div className="position-relative z-2">
+                    <div className="py-5">
+                        <AuditList />
+                    </div>
+                    <div className="py-5 border-top border-white border-opacity-10">
+                        <Testimonials />
+                    </div>
+                </div>
+
             </div>
         </div>
     );

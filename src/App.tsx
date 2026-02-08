@@ -5,6 +5,7 @@ import HomePage from './Components/HomePage';
 import ContactPage from './Components/ContactPage';
 import ProjectsPage from './Components/ProjectsPage';
 import { useEffect } from 'react';
+import Footer from './Components/Footer';
 
 // Wrapper to inject navigation into Header pending refactor
 const Layout = ({ children }: { children: React.ReactNode }) => {
@@ -23,11 +24,12 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
   };
 
   return (
-    <div className="app-container">
+    <div className="app-container bg-black min-vh-100">
       <div className="position-fixed top-0 start-0 w-100 z-3">
         <Header onNavigate={handleNavigate} />
       </div>
       {children}
+      {location.pathname !== '/' && <Footer />}
     </div>
   );
 };

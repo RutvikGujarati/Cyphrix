@@ -27,7 +27,7 @@ const Header: React.FC<HeaderProps> = ({ onNavigate }) => {
                                 />
                             </div>
                             <div className="ms-3 d-none d-sm-block">
-                                <span className="fw-bold text-white lh-1 h5 mb-0 d-block">CYPHRIXTECH</span>
+                                <span className="fw-bold text-white lh-1 h5 mb-0 d-block">CYPHRIX</span>
                                 <small className="text-info font-monospace opacity-75" style={{ fontSize: '0.65rem' }}>
                                     TRUST. ENCRYPTED.
                                 </small>

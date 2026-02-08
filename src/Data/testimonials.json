@@ -1,0 +1,23 @@
+[
+    {
+        "id": 1,
+        "quote": "Cyphrix's audit was thorough and exposed critical vulnerabilities that others missed. Their team is a vital partner in our security stack.",
+        "author": "Alex R.",
+        "role": "CTO",
+        "company": "DeFi Prime"
+    },
+    {
+        "id": 2,
+        "quote": "The professionalism and depth of knowledge regarding EVM opcode optimization saved us significant gas costs while securing the protocol.",
+        "author": "Sarah J.",
+        "role": "Lead Developer",
+        "company": "Nexus DAO"
+    },
+    {
+        "id": 3,
+        "quote": "Fast, reliable, and incredibly detailed reports. Cyphrix is the gold standard for smart contract auditing.",
+        "author": "Michael T.",
+        "role": "Founder",
+        "company": "EtherBridge"
+    }
+]
