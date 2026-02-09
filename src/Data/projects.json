@@ -4,6 +4,7 @@
     "title": "Decentralized Exchange Infrastructure",
     "tagline": "On-Chain Trading & Liquidity Primitives",
     "description": "A modular decentralized exchange architecture featuring swap modules, limit orders, balance management, and oracle-driven pricing. Designed with upgradeability, security testing, and gas efficiency in mind.",
+    "link": "https://dex-trend.com",
     "techStack": [
       "Solidity",
       "Ethereum",
@@ -26,51 +27,89 @@
   },
   {
     "id": 2,
-    "title": "Blockchain Backend & Indexing Services",
-    "tagline": "Reliable Data for Web3 Applications",
-    "description": "Backend services for blockchain applications including event indexing, balance tracking, transaction orchestration, and API layers. Built for scalability, observability, and real-time data access.",
+    "title": "Decentralized Synthetic Stablecoin",
+    "tagline": "Over-collateralized synthetic asset protocol with dynamic debt pooling.",
+    "description": "An algorithmic stablecoin system inspired by Synthetix. Features include multi-collateral backing, a global debt pool for liquidity, and Chainlink-powered price feeds to maintain peg stability and system solvency.",
+    "link": "https://us.dead.box/dashboard",
     "techStack": [
-      "Node.js",
-      "TypeScript",
-      "PostgreSQL",
-      "Redis",
-      "Docker"
+      "Solidity",
+      "Foundry",
+      "Chainlink Price Feeds",
+      "OpenZeppelin"
     ],
-    "image": "blockchain-backend.jpg",
+    "image": "stablecoin-protocol.jpg",
     "color": "#ff7a00",
     "stats": [
       {
-        "label": "Data Model",
-        "value": "Event-Driven"
+        "label": "Collateral Ratio",
+        "value": "Over-collateralized"
       },
       {
-        "label": "Deployment",
-        "value": "Containerized"
+        "label": "Oracle",
+        "value": "Chainlink Price Feeds"
+      },
+      {
+        "label": "Architecture",
+        "value": "Debt Pool Model"
       }
     ]
   },
   {
     "id": 3,
-    "title": "Smart Contract Security & Testing",
-    "tagline": "Preventing Bugs Before Mainnet",
-    "description": "A collection of smart contract security patterns, testing suites, and vulnerability analysis tools. Includes reentrancy protection, invariant testing, and audit-style validations using modern Solidity tooling.",
+    "title": "Dominix Token Launchpad",
+    "tagline": "A secure ICO platform for decentralized token fundraising.",
+    "description": "A high-performance fundraising engine featuring multi-tiered token presales, automated whitelisting, and dynamic pricing tiers. The platform handles secure asset exchange, token vesting schedules, and provides a seamless user interface for early-stage investors.",
     "techStack": [
       "Solidity",
       "Foundry",
-      "Hardhat",
+      "Chainlink Price Feeds",
+      "OpenZeppelin",
+      "React"
+    ],
+    "link": "https://dominix.cloud/",
+    "image": "ico-launchpad.jpg",
+    "color": "#3b82f6",
+    "stats": [
+      {
+        "label": "Feature",
+        "value": "Tiered Presale"
+      },
+      {
+        "label": "Liquidity",
+        "value": "Auto-Locking"
+      },
+      {
+        "label": "Distribution",
+        "value": "Linear Vesting"
+      }
+    ]
+  },
+  {
+    "id": 4,
+    "title": "Protocol Security Audit: Rarity Town",
+    "tagline": "Comprehensive vulnerability assessment and security hardening.",
+    "description": "A deep-dive security audit of the Rarity Town NFT protocol. Performed manual code review and automated analysis to identify high-severity vulnerabilities. Implemented a robust testing suite including Fuzzing and Invariant testing to ensure protocol-level safety and reentrancy resistance.",
+    "techStack": [
+      "Solidity",
+      "Foundry",
       "Slither",
+      "Aderyn",
       "Echidna"
     ],
     "image": "contract-security.jpg",
     "color": "#8b0000",
     "stats": [
       {
-        "label": "Testing Style",
-        "value": "Invariant-Based"
+        "label": "Audit Scope",
+        "value": "Logic & Math"
       },
       {
-        "label": "Risk Focus",
-        "value": "High-Severity"
+        "label": "Methodology",
+        "value": "Fuzz & Manual"
+      },
+      {
+        "label": "Findings",
+        "value": "Medium Secured"
       }
     ]
   }

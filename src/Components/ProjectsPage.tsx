@@ -187,6 +187,18 @@ const ProjectsPage: React.FC = () => {
                                                 ))}
                                             </div>
                                         </div>
+
+                                        {(project as any).link && (
+                                            <a
+                                                href={(project as any).link}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                className="btn btn-outline-light rounded-pill px-4 py-2 small fw-bold text-uppercase tracking-widest d-inline-flex align-items-center gap-2 hover-scale"
+                                                style={{ borderColor: 'rgba(255,255,255,0.2)' }}
+                                            >
+                                                Visit Project <ArrowRight size={16} />
+                                            </a>
+                                        )}
                                     </motion.div>
                                 </div>
 
@@ -217,11 +229,6 @@ const ProjectsPage: React.FC = () => {
                                                 ))}
                                             </div>
 
-                                            <div className="mt-4 pt-3 border-top border-white border-opacity-10 text-white-50 small">
-                                                <p className="mb-0">
-                                                    Delivered on time and exceeding performance benchmarks.
-                                                </p>
-                                            </div>
                                         </div>
                                     </motion.div>
                                 </div>

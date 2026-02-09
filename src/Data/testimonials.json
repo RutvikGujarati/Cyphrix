@@ -1,23 +1,23 @@
 [
     {
         "id": 1,
-        "quote": "Cyphrix's audit was thorough and exposed critical vulnerabilities that others missed. Their team is a vital partner in our security stack.",
-        "author": "Alex R.",
-        "role": "CTO",
-        "company": "DeFi Prime"
+        "quote": "Very happy with the service Cyphrix provides, literally not a bad word to say about him. He is very reachable and responsive when you contact him, very fast in delivery - always within agreed deadline. Highly recommended",
+        "author": "Ant.",
+        "role": "Smart Contract Dev.",
+        "company": "dead.box"
     },
     {
         "id": 2,
-        "quote": "The professionalism and depth of knowledge regarding EVM opcode optimization saved us significant gas costs while securing the protocol.",
-        "author": "Sarah J.",
-        "role": "Lead Developer",
+        "quote": "Very good developer ! Great experience !",
+        "author": "adir lakya",
+        "role": "NFT + Polygon + Metamask",
         "company": "Nexus DAO"
     },
     {
         "id": 3,
-        "quote": "Fast, reliable, and incredibly detailed reports. Cyphrix is the gold standard for smart contract auditing.",
+        "quote": "I had the pleasure of working with Cyphrix, and I can confidently say he is one of the best freelancers I've ever worked with. His professionalism, skill set, and attention to detail were exceptional throughout the project. He communicated clearly, met deadlines, and went above and beyond to deliver results that exceeded my expectations. If you're looking for a reliable and talented freelancers, I highly recommend Cyphrix. A true asset to any team.",
         "author": "Michael T.",
-        "role": "Founder",
-        "company": "EtherBridge"
+        "role": "Project OS Windows & Linux",
+        "company": ""
     }
 ]

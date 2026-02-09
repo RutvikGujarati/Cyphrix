@@ -2,8 +2,8 @@
     {
         "id": 1,
         "client": "DeFi Prime",
-        "protocol": "Lending Protocol V2",
-        "date": "2025-10-15",
+        "protocol": "Blockchain Analyst for Token Audit (ERC-20 & Custom Chain)",
+        "date": "2025-05-27",
         "verdict": "Secure",
         "score": 98,
         "issues": {
@@ -15,9 +15,9 @@
     },
     {
         "id": 2,
-        "client": "Nexus DAO",
-        "protocol": "Governance Module",
-        "date": "2025-09-02",
+        "client": "Defi",
+        "protocol": "Rust Smart Contract Auditor",
+        "date": "2024-12-19",
         "verdict": "pass",
         "score": 100,
         "issues": {
@@ -30,28 +30,14 @@
     {
         "id": 3,
         "client": "EtherBridge",
-        "protocol": "Cross-Chain Bridge",
-        "date": "2025-08-20",
+        "protocol": "NFT Marketplace Smart Contract Audit",
+        "date": "2024-07-19",
         "verdict": "Secure",
         "score": 95,
         "issues": {
             "critical": 0,
             "high": 2,
             "medium": 4
-        },
-        "link": "#"
-    },
-    {
-        "id": 4,
-        "client": "StableMint",
-        "protocol": "Algorithmic Stablecoin",
-        "date": "2025-07-10",
-        "verdict": "Review",
-        "score": 88,
-        "issues": {
-            "critical": 1,
-            "high": 3,
-            "medium": 5
         },
         "link": "#"
     }
