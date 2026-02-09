@@ -137,7 +137,14 @@ const ContactForm = () => {
             from_name: formData.name,
             from_email: formData.email,
             company: formData.company,
-            message: formData.message,
+            message: `
+                Name: ${formData.name}
+                Email: ${formData.email}
+                Company: ${formData.company}
+                
+                Message:
+                ${formData.message}
+            `,
             to_email: 'gujaratirutvik007@gmail.com'
         };
 

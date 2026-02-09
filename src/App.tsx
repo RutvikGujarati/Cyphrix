@@ -6,6 +6,9 @@ import ContactPage from './Components/ContactPage';
 import ProjectsPage from './Components/ProjectsPage';
 import { useEffect } from 'react';
 import Footer from './Components/Footer';
+import ResearchPage from './Components/ResearchPage';
+
+import RequestAuditPage from './Components/RequestAuditPage';
 
 // Wrapper to inject navigation into Header pending refactor
 const Layout = ({ children }: { children: React.ReactNode }) => {
@@ -17,10 +20,12 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
     window.scrollTo(0, 0);
   }, [location.pathname]);
 
-  const handleNavigate = (page: 'home' | 'projects' | 'contact') => {
+  const handleNavigate = (page: 'home' | 'projects' | 'contact' | 'research' | 'audit') => {
     if (page === 'home') navigate('/');
     if (page === 'projects') navigate('/projects');
     if (page === 'contact') navigate('/inquiry');
+    if (page === 'research') navigate('/research');
+    if (page === 'audit') navigate('/request-audit');
   };
 
   return (
@@ -41,7 +46,9 @@ function App() {
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/projects" element={<ProjectsPage />} />
+          <Route path="/research" element={<ResearchPage />} />
           <Route path="/inquiry" element={<ContactPage />} />
+          <Route path="/request-audit" element={<RequestAuditPage />} />
         </Routes>
       </Layout>
     </Router>

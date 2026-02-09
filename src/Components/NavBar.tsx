@@ -2,7 +2,7 @@ import React from 'react';
 import logo from "/Cyphrix.svg";
 
 interface HeaderProps {
-    onNavigate: (page: 'home' | 'projects' | 'contact') => void;
+    onNavigate: (page: 'home' | 'projects' | 'contact' | 'research' | 'audit') => void;
 }
 
 const Header: React.FC<HeaderProps> = ({ onNavigate }) => {
@@ -43,6 +43,13 @@ const Header: React.FC<HeaderProps> = ({ onNavigate }) => {
                                 Projects
                             </button>
 
+                            <button
+                                onClick={() => onNavigate('research')}
+                                className="btn btn-link text-white text-decoration-none small fw-bold text-uppercase d-none d-md-inline-block px-3 border-0"
+                            >
+                                R&D
+                            </button>
+
                             {/* Connect Us / Inquire */}
                             <button
                                 onClick={() => onNavigate('contact')}
@@ -55,7 +62,10 @@ const Header: React.FC<HeaderProps> = ({ onNavigate }) => {
                             <div className="vr bg-white opacity-25 mx-3 d-none d-md-block" style={{ height: '20px' }}></div>
 
                             {/* Request Audit: High-contrast CTA */}
-                            <button className="btn btn-info rounded-pill px-4 py-2 fw-bold text-uppercase small text-dark border-0">
+                            <button
+                                onClick={() => onNavigate('audit')}
+                                className="btn btn-info rounded-pill px-4 py-2 fw-bold text-uppercase small text-dark border-0 hover-lift active-scale-down transition-transform"
+                            >
                                 Request Audit
                             </button>
                         </div>

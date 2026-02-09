@@ -1,0 +1,58 @@
+[
+    {
+        "id": 1,
+        "title": "Quantum-Resistant Cryptography",
+        "category": "Security Research",
+        "status": "In Progress",
+        "description": "Exploration of lattice-based cryptography to secure blockchain networks against future quantum computing threats. Developing a prototype signature scheme compatible with EVM.",
+        "tags": [
+            "Cryptography",
+            "Quantum Computing",
+            "Lattice-Based"
+        ],
+        "date": "2025-11-15",
+        "link": "#"
+    },
+    {
+        "id": 2,
+        "title": "Zero-Knowledge Rollup Optimization",
+        "category": "Scaling Solutions",
+        "status": "Published",
+        "description": "A neovel approach to batch processing in ZK-Rollups, reducing gas costs by 30% through improved recursive proof generation techniques.",
+        "tags": [
+            "ZK-Snarks",
+            "Layer 2",
+            "Scaling"
+        ],
+        "date": "2025-08-22",
+        "link": "#"
+    },
+    {
+        "id": 3,
+        "title": "AI-Driven Smart Contract Auditing",
+        "category": "AI & Security",
+        "status": "Prototype",
+        "description": "Integrating LLMs with static analysis tools to detect complex logic vulnerabilities in smart contracts that traditional tools miss.",
+        "tags": [
+            "AI",
+            "Auditing",
+            "Smart Contracts"
+        ],
+        "date": "2025-05-10",
+        "link": "#"
+    },
+    {
+        "id": 4,
+        "title": "Decentralized Identity (DID) Framework",
+        "category": "Identity",
+        "status": "Concept",
+        "description": "Designing a privacy-preserving identity layer for DeFi applications, allowing compliance without compromising user anonymity.",
+        "tags": [
+            "DID",
+            "Privacy",
+            "Compliance"
+        ],
+        "date": "2025-02-01",
+        "link": "#"
+    }
+]
