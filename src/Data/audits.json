@@ -1,44 +1,93 @@
 [
     {
         "id": 1,
-        "client": "DeFi Prime",
-        "protocol": "Blockchain Analyst for Token Audit (ERC-20 & Custom Chain)",
-        "date": "2025-05-27",
+        "client": "8bit Protocol",
+        "protocol": "8bit Protocol Smart Contract Audit",
+        "date": "17 December 2025",
         "verdict": "Secure",
-        "score": 98,
         "issues": {
             "critical": 0,
             "high": 1,
-            "medium": 3
+            "medium": 2
         },
-        "link": "#"
+        "link": "https://gold-favourable-bonobo-219.mypinata.cloud/ipfs/bafybeiawtllcjhzyr76nif4civbp352s5oyvrnu3eol75jcdag2ionmd7a/8bit-Protocol-FinalReport%20(1).pdf"
     },
     {
         "id": 2,
-        "client": "Defi",
-        "protocol": "Rust Smart Contract Auditor",
-        "date": "2024-12-19",
-        "verdict": "pass",
-        "score": 100,
+        "client": "Stellar Network",
+        "protocol": "Stellar Network Smart Contract Audit",
+        "date": "17 December 2024",
+        "verdict": "Secure",
         "issues": {
-            "critical": 0,
-            "high": 0,
+            "critical": 1,
+            "high": 5,
             "medium": 1
         },
-        "link": "#"
+        "link": "https://gold-favourable-bonobo-219.mypinata.cloud/ipfs/bafybeiawtllcjhzyr76nif4civbp352s5oyvrnu3eol75jcdag2ionmd7a/Stellar_Final_Report.pdf"
     },
     {
         "id": 3,
-        "client": "EtherBridge",
-        "protocol": "NFT Marketplace Smart Contract Audit",
-        "date": "2024-07-19",
+        "client": "NFT Marketplace",
+        "protocol": "NFT Marketplace Smart Contract Final Review",
+        "date": "18 July 2024",
         "verdict": "Secure",
-        "score": 95,
         "issues": {
             "critical": 0,
-            "high": 2,
+            "high": 0,
             "medium": 4
         },
-        "link": "#"
+        "link": "https://gold-favourable-bonobo-219.mypinata.cloud/ipfs/bafybeiawtllcjhzyr76nif4civbp352s5oyvrnu3eol75jcdag2ionmd7a/NFT%20Marketplace%20Final%20Review%20.pdf"
+    },
+    {
+        "id": 4,
+        "client": "Nxml Protocol",
+        "protocol": "Nxml Smart Contract Security Audit",
+        "date": "05 June 2024",
+        "verdict": "Secure",
+        "issues": {
+            "critical": 0,
+            "high": 0,
+            "medium": 2
+        },
+        "link": "https://gold-favourable-bonobo-219.mypinata.cloud/ipfs/bafybeiawtllcjhzyr76nif4civbp352s5oyvrnu3eol75jcdag2ionmd7a/Nxml%2BAudit%2BReport.pdf"
+    },
+    {
+        "id": 5,
+        "client": "Equity Coin",
+        "protocol": "Equity Coin (ERC884) ICO Smart Contract Audit",
+        "date": "15 July 2022",
+        "verdict": "Secure",
+        "issues": {
+            "critical": 0,
+            "high": 1,
+            "medium": 1
+        },
+        "link": "https://gold-favourable-bonobo-219.mypinata.cloud/ipfs/bafybeiawtllcjhzyr76nif4civbp352s5oyvrnu3eol75jcdag2ionmd7a/Equity%20Coin(ERC884)%20ICO%20Audit%20Report.pdf"
+    },
+    {
+        "id": 6,
+        "client": "ICO Platform",
+        "protocol": "ICO Smart Contract Security Audit V1",
+        "date": "31 May 2022",
+        "verdict": "Secure",
+        "issues": {
+            "critical": 0,
+            "high": 3,
+            "medium": 3
+        },
+        "link": "https://gold-favourable-bonobo-219.mypinata.cloud/ipfs/bafybeiawtllcjhzyr76nif4civbp352s5oyvrnu3eol75jcdag2ionmd7a/ico%2BAudit%2BV1.pdf"
+    },
+    {
+        "id": 7,
+        "client": "AppDoc",
+        "protocol": "AppDoc Web Applications Security Re-Assessment (VAPT)",
+        "date": "21 September 2018",
+        "verdict": "Secure",
+        "issues": {
+            "critical": 0,
+            "high": 0,
+            "medium": 3
+        },
+        "link": "https://gold-favourable-bonobo-219.mypinata.cloud/ipfs/bafybeiawtllcjhzyr76nif4civbp352s5oyvrnu3eol75jcdag2ionmd7a/AppDoc%20Web%20Applications%20Re-Assessment%20Report.pdf"
     }
 ]

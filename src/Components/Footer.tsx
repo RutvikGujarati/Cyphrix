@@ -14,49 +14,66 @@ const Footer: React.FC = () => {
                             Architects of the decentralized future.
                         </p>
 
-                        <div className="row justify-content-center g-4">
-                            {/* Member 1 */}
-                            <div className="col-md-5">
-                                <div className="p-4 rounded-4 border border-white border-opacity-10 bg-dark bg-opacity-25 h-100 d-flex flex-column align-items-center hover-lift transition-all">
-                                    {/* Minecraft/Pixel NFT Avatar Placeholder */}
-                                    <div className="mb-4 position-relative">
-                                        <div className="rounded-circle overflow-hidden p-1" style={{ width: '100px', height: '100px', background: 'linear-gradient(135deg, #06b6d4, #2563eb)' }}>
+                        <div className="row justify-content-center g-3">
+                            {/* Member 1 - Rutvik */}
+                            <div className="col-md-4">
+                                <div className="p-3 rounded-4 border border-white border-opacity-10 bg-dark bg-opacity-25 h-100 d-flex flex-column align-items-center hover-lift transition-all">
+                                    <div className="mb-3 position-relative">
+                                        <div className="rounded-circle overflow-hidden p-1" style={{ width: '80px', height: '80px', background: 'linear-gradient(135deg, #06b6d4, #2563eb)' }}>
                                             <img
-                                                src="https://api.dicebear.com/9.x/identicon/svg?seed=Destiny"
-                                                alt="Team Member 1"
+                                                src="https://api.dicebear.com/9.x/identicon/svg?seed=Felix"
+                                                alt="Rutvik Gujarati"
                                                 className="w-100 h-100 rounded-circle bg-black"
                                             />
                                         </div>
-                                        <div className="position-absolute bottom-0 end-0 bg-success border border-black rounded-circle p-1" style={{ width: '12px', height: '12px' }}></div>
+                                        <div className="position-absolute bottom-0 end-0 bg-success border border-black rounded-circle p-1" style={{ width: '10px', height: '10px' }}></div>
                                     </div>
-
-                                    <h5 className="fw-bold mb-1">Developer 1</h5>
-                                    <a target="_blank" href="https://www.upwork.com/freelancers/~0119617106c07ee432?viewMode=1" className="btn btn-sm btn-outline-light rounded-pill px-4 mt-auto d-flex align-items-center gap-2 group">
-                                        <span>Upwork Profile</span>
-                                        <ExternalLink size={14} className="group-hover:translate-x-1 transition-transform" />
+                                    <h6 className="fw-bold mb-1">Rutvik Gujarati</h6>
+                                    <a target="_blank" href="https://www.upwork.com/freelancers/~0119617106c07ee432?viewMode=1" className="btn btn-sm btn-outline-light rounded-pill px-3 mt-auto d-flex align-items-center gap-1" style={{ fontSize: '0.8rem' }}>
+                                        <span>Upwork</span>
+                                        <ExternalLink size={12} />
                                     </a>
                                 </div>
                             </div>
 
-                            {/* Member 2 */}
-                            <div className="col-md-5">
-                                <div className="p-4 rounded-4 border border-white border-opacity-10 bg-dark bg-opacity-25 h-100 d-flex flex-column align-items-center hover-lift transition-all">
-                                    {/* Minecraft/Pixel NFT Avatar Placeholder */}
-                                    <div className="mb-4 position-relative">
-                                        <div className="rounded-circle overflow-hidden p-1" style={{ width: '100px', height: '100px', background: 'linear-gradient(135deg, #a855f7, #db2777)' }}>
+                            {/* Member 2 - Vishal */}
+                            <div className="col-md-4">
+                                <div className="p-3 rounded-4 border border-white border-opacity-10 bg-dark bg-opacity-25 h-100 d-flex flex-column align-items-center hover-lift transition-all">
+                                    <div className="mb-3 position-relative">
+                                        <div className="rounded-circle overflow-hidden p-1" style={{ width: '80px', height: '80px', background: 'linear-gradient(135deg, #a855f7, #db2777)' }}>
                                             <img
-                                                src="https://api.dicebear.com/9.x/identicon/svg?seed=Jameson"
-                                                alt="Team Member 2"
+                                                src="https://api.dicebear.com/9.x/identicon/svg?seed=Luna"
+                                                alt="Vishal Baraiya"
                                                 className="w-100 h-100 rounded-circle bg-black"
                                             />
                                         </div>
-                                        <div className="position-absolute bottom-0 end-0 bg-success border border-black rounded-circle p-1" style={{ width: '12px', height: '12px' }}></div>
+                                        <div className="position-absolute bottom-0 end-0 bg-success border border-black rounded-circle p-1" style={{ width: '10px', height: '10px' }}></div>
                                     </div>
+                                    <h6 className="fw-bold mb-1">Vishal Baraiya</h6>
+                                    <a target="_blank" href="https://www.upwork.com/freelancers/vishalb43?mp_source=share" className="btn btn-sm btn-outline-light rounded-pill px-3 mt-auto d-flex align-items-center gap-1" style={{ fontSize: '0.8rem' }}>
+                                        <span>Upwork</span>
+                                        <ExternalLink size={12} />
+                                    </a>
+                                </div>
+                            </div>
 
-                                    <h5 className="fw-bold mb-1">Developer 2</h5>
-                                    <a target="_blank" href="https://www.upwork.com/freelancers/vishalb43?mp_source=share" className="btn btn-sm btn-outline-light rounded-pill px-4 mt-auto d-flex align-items-center gap-2 group">
-                                        <span>Upwork Profile</span>
-                                        <ExternalLink size={14} className="group-hover:translate-x-1 transition-transform" />
+                            {/* Member 3 - Kinal */}
+                            <div className="col-md-4">
+                                <div className="p-3 rounded-4 border border-white border-opacity-10 bg-dark bg-opacity-25 h-100 d-flex flex-column align-items-center hover-lift transition-all">
+                                    <div className="mb-3 position-relative">
+                                        <div className="rounded-circle overflow-hidden p-1" style={{ width: '80px', height: '80px', background: 'linear-gradient(135deg, #f59e0b, #ef4444)' }}>
+                                            <img
+                                                src="https://api.dicebear.com/9.x/identicon/svg?seed=Aneka"
+                                                alt="Kinal Makavana"
+                                                className="w-100 h-100 rounded-circle bg-black"
+                                            />
+                                        </div>
+                                        <div className="position-absolute bottom-0 end-0 bg-success border border-black rounded-circle p-1" style={{ width: '10px', height: '10px' }}></div>
+                                    </div>
+                                    <h6 className="fw-bold mb-1">Kinal Makavana</h6>
+                                    <a target="_blank" href="https://www.upwork.com/freelancers/~01aab1fed28d527e46?mp_source=share" className="btn btn-sm btn-outline-light rounded-pill px-3 mt-auto d-flex align-items-center gap-1" style={{ fontSize: '0.8rem' }}>
+                                        <span>Upwork</span>
+                                        <ExternalLink size={12} />
                                     </a>
                                 </div>
                             </div>

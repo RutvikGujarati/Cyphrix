@@ -27,7 +27,6 @@ const AuditList: React.FC = () => {
                                 <th scope="col" className="py-3 ps-4">Protocol</th>
                                 <th scope="col" className="py-3">Date</th>
                                 <th scope="col" className="py-3 text-center">Findings</th>
-                                <th scope="col" className="py-3 text-center">Score</th>
                                 <th scope="col" className="py-3 text-end pe-4">Report</th>
                             </tr>
                         </thead>
@@ -54,20 +53,13 @@ const AuditList: React.FC = () => {
                                             {audit.issues?.critical === 0 && audit.issues?.high === 0 && audit.issues?.medium === 0 && <span className="badge bg-success bg-opacity-10 text-success border border-success border-opacity-25">Clean</span>}
                                         </div>
                                     </td>
-                                    <td className="py-4 text-center">
-                                        <div className="d-flex align-items-center justify-content-center gap-2">
-                                            <span className={`fw-bold ${audit.score >= 90 ? 'text-success' : audit.score >= 80 ? 'text-warning' : 'text-danger'}`}>{audit.score}</span>
-                                            <div className="progress" style={{ width: '60px', height: '4px', background: 'rgba(255,255,255,0.1)' }}>
-                                                <div
-                                                    className={`progress-bar ${audit.score >= 90 ? 'bg-success' : audit.score >= 80 ? 'bg-warning' : 'bg-danger'}`}
-                                                    role="progressbar"
-                                                    style={{ width: `${audit.score}%` }}
-                                                />
-                                            </div>
-                                        </div>
-                                    </td>
                                     <td className="py-4 text-end pe-4">
-                                        <a href={audit.link} className="btn btn-sm btn-outline-light rounded-pill px-3 opacity-75">
+                                        <a
+                                            href={audit.link}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="btn btn-sm btn-outline-light rounded-pill px-3 opacity-75 hover-scale"
+                                        >
                                             View <ExternalLink size={14} className="ms-1" />
                                         </a>
                                     </td>
