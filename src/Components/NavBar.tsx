@@ -1,75 +1,56 @@
-import React from 'react';
+import React, { useState } from 'react';
 import logo from "/Cyphrix.svg";
+import './NavBar.css';
 
 interface HeaderProps {
     onNavigate: (page: 'home' | 'projects' | 'contact' | 'research' | 'audit') => void;
 }
 
 const Header: React.FC<HeaderProps> = ({ onNavigate }) => {
-    return (
-        <header className="fixed-top py-4 shadow-none">
-            <div className="container">
-                {/* Advanced Glassmorphism using Bootstrap classes */}
-                <nav className="navbar navbar-dark rounded-pill px-4 py-2 border border-info border-opacity-25 bg-black bg-opacity-75 shadow-lg">
-                    <div className="container-fluid d-flex align-items-center justify-content-between">
+    const [isOpen, setIsOpen] = useState(false);
 
-                        {/* 1. LOGO: Using negative margins to break the border */}
-                        <a
-                            className="navbar-brand d-flex align-items-center m-0 p-0"
-                            href="#"
-                            onClick={(e) => { e.preventDefault(); onNavigate('home'); }}
-                        >
-                            <div className="position-relative mt-n3 mb-n3" style={{ width: '64px' }}>
-                                <img
-                                    src={logo}
-                                    alt="Cyphrix"
-                                    className="img-fluid"
-                                />
+    const handleNav = (page: 'home' | 'projects' | 'contact' | 'research' | 'audit') => {
+        onNavigate(page);
+        setIsOpen(false);
+    };
+
+    return (
+        <header className="fixed-top py-2 py-md-4 shadow-none">
+            <div className="container px-2 px-sm-3">
+                <nav className="navbar navbar-expand-lg navbar-dark p-0 border-0 bg-transparent shadow-none">
+                    <div className={`container-fluid p-2 px-3 transition-all duration-300 ${isOpen ? 'rounded-4' : 'rounded-pill'} border border-info border-opacity-25 bg-black bg-opacity-75 shadow-lg`}
+                        style={{ backdropFilter: 'blur(20px)' }}>
+
+                        {/* Logo */}
+                        <a className="navbar-brand d-flex align-items-center m-0 p-0" href="#" onClick={(e) => { e.preventDefault(); handleNav('home'); }}>
+                            <div className="position-relative nav-logo-wrap">
+                                <img src={logo} alt="Cyphrix" className="img-fluid" />
                             </div>
-                            <div className="ms-3 d-none d-sm-block">
-                                <span className="fw-bold text-white lh-1 h5 mb-0 d-block">CYPHRIX</span>
-                                <small className="text-info font-monospace opacity-75" style={{ fontSize: '0.65rem' }}>
-                                    TRUST. ENCRYPTED.
-                                </small>
+                            <div className="ms-2 d-none d-sm-block">
+                                <span className="fw-bold text-white lh-1 h5 mb-0 d-block tracking-tight">CYPHRIX</span>
+                                <small className="text-info font-monospace opacity-75 nav-tagline">TRUST. ENCRYPTED.</small>
                             </div>
                         </a>
 
-                        {/* 2. DUAL ACTION BUTTONS */}
-                        <div className="d-flex align-items-center">
-                            <button
-                                onClick={() => onNavigate('projects')}
-                                className="btn btn-link text-white text-decoration-none small fw-bold text-uppercase d-none d-md-inline-block px-3 border-0"
-                            >
-                                Projects
-                            </button>
+                        {/* Toggler */}
+                        <button className="navbar-toggler border-0 shadow-none" type="button" onClick={() => setIsOpen(!isOpen)}>
+                            <span className="navbar-toggler-icon" />
+                        </button>
 
-                            <button
-                                onClick={() => onNavigate('research')}
-                                className="btn btn-link text-white text-decoration-none small fw-bold text-uppercase d-none d-md-inline-block px-3 border-0"
-                            >
-                                R&D
-                            </button>
-
-                            {/* Connect Us / Inquire */}
-                            <button
-                                onClick={() => onNavigate('contact')}
-                                className="btn btn-link text-white text-decoration-none small fw-bold text-uppercase d-none d-md-inline-block px-3 border-0"
-                            >
-                                Contact Us
-                            </button>
-
-                            {/* Vertical Divider */}
-                            <div className="vr bg-white opacity-25 mx-3 d-none d-md-block" style={{ height: '20px' }}></div>
-
-                            {/* Request Audit: High-contrast CTA */}
-                            <button
-                                onClick={() => onNavigate('audit')}
-                                className="btn btn-info rounded-pill px-4 py-2 fw-bold text-uppercase small text-dark border-0 hover-lift active-scale-down transition-transform"
-                            >
-                                Request Audit
-                            </button>
+                        {/* Menu */}
+                        <div className={`collapse navbar-collapse ${isOpen ? 'show' : ''}`}>
+                            <div className="nav-menu-inner d-flex flex-column flex-lg-row align-items-center w-100 py-3 py-lg-0">
+                                <div className="d-flex flex-column flex-lg-row align-items-center justify-content-lg-center gap-2 gap-lg-4 flex-grow-1">
+                                    <button onClick={() => handleNav('projects')} className="nav-link-btn">Projects</button>
+                                    <button onClick={() => handleNav('research')} className="nav-link-btn">R&D</button>
+                                    <button onClick={() => handleNav('contact')} className="nav-link-btn">Assurance</button>
+                                    <button onClick={() => handleNav('contact')} className="nav-link-btn">Contact</button>
+                                </div>
+                                <button onClick={() => handleNav('audit')} className="btn btn-info rounded-pill px-4 py-2 fw-bold text-uppercase small text-dark border-0 mt-3 mt-lg-0">
+                                    Request Audit
+                                </button>
+                            </div>
                         </div>
-
                     </div>
                 </nav>
             </div>

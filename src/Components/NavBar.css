@@ -25,7 +25,7 @@
   border: 1px solid rgba(0, 242, 255, 0.15);
   border-radius: 20px;
   padding: 1rem 1.5rem;
-  box-shadow: 
+  box-shadow:
     0 8px 32px rgba(0, 0, 0, 0.8),
     0 0 40px rgba(0, 242, 255, 0.1);
   transition: all 0.3s ease;
@@ -48,7 +48,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 
+  box-shadow:
     0 0 20px rgba(0, 242, 255, 0.4),
     inset 0 0 10px rgba(255, 255, 255, 0.2);
   transition: all 0.3s ease;
@@ -63,19 +63,17 @@
   left: -50%;
   width: 200%;
   height: 200%;
-  background: linear-gradient(
-    45deg,
-    transparent,
-    rgba(255, 255, 255, 0.3),
-    transparent
-  );
+  background: linear-gradient(45deg,
+      transparent,
+      rgba(255, 255, 255, 0.3),
+      transparent);
   transform: rotate(45deg);
   transition: all 0.5s ease;
 }
 
 .navbar-brand:hover .logo-box {
   transform: rotate(-10deg) scale(1.08);
-  box-shadow: 
+  box-shadow:
     0 0 30px rgba(0, 242, 255, 0.6),
     inset 0 0 15px rgba(255, 255, 255, 0.3);
 }
@@ -200,7 +198,7 @@
 .btn-audit:hover {
   background: rgba(0, 242, 255, 0.1);
   border-color: #00f2ff;
-  box-shadow: 
+  box-shadow:
     0 0 30px rgba(0, 242, 255, 0.3),
     inset 0 0 20px rgba(0, 242, 255, 0.1);
   color: #00f2ff;
@@ -216,40 +214,83 @@
    MOBILE STYLES
    =================================== */
 
+/* Logo wrap: default size */
+.nav-logo-wrap {
+  width: 64px;
+  margin-top: -0.5rem;
+  margin-bottom: -0.5rem;
+}
+
+.nav-tagline {
+  font-size: 0.65rem;
+}
+
+/* Simple nav link style (text only, no dropdown look) */
+.nav-link-btn {
+  background: none;
+  border: none;
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 0.875rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  padding: 0.6rem 1rem;
+  text-decoration: none;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.nav-link-btn:hover {
+  color: #00f2ff;
+}
+
+/* Desktop: nav menu inner spacing */
+.nav-menu-inner {
+  gap: 0;
+}
+
+/* ===================================
+   MOBILE DROPDOWN FIXES
+   =================================== */
+
+/* Fix for the background circle issue */
 @media (max-width: 991px) {
-  .navbar-advanced {
-    padding: 1rem;
-  }
-  
+
+  /* Prevent the parent pill from clipping the dropdown */
   .navbar-collapse {
-    margin-top: 1rem;
+    width: 100%;
+    /* Ensure links are centered and not crowded by the pill ends */
     padding-top: 1rem;
     border-top: 1px solid rgba(0, 242, 255, 0.1);
+    margin-top: 0.75rem;
   }
-  
-  .nav-link-custom {
-    padding: 0.8rem 1rem !important;
-    margin-bottom: 0.25rem;
-  }
-  
-  .btn-audit {
+
+  .nav-menu-inner {
     width: 100%;
-    justify-content: center;
+    text-align: center;
   }
-  
-  .logo-box {
-    width: 38px;
-    height: 38px;
+
+  /* Make sure the pill shape transitions to a rounded box when open */
+  .container-fluid.rounded-4 {
+    border-radius: 24px !important;
+    transition: border-radius 0.3s ease;
   }
-  
-  .navbar-brand h5 {
-    font-size: 1.1rem;
-  }
-  
-  .tagline {
-    font-size: 7px;
+
+  .nav-link-btn {
+    display: block;
+    width: 100%;
+    padding: 10px 0 !important;
+    background: transparent !important;
+    border: none !important;
   }
 }
+
+/* Remove Bootstrap's default pill-breaking behavior */
+.navbar-nav {
+  --bs-nav-link-padding-y: 0.5rem;
+}
+
+
 
 /* ===================================
    NAVBAR TOGGLER

@@ -374,7 +374,7 @@ const HeroVisual = ({ logoProgress, onVisualComplete }: HeroVisualProps) => {
           const lz = logo[i3 + 2];
           targetX = baseX * waveInfluence + lx * easedS;
           targetZ = baseZ * waveInfluence + lz * easedS;
-          let waveY = (waveBase + waveLayer) * waveInfluence;
+          const  waveY = (waveBase + waveLayer) * waveInfluence;
           targetY = waveY + ly * easedS;
         } else {
           targetX = baseX;
