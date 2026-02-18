@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import * as THREE from 'three';
 import emailjs from '@emailjs/browser';
+import { ExternalLink } from 'lucide-react';
 
 const ContactVisual = () => {
     const mountRef = useRef<HTMLDivElement>(null);
@@ -227,10 +228,10 @@ const ContactForm = () => {
 
 export default function ContactPage() {
     return (
-        <div className="min-vh-100 w-100 position-relative bg-black text-white d-flex align-items-center py-5 overflow-hidden">
+        <div className="min-vh-100 w-100 position-relative bg-black text-white py-5 overflow-hidden">
             <ContactVisual />
             <div className="container position-relative z-1 py-5">
-                <div className="row align-items-center g-5">
+                <div className="row align-items-center g-5 mb-5">
                     <div className="col-lg-5 text-center text-lg-start">
                         <div className="mb-4">
                             <span className="badge border border-info text-info rounded-pill px-3 py-2 mb-3 bg-transparent">SECURE CHANNEL OPEN</span>
@@ -246,6 +247,61 @@ export default function ContactPage() {
                         </div>
                     </div>
                 </div>
+
+                <section className="border-top border-white border-opacity-10 pt-5 mt-5">
+                    <div className="row justify-content-center">
+                        <div className="col-lg-8 text-center">
+                            <h3 className="display-6 fw-bold mb-4 text-uppercase tracking-widest">
+                                <span className="text-white">The</span> <span className="text-info">Team</span>
+                            </h3>
+                            <p className="text-white-50 mb-5">Architects of the decentralized future.</p>
+                            <div className="row justify-content-center g-3">
+                                <div className="col-md-4">
+                                    <div className="p-3 rounded-4 border border-white border-opacity-10 bg-dark bg-opacity-25 h-100 d-flex flex-column align-items-center hover-lift transition-all">
+                                        <div className="mb-3 position-relative">
+                                            <div className="rounded-circle overflow-hidden p-1" style={{ width: '80px', height: '80px', background: 'linear-gradient(135deg, #06b6d4, #2563eb)' }}>
+                                                <img src="https://api.dicebear.com/9.x/identicon/svg?seed=Felix" alt="Rutvik Gujarati" className="w-100 h-100 rounded-circle bg-black" />
+                                            </div>
+                                            <div className="position-absolute bottom-0 end-0 bg-success border border-black rounded-circle p-1" style={{ width: '10px', height: '10px' }}></div>
+                                        </div>
+                                        <h6 className="fw-bold mb-1">Rutvik Gujarati</h6>
+                                        <a target="_blank" rel="noopener noreferrer" href="https://www.upwork.com/freelancers/~0119617106c07ee432?viewMode=1" className="btn btn-sm btn-outline-light rounded-pill px-3 mt-auto d-flex align-items-center gap-1" style={{ fontSize: '0.8rem' }}>
+                                            <span>Upwork</span> <ExternalLink size={12} />
+                                        </a>
+                                    </div>
+                                </div>
+                                <div className="col-md-4">
+                                    <div className="p-3 rounded-4 border border-white border-opacity-10 bg-dark bg-opacity-25 h-100 d-flex flex-column align-items-center hover-lift transition-all">
+                                        <div className="mb-3 position-relative">
+                                            <div className="rounded-circle overflow-hidden p-1" style={{ width: '80px', height: '80px', background: 'linear-gradient(135deg, #a855f7, #db2777)' }}>
+                                                <img src="https://api.dicebear.com/9.x/identicon/svg?seed=Luna" alt="Vishal Baraiya" className="w-100 h-100 rounded-circle bg-black" />
+                                            </div>
+                                            <div className="position-absolute bottom-0 end-0 bg-success border border-black rounded-circle p-1" style={{ width: '10px', height: '10px' }}></div>
+                                        </div>
+                                        <h6 className="fw-bold mb-1">Vishal Baraiya</h6>
+                                        <a target="_blank" rel="noopener noreferrer" href="https://www.upwork.com/freelancers/vishalb43?mp_source=share" className="btn btn-sm btn-outline-light rounded-pill px-3 mt-auto d-flex align-items-center gap-1" style={{ fontSize: '0.8rem' }}>
+                                            <span>Upwork</span> <ExternalLink size={12} />
+                                        </a>
+                                    </div>
+                                </div>
+                                <div className="col-md-4">
+                                    <div className="p-3 rounded-4 border border-white border-opacity-10 bg-dark bg-opacity-25 h-100 d-flex flex-column align-items-center hover-lift transition-all">
+                                        <div className="mb-3 position-relative">
+                                            <div className="rounded-circle overflow-hidden p-1" style={{ width: '80px', height: '80px', background: 'linear-gradient(135deg, #f59e0b, #ef4444)' }}>
+                                                <img src="https://api.dicebear.com/9.x/identicon/svg?seed=Aneka" alt="Kinal Makavana" className="w-100 h-100 rounded-circle bg-black" />
+                                            </div>
+                                            <div className="position-absolute bottom-0 end-0 bg-success border border-black rounded-circle p-1" style={{ width: '10px', height: '10px' }}></div>
+                                        </div>
+                                        <h6 className="fw-bold mb-1">Kinal Makavana</h6>
+                                        <a target="_blank" rel="noopener noreferrer" href="https://www.upwork.com/freelancers/~01aab1fed28d527e46?mp_source=share" className="btn btn-sm btn-outline-light rounded-pill px-3 mt-auto d-flex align-items-center gap-1" style={{ fontSize: '0.8rem' }}>
+                                            <span>Upwork</span> <ExternalLink size={12} />
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
             </div>
         </div>
     );

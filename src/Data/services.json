@@ -1,0 +1,89 @@
+{
+  "tagline": "Build Secure. Scale Confidently. Lead with Blockchain.",
+  "intro": "Cyphrix delivers enterprise-grade blockchain development, smart contract security, and Web3 engineering solutions designed for performance, scalability, and trust.",
+  "closing": "Cyphrix — Securing the Future of Web3 Infrastructure.",
+  "pageTitle": "Blockchain Development & Web3 Security Services",
+  "pageIntro": "Cyphrix is a trusted blockchain development company specializing in smart contract development, smart contract audit, dApp development, private blockchain solutions, and enterprise Web3 security services.",
+  "services": [
+    {
+      "id": 1,
+      "icon": "Sparkles",
+      "title": "Blockchain PoC & MVP Development",
+      "summary": "We transform ideas into validated blockchain prototypes and production-ready MVPs — minimizing risk and accelerating go-to-market.",
+      "detail": "As a leading blockchain consulting company, we provide structured Proof of Concept (PoC), prototype, and MVP development services to validate feasibility and technical architecture before full-scale deployment.",
+      "tagline": "Validate your blockchain vision before you scale.",
+      "keywords": "blockchain PoC development, MVP development company, blockchain consulting services"
+    },
+    {
+      "id": 2,
+      "icon": "FileCode",
+      "title": "Smart Contract Development",
+      "summary": "Secure, gas-optimized smart contracts built on Ethereum and TRON, engineered for performance and automation.",
+      "detail": "Cyphrix delivers secure, gas-efficient, and production-ready smart contract development services across major blockchain networks.",
+      "tagline": "Secure, optimized contracts engineered for Web3 performance.",
+      "platforms": ["Ethereum (ERC-20 tokens, security tokens)", "TRON", "Custom wallet & automation contracts"],
+      "bullets": ["Security-first architecture", "Gas optimization", "Upgradeability", "Mainnet deployment"],
+      "keywords": "smart contract development company, Ethereum smart contract development, ERC-20 token development"
+    },
+    {
+      "id": 3,
+      "icon": "ShieldCheck",
+      "title": "Smart Contract Audit & Web3 Security",
+      "summary": "Comprehensive smart contract security audits to eliminate vulnerabilities, prevent exploits, and ensure mainnet readiness.",
+      "detail": "We provide independent smart contract audit services to identify vulnerabilities, logic flaws, and security risks before deployment.",
+      "tagline": "Identify vulnerabilities before attackers do.",
+      "methodology": ["Manual code review", "Static & dynamic analysis", "Business logic verification", "Re-audit after fixes"],
+      "deliverables": "Detailed audit report with risk classification and remediation guidance.",
+      "keywords": "smart contract audit company, blockchain security audit, Web3 security services"
+    },
+    {
+      "id": 4,
+      "icon": "Globe",
+      "title": "Decentralized Application (dApp) Development",
+      "summary": "End-to-end decentralized application development with scalable architecture and seamless blockchain integration.",
+      "detail": "Cyphrix offers full-cycle dApp development services, including smart contract integration, backend architecture, and frontend engineering.",
+      "tagline": "Scalable decentralized applications built for real-world adoption.",
+      "bullets": ["Transparency", "Automated execution", "High availability", "Reduced operational costs"],
+      "keywords": "dApp development company, decentralized application development services, Web3 app development"
+    },
+    {
+      "id": 5,
+      "icon": "Network",
+      "title": "Private Blockchain Solutions",
+      "summary": "Enterprise-grade permissioned blockchain networks built on Hyperledger Fabric, Corda, and Quorum.",
+      "detail": "We design and deploy enterprise-grade private blockchain networks tailored for scalability, governance, and regulatory compliance.",
+      "tagline": "Enterprise-grade blockchain with control, speed, and privacy.",
+      "platforms": ["Hyperledger Fabric", "Hyperledger Besu", "Corda", "Quorum"],
+      "keywords": "private blockchain development company, enterprise blockchain solutions, permissioned blockchain development"
+    },
+    {
+      "id": 6,
+      "icon": "Coins",
+      "title": "ICO & Token Development",
+      "summary": "Complete token launch solutions — from tokenomics design to smart contract deployment and compliance integration.",
+      "detail": "We provide end-to-end ICO and token development services, covering tokenomics design, smart contract engineering, KYC/AML integration, and mainnet deployment.",
+      "tagline": "Launch compliant, secure, and scalable token ecosystems.",
+      "keywords": "ICO development company, token development services, crypto token launch"
+    },
+    {
+      "id": 7,
+      "icon": "MonitorSmartphone",
+      "title": "Web & Mobile Application Development",
+      "summary": "Secure, scalable enterprise web platforms and high-performance mobile applications.",
+      "detail": "Cyphrix builds secure, scalable enterprise web applications and mobile solutions.",
+      "tagline": "High-performance digital platforms built for growth.",
+      "bullets": ["B2B & B2C platforms", "CMS & eCommerce solutions", "Android & iOS development"],
+      "keywords": "enterprise web development company, mobile app development services"
+    },
+    {
+      "id": 8,
+      "icon": "CloudCog",
+      "title": "Security & Cloud Assurance",
+      "summary": "Web application security testing, VAPT services, and cloud security assessments aligned with global standards.",
+      "detail": "We offer advanced cybersecurity services including:",
+      "tagline": "End-to-end protection for your Web3 infrastructure.",
+      "bullets": ["Web Application Security Testing (OWASP)", "Infrastructure VAPT", "Cloud security & IAM review"],
+      "keywords": "VAPT services company, cloud security services, web application security testing"
+    }
+  ]
+}

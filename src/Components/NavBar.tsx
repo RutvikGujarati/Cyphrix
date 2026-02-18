@@ -3,13 +3,13 @@ import logo from "/Cyphrix.svg";
 import './NavBar.css';
 
 interface HeaderProps {
-    onNavigate: (page: 'home' | 'projects' | 'contact' | 'research' | 'audit') => void;
+    onNavigate: (page: 'home' | 'projects' | 'contact' | 'research' | 'audit' | 'services') => void;
 }
 
 const Header: React.FC<HeaderProps> = ({ onNavigate }) => {
     const [isOpen, setIsOpen] = useState(false);
 
-    const handleNav = (page: 'home' | 'projects' | 'contact' | 'research' | 'audit') => {
+    const handleNav = (page: 'home' | 'projects' | 'contact' | 'research' | 'audit' | 'services') => {
         onNavigate(page);
         setIsOpen(false);
     };
@@ -42,8 +42,8 @@ const Header: React.FC<HeaderProps> = ({ onNavigate }) => {
                             <div className="nav-menu-inner d-flex flex-column flex-lg-row align-items-center w-100 py-3 py-lg-0">
                                 <div className="d-flex flex-column flex-lg-row align-items-center justify-content-lg-center gap-2 gap-lg-4 flex-grow-1">
                                     <button onClick={() => handleNav('projects')} className="nav-link-btn">Projects</button>
+                                    <button onClick={() => handleNav('services')} className="nav-link-btn">Services</button>
                                     <button onClick={() => handleNav('research')} className="nav-link-btn">R&D</button>
-                                    <button onClick={() => handleNav('contact')} className="nav-link-btn">Assurance</button>
                                     <button onClick={() => handleNav('contact')} className="nav-link-btn">Contact</button>
                                 </div>
                                 <button onClick={() => handleNav('audit')} className="btn btn-info rounded-pill px-4 py-2 fw-bold text-uppercase small text-dark border-0 mt-3 mt-lg-0">

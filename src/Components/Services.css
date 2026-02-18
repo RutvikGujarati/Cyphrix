@@ -277,3 +277,41 @@
 .letter-spacing-wide {
   letter-spacing: 0.2em;
 }
+
+/* ===================================
+   SERVICES PAGE (full docx content, scroll)
+   =================================== */
+
+.services-page {
+  background: transparent;
+}
+
+.services-hero {
+  min-height: 100vh;
+  padding: 100px 1rem 3rem;
+}
+
+/* Three.js canvas sits behind; subtle gradient overlay for readability */
+.services-visual-wrapper::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0.15) 25%, rgba(0,0,0,0.08) 50%, rgba(0,0,0,0.2) 100%);
+  pointer-events: none;
+}
+
+.services-visual {
+  background: radial-gradient(ellipse 80% 60% at 50% 0%, #001a1f 0%, #000 60%);
+}
+
+.service-detail-section {
+  scroll-margin-top: 100px;
+}
+
+.service-icon-display {
+  filter: drop-shadow(0 0 12px rgba(0, 242, 255, 0.3));
+}
+
+.service-icon-display svg {
+  flex-shrink: 0;
+}

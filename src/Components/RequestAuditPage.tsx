@@ -14,6 +14,9 @@ const AuditVisual: React.FC = () => {
         let width = mount.clientWidth;
         let height = mount.clientHeight;
 
+        const getScale = () => Math.max(0.4, Math.min(1, Math.min(width, height) / 500));
+        let scale = getScale();
+
         const scene = new THREE.Scene();
         const camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 100);
         camera.position.z = 15;
@@ -25,6 +28,7 @@ const AuditVisual: React.FC = () => {
 
         // Security Shield / Hexagon
         const shieldGroup = new THREE.Group();
+        shieldGroup.scale.set(scale, scale, scale);
         scene.add(shieldGroup);
 
         // Lock Body
@@ -59,11 +63,12 @@ const AuditVisual: React.FC = () => {
         particlesGeo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
         const particlesMat = new THREE.PointsMaterial({
             color: 0x00f2ff,
-            size: 0.05,
+            size: 0.08 * scale,
             transparent: true,
             opacity: 0.4
         });
         const particles = new THREE.Points(particlesGeo, particlesMat);
+        particles.scale.set(scale, scale, scale);
         scene.add(particles);
 
         const animate = () => {
@@ -86,6 +91,10 @@ const AuditVisual: React.FC = () => {
             if (!mount) return;
             width = mount.clientWidth;
             height = mount.clientHeight;
+            scale = getScale();
+            shieldGroup.scale.set(scale, scale, scale);
+            particles.scale.set(scale, scale, scale);
+            particlesMat.size = 0.08 * scale;
             renderer.setSize(width, height);
             camera.aspect = width / height;
             camera.updateProjectionMatrix();
