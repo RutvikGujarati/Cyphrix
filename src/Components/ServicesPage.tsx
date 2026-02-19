@@ -1,5 +1,5 @@
-import React, { useEffect } from 'react';
-import { motion } from 'framer-motion';
+import React, { useEffect, useState, useRef, useCallback } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import {
   Sparkles,
   FileCode,
@@ -26,13 +26,61 @@ const ICON_MAP: Record<string, LucideIcon> = {
   CloudCog,
 };
 
+const PHRASES = ['Build Secure', 'Scale Confidently', 'Lead with Blockchain'];
+const STEP = 400;
+const MAX_VIRTUAL = PHRASES.length * STEP;
+
 const ServicesPage: React.FC = () => {
+  const [phraseIndex, setPhraseIndex] = useState(0);
+  const virtualY = useRef(0);
+  const touchStartY = useRef(0);
+
+  const updateFromDelta = useCallback((delta: number) => {
+    virtualY.current += delta;
+    virtualY.current = Math.max(0, Math.min(MAX_VIRTUAL, virtualY.current));
+    const idx = Math.min(PHRASES.length - 1, Math.floor(virtualY.current / STEP));
+    setPhraseIndex(idx);
+  }, []);
+
+  const handleWheel = useCallback((e: WheelEvent) => {
+    if (window.scrollY > 0) return;
+    const atMax = virtualY.current >= MAX_VIRTUAL;
+    const scrollingDown = e.deltaY > 0;
+    if (atMax && scrollingDown) return;
+    if (e.cancelable) e.preventDefault();
+    updateFromDelta(e.deltaY);
+  }, [updateFromDelta]);
+
+  const handleTouchStart = (e: TouchEvent) => {
+    touchStartY.current = e.touches[0].clientY;
+  };
+
+  const handleTouchMove = useCallback((e: TouchEvent) => {
+    if (window.scrollY > 0) return;
+    const currentY = e.touches[0].clientY;
+    const deltaY = touchStartY.current - currentY;
+    touchStartY.current = currentY;
+    const atMax = virtualY.current >= MAX_VIRTUAL;
+    const scrollingDown = deltaY > 0;
+    if (atMax && scrollingDown) return;
+    if (e.cancelable) e.preventDefault();
+    updateFromDelta(deltaY * 0.6);
+  }, [updateFromDelta]);
+
   useEffect(() => {
     document.documentElement.style.scrollBehavior = 'smooth';
+    document.body.style.scrollBehavior = 'smooth';
+    window.addEventListener('wheel', handleWheel, { passive: false });
+    window.addEventListener('touchstart', handleTouchStart, { passive: true });
+    window.addEventListener('touchmove', handleTouchMove, { passive: false });
     return () => {
       document.documentElement.style.scrollBehavior = 'auto';
+      document.body.style.scrollBehavior = 'auto';
+      window.removeEventListener('wheel', handleWheel);
+      window.removeEventListener('touchstart', handleTouchStart);
+      window.removeEventListener('touchmove', handleTouchMove);
     };
-  }, []);
+  }, [handleWheel, handleTouchMove]);
 
   const data = servicesData as {
     tagline: string;
@@ -66,20 +114,24 @@ const ServicesPage: React.FC = () => {
         <ServicesVisual />
       </div>
       <div className="position-relative services-page-content" style={{ zIndex: 1 }}>
-        {/* Hero - centered heading, full viewport */}
-        <motion.section
-          className="services-hero d-flex flex-column align-items-center justify-content-center text-center"
-          initial={{ opacity: 0, y: 24 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-        >
-          <h1 className="display-4 fw-bold mb-4">
-            {data.tagline}
-          </h1>
-          <p className="lead text-white-50 mx-auto px-3" style={{ maxWidth: '640px' }}>
-            {data.intro}
-          </p>
-        </motion.section>
+        {/* Hero - tagline swaps in place with each scroll */}
+        <section className="services-hero d-flex flex-column align-items-center justify-content-center text-center">
+          <div className="services-hero-phrase-swap">
+            <AnimatePresence mode="wait">
+              <motion.h1
+                key={phraseIndex}
+                className="display-4 fw-bold mb-0"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
+                transition={{ duration: 0.35 }}
+              >
+                {PHRASES[phraseIndex]}
+              </motion.h1>
+            </AnimatePresence>
+          </div>
+        
+        </section>
 
         {/* Services - main content */}
         <div className="container py-5">

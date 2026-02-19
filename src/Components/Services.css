@@ -291,6 +291,13 @@
   padding: 100px 1rem 3rem;
 }
 
+.services-hero-phrase-swap {
+  min-height: 5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 /* Three.js canvas sits behind; subtle gradient overlay for readability */
 .services-visual-wrapper::after {
   content: '';
