@@ -129,7 +129,13 @@ const RequestAuditPage: React.FC = () => {
         nContracts: '',
         loc: '',
         blockchain: 'Ethereum',
-        additionalNotes: ''
+        additionalNotes: '',
+        testingType: 'Black Box',
+        targetAsset: '',
+        pentestScope: 'Web Application',
+        verificationScope: 'Invariants & Safety Properties',
+        consultTopic: 'Smart Contract Architecture',
+        timeline: '',
     });
     const [status, setStatus] = useState<'idle' | 'sending' | 'success' | 'error'>('idle');
 
@@ -147,19 +153,18 @@ const RequestAuditPage: React.FC = () => {
         const TEMPLATE_ID = import.meta.env.VITE_EMAILJS_AUDIT_TEMPLATE_ID;
         const PUBLIC_KEY = import.meta.env.VITE_EMAILJS_PUBLIC_KEY;
 
+        const typeDetails = formData.auditType === 'Smart Contract Audit'
+            ? `Contracts: ${formData.nContracts}\nLOC: ${formData.loc}\nChain: ${formData.blockchain}`
+            : formData.auditType === 'Penetration Testing'
+            ? `Testing Type: ${formData.testingType}\nTarget: ${formData.targetAsset}\nScope: ${formData.pentestScope}`
+            : formData.auditType === 'Formal Verification'
+            ? `Contracts: ${formData.nContracts}\nLOC: ${formData.loc}\nChain: ${formData.blockchain}\nVerification: ${formData.verificationScope}`
+            : `Topic: ${formData.consultTopic}\nTimeline: ${formData.timeline}`;
+
         const templateParams = {
             from_name: formData.projectName,
             from_email: formData.contactEmail,
-            message: `
-                Project: ${formData.projectName}
-                Type: ${formData.auditType}
-                Email: ${formData.contactEmail}
-                Contracts: ${formData.nContracts}
-                LOC: ${formData.loc}
-                Chain: ${formData.blockchain}
-                Telegram: ${formData.telegram}
-                Notes: ${formData.additionalNotes}
-            `,
+            message: `Project: ${formData.projectName}\nType: ${formData.auditType}\nEmail: ${formData.contactEmail}\n${typeDetails}\nTelegram: ${formData.telegram}\nNotes: ${formData.additionalNotes}`,
             to_email: 'gujaratirutvik007@gmail.com'
         };
 
@@ -175,7 +180,13 @@ const RequestAuditPage: React.FC = () => {
                 nContracts: '',
                 loc: '',
                 blockchain: 'Ethereum',
-                additionalNotes: ''
+                additionalNotes: '',
+                testingType: 'Black Box',
+                targetAsset: '',
+                pentestScope: 'Web Application',
+                verificationScope: 'Invariants & Safety Properties',
+                consultTopic: 'Smart Contract Architecture',
+                timeline: '',
             });
         } catch (error) {
             console.error('EmailJS Error:', error);
@@ -280,46 +291,109 @@ const RequestAuditPage: React.FC = () => {
                                     </div>
                                 </div>
 
-                                <div className="row g-3">
-                                    <div className="col-md-4">
-                                        <label className="form-label small text-info fw-bold">No. of Contracts</label>
-                                        <input
-                                            type="number"
-                                            name="nContracts"
-                                            value={formData.nContracts}
-                                            onChange={handleChange}
-                                            className="form-control bg-black border-secondary text-white shadow-none"
-                                            placeholder="5"
-                                        />
+                                {/* Dynamic fields based on audit type */}
+                                {formData.auditType === 'Smart Contract Audit' && (
+                                    <div className="row g-3">
+                                        <div className="col-md-4">
+                                            <label className="form-label small text-info fw-bold">No. of Contracts</label>
+                                            <input type="number" name="nContracts" value={formData.nContracts} onChange={handleChange} className="form-control bg-black border-secondary text-white shadow-none" placeholder="5" />
+                                        </div>
+                                        <div className="col-md-4">
+                                            <label className="form-label small text-info fw-bold">Lines of Code (approx)</label>
+                                            <input type="number" name="loc" value={formData.loc} onChange={handleChange} className="form-control bg-black border-secondary text-white shadow-none" placeholder="1500" />
+                                        </div>
+                                        <div className="col-md-4">
+                                            <label className="form-label small text-info fw-bold">Target Chain</label>
+                                            <select name="blockchain" value={formData.blockchain} onChange={handleChange} className="form-select bg-black border-secondary text-white shadow-none">
+                                                <option>Ethereum</option>
+                                                <option>BSC</option>
+                                                <option>Polygon</option>
+                                                <option>Arbitrum</option>
+                                                <option>Solana</option>
+                                                <option>Other</option>
+                                            </select>
+                                        </div>
                                     </div>
-                                    <div className="col-md-4">
-                                        <label className="form-label small text-info fw-bold">Lines of Code (approx)</label>
-                                        <input
-                                            type="number"
-                                            name="loc"
-                                            value={formData.loc}
-                                            onChange={handleChange}
-                                            className="form-control bg-black border-secondary text-white shadow-none"
-                                            placeholder="1500"
-                                        />
+                                )}
+
+                                {formData.auditType === 'Penetration Testing' && (
+                                    <div className="row g-3">
+                                        <div className="col-md-4">
+                                            <label className="form-label small text-info fw-bold">Testing Type</label>
+                                            <select name="testingType" value={formData.testingType} onChange={handleChange} className="form-select bg-black border-secondary text-white shadow-none">
+                                                <option>Black Box</option>
+                                                <option>White Box</option>
+                                                <option>Gray Box</option>
+                                            </select>
+                                        </div>
+                                        <div className="col-md-4">
+                                            <label className="form-label small text-info fw-bold">Target (URL / IP)</label>
+                                            <input name="targetAsset" value={formData.targetAsset} onChange={handleChange} className="form-control bg-black border-secondary text-white shadow-none" placeholder="https://app.example.com" />
+                                        </div>
+                                        <div className="col-md-4">
+                                            <label className="form-label small text-info fw-bold">Scope</label>
+                                            <select name="pentestScope" value={formData.pentestScope} onChange={handleChange} className="form-select bg-black border-secondary text-white shadow-none">
+                                                <option>Web Application</option>
+                                                <option>API</option>
+                                                <option>Mobile Application</option>
+                                                <option>Network / Infrastructure</option>
+                                                <option>Cloud Environment</option>
+                                            </select>
+                                        </div>
                                     </div>
-                                    <div className="col-md-4">
-                                        <label className="form-label small text-info fw-bold">Target Chain</label>
-                                        <select
-                                            name="blockchain"
-                                            value={formData.blockchain}
-                                            onChange={handleChange}
-                                            className="form-select bg-black border-secondary text-white shadow-none"
-                                        >
-                                            <option>Ethereum</option>
-                                            <option>BSC</option>
-                                            <option>Polygon</option>
-                                            <option>Arbitrum</option>
-                                            <option>Solana</option>
-                                            <option>Other</option>
-                                        </select>
+                                )}
+
+                                {formData.auditType === 'Formal Verification' && (
+                                    <div className="row g-3">
+                                        <div className="col-md-3">
+                                            <label className="form-label small text-info fw-bold">No. of Contracts</label>
+                                            <input type="number" name="nContracts" value={formData.nContracts} onChange={handleChange} className="form-control bg-black border-secondary text-white shadow-none" placeholder="3" />
+                                        </div>
+                                        <div className="col-md-3">
+                                            <label className="form-label small text-info fw-bold">Lines of Code</label>
+                                            <input type="number" name="loc" value={formData.loc} onChange={handleChange} className="form-control bg-black border-secondary text-white shadow-none" placeholder="1500" />
+                                        </div>
+                                        <div className="col-md-3">
+                                            <label className="form-label small text-info fw-bold">Target Chain</label>
+                                            <select name="blockchain" value={formData.blockchain} onChange={handleChange} className="form-select bg-black border-secondary text-white shadow-none">
+                                                <option>Ethereum</option>
+                                                <option>BSC</option>
+                                                <option>Polygon</option>
+                                                <option>Solana</option>
+                                                <option>Other</option>
+                                            </select>
+                                        </div>
+                                        <div className="col-md-3">
+                                            <label className="form-label small text-info fw-bold">Verification Scope</label>
+                                            <select name="verificationScope" value={formData.verificationScope} onChange={handleChange} className="form-select bg-black border-secondary text-white shadow-none">
+                                                <option>Invariants & Safety Properties</option>
+                                                <option>Liveness & Fairness</option>
+                                                <option>Functional Correctness</option>
+                                                <option>Full Specification</option>
+                                            </select>
+                                        </div>
                                     </div>
-                                </div>
+                                )}
+
+                                {formData.auditType === 'Consultation' && (
+                                    <div className="row g-3">
+                                        <div className="col-md-6">
+                                            <label className="form-label small text-info fw-bold">Consultation Topic</label>
+                                            <select name="consultTopic" value={formData.consultTopic} onChange={handleChange} className="form-select bg-black border-secondary text-white shadow-none">
+                                                <option>Smart Contract Architecture</option>
+                                                <option>Blockchain Selection & Design</option>
+                                                <option>Security Review & Strategy</option>
+                                                <option>Token Economics</option>
+                                                <option>Regulatory & Compliance</option>
+                                                <option>Other</option>
+                                            </select>
+                                        </div>
+                                        <div className="col-md-6">
+                                            <label className="form-label small text-info fw-bold">Preferred Timeline</label>
+                                            <input name="timeline" value={formData.timeline} onChange={handleChange} className="form-control bg-black border-secondary text-white shadow-none" placeholder="e.g. 2 weeks, ASAP" />
+                                        </div>
+                                    </div>
+                                )}
 
                                 <div className="row g-3">
                                     <div className="col-md-6">
