@@ -159,7 +159,9 @@ const ContactForm = () => {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ email: formData.email }),
             });
-            const result = await res.json();
+            const text = await res.text();
+            let result: any;
+            try { result = JSON.parse(text); } catch { throw new Error('Server returned an unexpected response. Please try again.'); }
             if (!res.ok) throw new Error(result.detail || result.error || 'Failed');
             setOtpToken(result.token);
             setOtpExpiry(result.expiresAt);
@@ -203,7 +205,9 @@ const ContactForm = () => {
                     otpExpiry,
                 }),
             });
-            const result = await res.json();
+            const text = await res.text();
+            let result: any;
+            try { result = JSON.parse(text); } catch { throw new Error('Server returned an unexpected response. Please try again.'); }
             if (!res.ok) throw new Error(result.detail || result.error || 'Send failed');
             setStatus('success');
             setFormData({ name: '', company: '', email: '', message: '' });

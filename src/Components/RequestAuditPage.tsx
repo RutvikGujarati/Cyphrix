@@ -171,7 +171,9 @@ const RequestAuditPage: React.FC = () => {
         setOtpStatus('sending'); setOtpError('');
         try {
             const res = await fetch('/api/send-otp', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email: formData.contactEmail }) });
-            const result = await res.json();
+            const text = await res.text();
+            let result: any;
+            try { result = JSON.parse(text); } catch { throw new Error('Server returned an unexpected response. Please try again.'); }
             if (!res.ok) throw new Error(result.detail || result.error || 'Failed');
             setOtpToken(result.token); setOtpExpiry(result.expiresAt); setOtpSent(true); setOtpStatus('sent'); setCooldown(60);
         } catch (err: any) {
@@ -227,7 +229,9 @@ const RequestAuditPage: React.FC = () => {
                     otpExpiry,
                 }),
             });
-            const result = await res.json();
+            const resText = await res.text();
+            let result: any;
+            try { result = JSON.parse(resText); } catch { throw new Error('Server returned an unexpected response. Please try again.'); }
             if (!res.ok) throw new Error(result.detail || result.error || 'Send failed');
             setStatus('success');
             setTimeout(() => setStatus('idle'), 5000);
