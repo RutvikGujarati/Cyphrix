@@ -1,6 +1,6 @@
-import { randomInt, createHmac, timingSafeEqual } from 'crypto';
+import { createHmac, timingSafeEqual, randomBytes } from 'node:crypto';
 
-const OTP_TTL_MS = 5 * 60 * 1000; // 5 minutes
+const OTP_TTL_MS = 5 * 60 * 1000;
 
 function getSecret(): string {
   const s = process.env.OTP_SECRET;
@@ -9,7 +9,8 @@ function getSecret(): string {
 }
 
 export function generateOtp(): string {
-  return randomInt(100000, 999999).toString();
+  const num = randomBytes(4).readUInt32BE(0) % 900000 + 100000;
+  return num.toString();
 }
 
 export function signOtp(email: string, otp: string, expiresAt: number): string {
