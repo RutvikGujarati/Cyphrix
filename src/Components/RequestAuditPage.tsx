@@ -1,7 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import * as THREE from 'three';
 import { motion } from 'framer-motion';
-import emailjs from '@emailjs/browser';
 import { Shield, Lock, Send } from 'lucide-react';
 
 const AuditVisual: React.FC = () => {
@@ -138,60 +137,107 @@ const RequestAuditPage: React.FC = () => {
         timeline: '',
     });
     const [status, setStatus] = useState<'idle' | 'sending' | 'success' | 'error'>('idle');
+    const [errorMsg, setErrorMsg] = useState('');
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+
+    const [otpSent, setOtpSent] = useState(false);
+    const [otpVerified, setOtpVerified] = useState(false);
+    const [otpValue, setOtpValue] = useState('');
+    const [otpToken, setOtpToken] = useState('');
+    const [otpExpiry, setOtpExpiry] = useState(0);
+    const [otpStatus, setOtpStatus] = useState<'idle' | 'sending' | 'sent' | 'error'>('idle');
+    const [otpError, setOtpError] = useState('');
+    const [cooldown, setCooldown] = useState(0);
+    const [verifiedEmail, setVerifiedEmail] = useState('');
+
+    useEffect(() => {
+        if (cooldown <= 0) return;
+        const t = setTimeout(() => setCooldown(c => c - 1), 1000);
+        return () => clearTimeout(t);
+    }, [cooldown]);
+
+    useEffect(() => {
+        if (verifiedEmail && formData.contactEmail !== verifiedEmail) {
+            setOtpSent(false); setOtpVerified(false); setOtpValue(''); setOtpToken(''); setOtpExpiry(0); setVerifiedEmail('');
+        }
+    }, [formData.contactEmail, verifiedEmail]);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
 
+    const handleSendOtp = async () => {
+        if (!emailRegex.test(formData.contactEmail)) { setOtpError('Enter a valid email first'); setOtpStatus('error'); setTimeout(() => setOtpStatus('idle'), 3000); return; }
+        setOtpStatus('sending'); setOtpError('');
+        try {
+            const res = await fetch('/api/send-otp', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email: formData.contactEmail }) });
+            const result = await res.json();
+            if (!res.ok) throw new Error(result.detail || result.error || 'Failed');
+            setOtpToken(result.token); setOtpExpiry(result.expiresAt); setOtpSent(true); setOtpStatus('sent'); setCooldown(60);
+        } catch (err: any) {
+            setOtpError(err.message || 'Failed to send OTP'); setOtpStatus('error'); setTimeout(() => setOtpStatus('idle'), 5000);
+        }
+    };
+
+    const handleVerifyOtp = () => {
+        if (otpValue.length !== 6) return;
+        setOtpVerified(true);
+        setVerifiedEmail(formData.contactEmail);
+    };
+
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+        if (!formData.projectName.trim()) { setErrorMsg('Project name is required'); setStatus('error'); setTimeout(() => setStatus('idle'), 4000); return; }
+        if (!emailRegex.test(formData.contactEmail)) { setErrorMsg('Please enter a valid email address'); setStatus('error'); setTimeout(() => setStatus('idle'), 4000); return; }
+        if (!otpVerified) { setErrorMsg('Please verify your email first'); setStatus('error'); setTimeout(() => setStatus('idle'), 4000); return; }
+
         setStatus('sending');
 
-        // Using same EmailJS logic as ContactForm, but potentially different template if available.
-        // For now using the same secrets as ContactPage.
-        const SERVICE_ID = import.meta.env.VITE_EMAILJS_SERVICE_ID;
-        const TEMPLATE_ID = import.meta.env.VITE_EMAILJS_AUDIT_TEMPLATE_ID;
-        const PUBLIC_KEY = import.meta.env.VITE_EMAILJS_PUBLIC_KEY;
-
-        const typeDetails = formData.auditType === 'Smart Contract Audit'
-            ? `Contracts: ${formData.nContracts}\nLOC: ${formData.loc}\nChain: ${formData.blockchain}`
-            : formData.auditType === 'Penetration Testing'
-            ? `Testing Type: ${formData.testingType}\nTarget: ${formData.targetAsset}\nScope: ${formData.pentestScope}`
-            : formData.auditType === 'Formal Verification'
-            ? `Contracts: ${formData.nContracts}\nLOC: ${formData.loc}\nChain: ${formData.blockchain}\nVerification: ${formData.verificationScope}`
-            : `Topic: ${formData.consultTopic}\nTimeline: ${formData.timeline}`;
-
-        const templateParams = {
-            from_name: formData.projectName,
-            from_email: formData.contactEmail,
-            message: `Project: ${formData.projectName}\nType: ${formData.auditType}\nEmail: ${formData.contactEmail}\n${typeDetails}\nTelegram: ${formData.telegram}\nNotes: ${formData.additionalNotes}`,
-            to_email: 'gujaratirutvik007@gmail.com'
-        };
+        const details: Record<string, string> = {};
+        if (formData.auditType === 'Smart Contract Audit') {
+            if (formData.nContracts) details['Contracts'] = formData.nContracts;
+            if (formData.loc) details['Lines of Code'] = formData.loc;
+            details['Blockchain'] = formData.blockchain;
+        } else if (formData.auditType === 'Penetration Testing') {
+            details['Testing Type'] = formData.testingType;
+            if (formData.targetAsset) details['Target'] = formData.targetAsset;
+            details['Scope'] = formData.pentestScope;
+        } else if (formData.auditType === 'Formal Verification') {
+            if (formData.nContracts) details['Contracts'] = formData.nContracts;
+            if (formData.loc) details['Lines of Code'] = formData.loc;
+            details['Blockchain'] = formData.blockchain;
+            details['Verification Scope'] = formData.verificationScope;
+        } else {
+            details['Topic'] = formData.consultTopic;
+            if (formData.timeline) details['Timeline'] = formData.timeline;
+        }
 
         try {
-            await emailjs.send(SERVICE_ID, TEMPLATE_ID, templateParams, PUBLIC_KEY);
+            const res = await fetch('/api/send-email', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    type: 'audit',
+                    subject: `Audit Request: ${formData.auditType} — ${formData.projectName}`,
+                    name: formData.projectName,
+                    email: formData.contactEmail,
+                    audit: { auditType: formData.auditType, telegram: formData.telegram, details, notes: formData.additionalNotes },
+                    otp: otpValue,
+                    otpToken,
+                    otpExpiry,
+                }),
+            });
+            const result = await res.json();
+            if (!res.ok) throw new Error(result.detail || result.error || 'Send failed');
             setStatus('success');
             setTimeout(() => setStatus('idle'), 5000);
-            setFormData({
-                projectName: '',
-                contactEmail: '',
-                telegram: '',
-                auditType: 'Smart Contract Audit',
-                nContracts: '',
-                loc: '',
-                blockchain: 'Ethereum',
-                additionalNotes: '',
-                testingType: 'Black Box',
-                targetAsset: '',
-                pentestScope: 'Web Application',
-                verificationScope: 'Invariants & Safety Properties',
-                consultTopic: 'Smart Contract Architecture',
-                timeline: '',
-            });
-        } catch (error) {
-            console.error('EmailJS Error:', error);
+            setFormData({ projectName: '', contactEmail: '', telegram: '', auditType: 'Smart Contract Audit', nContracts: '', loc: '', blockchain: 'Ethereum', additionalNotes: '', testingType: 'Black Box', targetAsset: '', pentestScope: 'Web Application', verificationScope: 'Invariants & Safety Properties', consultTopic: 'Smart Contract Architecture', timeline: '' });
+            setOtpSent(false); setOtpVerified(false); setOtpValue(''); setOtpToken(''); setOtpExpiry(0); setVerifiedEmail('');
+        } catch (error: any) {
+            console.error('Email Error:', error);
+            setErrorMsg(error.message || 'Unknown error');
             setStatus('error');
-            setTimeout(() => setStatus('idle'), 5000);
+            setTimeout(() => setStatus('idle'), 8000);
         }
     };
 
@@ -328,7 +374,7 @@ const RequestAuditPage: React.FC = () => {
                                         </div>
                                         <div className="col-md-4">
                                             <label className="form-label small text-info fw-bold">Target (URL / IP)</label>
-                                            <input name="targetAsset" value={formData.targetAsset} onChange={handleChange} className="form-control bg-black border-secondary text-white shadow-none" placeholder="https://app.example.com" />
+                                            <input name="targetAsset" value={formData.targetAsset} onChange={handleChange} className="form-control bg-black border-secondary text-white shadow-none" placeholder="https://app.example.com" required />
                                         </div>
                                         <div className="col-md-4">
                                             <label className="form-label small text-info fw-bold">Scope</label>
@@ -395,46 +441,59 @@ const RequestAuditPage: React.FC = () => {
                                     </div>
                                 )}
 
-                                <div className="row g-3">
-                                    <div className="col-md-6">
-                                        <label className="form-label small text-info fw-bold">Contact Email</label>
+                                <div>
+                                    <label className="form-label small text-info fw-bold">Contact Email <span className="text-danger">*</span></label>
+                                    <div className="d-flex gap-2">
                                         <input
-                                            type="email"
-                                            name="contactEmail"
-                                            value={formData.contactEmail}
-                                            onChange={handleChange}
-                                            className="form-control bg-black border-secondary text-white shadow-none"
-                                            placeholder="security@project.io"
-                                            required
+                                            type="email" name="contactEmail" value={formData.contactEmail} onChange={handleChange}
+                                            className={`form-control bg-black border-secondary text-white shadow-none ${otpVerified ? 'border-success' : ''}`}
+                                            placeholder="security@project.io" required disabled={otpVerified}
                                         />
+                                        {!otpVerified ? (
+                                            <button type="button" onClick={handleSendOtp} disabled={otpStatus === 'sending' || cooldown > 0}
+                                                className="btn btn-outline-info btn-sm rounded-pill px-3 text-nowrap">
+                                                {otpStatus === 'sending' ? 'Sending...' : cooldown > 0 ? `Resend (${cooldown}s)` : otpSent ? 'Resend OTP' : 'Verify Email'}
+                                            </button>
+                                        ) : (
+                                            <span className="btn btn-success btn-sm rounded-pill px-3 text-nowrap disabled d-flex align-items-center gap-1">Verified</span>
+                                        )}
                                     </div>
-                                    <div className="col-md-6">
+                                    {otpStatus === 'error' && <small className="text-danger mt-1 d-block">{otpError}</small>}
+                                </div>
+
+                                {otpSent && !otpVerified && (
+                                    <div>
+                                        <label className="form-label small text-info fw-bold">Enter 6-digit verification code</label>
+                                        <div className="d-flex gap-2">
+                                            <input
+                                                type="text" maxLength={6} value={otpValue}
+                                                onChange={e => setOtpValue(e.target.value.replace(/\D/g, '').slice(0, 6))}
+                                                className="form-control bg-black border-secondary text-white shadow-none text-center fw-bold"
+                                                style={{ letterSpacing: '6px', maxWidth: '200px', fontFamily: 'monospace' }}
+                                                placeholder="------"
+                                            />
+                                            <button type="button" onClick={handleVerifyOtp} disabled={otpValue.length !== 6}
+                                                className="btn btn-info btn-sm text-dark rounded-pill px-3 fw-bold">Confirm</button>
+                                        </div>
+                                        <small className="text-white-50 mt-1 d-block">Check your inbox for the code. Expires in 5 minutes.</small>
+                                    </div>
+                                )}
+
+                                <div className="row g-3">
+                                    <div className="col-12">
                                         <label className="form-label small text-info fw-bold">Telegram / Discord</label>
-                                        <input
-                                            name="telegram"
-                                            value={formData.telegram}
-                                            onChange={handleChange}
-                                            className="form-control bg-black border-secondary text-white shadow-none"
-                                            placeholder="@username"
-                                        />
+                                        <input name="telegram" value={formData.telegram} onChange={handleChange} className="form-control bg-black border-secondary text-white shadow-none" placeholder="@username" />
                                     </div>
                                 </div>
 
                                 <div>
                                     <label className="form-label small text-info fw-bold">Additional Notes / Scope</label>
-                                    <textarea
-                                        name="additionalNotes"
-                                        value={formData.additionalNotes}
-                                        onChange={handleChange}
-                                        className="form-control bg-black border-secondary text-white shadow-none"
-                                        rows={3}
-                                        placeholder="Specific contracts to focus on, timeline requirements..."
-                                    ></textarea>
+                                    <textarea name="additionalNotes" value={formData.additionalNotes} onChange={handleChange} className="form-control bg-black border-secondary text-white shadow-none" rows={3} placeholder="Specific contracts to focus on, timeline requirements..."></textarea>
                                 </div>
 
                                 <button
                                     type="submit"
-                                    disabled={status === 'sending' || status === 'success'}
+                                    disabled={status === 'sending' || status === 'success' || !otpVerified}
                                     className={`btn ${status === 'success' ? 'btn-success' : 'btn-info'} text-dark fw-bold py-3 mt-3 w-100 rounded-pill d-flex align-items-center justify-content-center gap-2`}
                                 >
                                     {status === 'sending' ? (
@@ -446,7 +505,7 @@ const RequestAuditPage: React.FC = () => {
                                     )}
                                 </button>
                                 {status === 'success' && <p className="text-success small text-center mt-2">We will review your request and get back to you shortly via secure channel.</p>}
-                                {status === 'error' && <p className="text-danger small text-center mt-2">Failed to send request. Please try again or email us directly.</p>}
+                                {status === 'error' && <p className="text-danger small text-center mt-2">{errorMsg || 'Failed to send request. Please try again or email us directly.'}</p>}
                             </form>
                         </motion.div>
                     </div>
