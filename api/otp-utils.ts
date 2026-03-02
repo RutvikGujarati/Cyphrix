@@ -1,4 +1,4 @@
-import { createHmac, timingSafeEqual, randomBytes } from 'node:crypto';
+import { createHmac, timingSafeEqual, randomBytes } from 'crypto';
 
 const OTP_TTL_MS = 5 * 60 * 1000;
 

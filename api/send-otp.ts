@@ -22,6 +22,11 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       return res.status(500).json({ error: 'Server configuration error. Please contact support.' });
     }
 
+    if (!process.env.SMTP_USER || !process.env.SMTP_PASS) {
+      console.error('SMTP credentials are not configured');
+      return res.status(500).json({ error: 'Server configuration error. Please contact support.' });
+    }
+
     const otp = generateOtp();
     const { token, expiresAt } = createOtpToken(email, otp);
 
