@@ -1,7 +1,6 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 import nodemailer from 'nodemailer';
 import { contactEmailHtml, auditEmailHtml } from './email-template';
-import { verifyOtpToken } from './otp-utils';
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 
@@ -11,27 +10,13 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       return res.status(405).json({ error: 'Method not allowed' });
     }
 
-    const { type, subject, name, email, company, message, audit, otp, otpToken, otpExpiry } = req.body;
+    const { type, subject, name, email, company, message, audit } = req.body;
 
     if (!email || !EMAIL_RE.test(email)) {
       return res.status(400).json({ error: 'A valid email address is required' });
     }
     if (!name?.trim()) {
       return res.status(400).json({ error: 'Name is required' });
-    }
-
-    if (!otp || !otpToken || !otpExpiry) {
-      return res.status(400).json({ error: 'Email verification is required. Please verify your email first.' });
-    }
-
-    if (!process.env.OTP_SECRET) {
-      console.error('OTP_SECRET env variable is not configured');
-      return res.status(500).json({ error: 'Server configuration error. Please contact support.' });
-    }
-
-    const otpResult = verifyOtpToken(email, otp, otpExpiry, otpToken);
-    if (!otpResult.valid) {
-      return res.status(403).json({ error: otpResult.error });
     }
 
     const transporter = nodemailer.createTransport({

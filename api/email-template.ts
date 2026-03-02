@@ -124,30 +124,3 @@ export function auditEmailHtml(data: {
 </body>
 </html>`;
 }
-
-export function otpEmailHtml(otp: string) {
-  return `
-<!DOCTYPE html>
-<html>
-<head><meta charset="utf-8" /></head>
-<body style="margin:0;padding:0;background:#0a0a0a;font-family:'Segoe UI',Arial,sans-serif;">
-  <div style="max-width:480px;margin:0 auto;padding:40px 24px;">
-    <div style="text-align:center;padding-bottom:24px;border-bottom:1px solid #1a1a1a;">
-      <h1 style="color:#00f2ff;font-size:22px;margin:0;letter-spacing:2px;">CYPHRIX</h1>
-      <p style="color:#666;font-size:12px;margin:4px 0 0;letter-spacing:1px;">EMAIL VERIFICATION</p>
-    </div>
-    <div style="text-align:center;padding:40px 0;">
-      <p style="color:#999;font-size:14px;margin:0 0 24px;">Your verification code is:</p>
-      <div style="display:inline-block;background:#111;border:2px solid #00f2ff;border-radius:12px;padding:16px 40px;">
-        <span style="color:#00f2ff;font-size:36px;font-weight:700;letter-spacing:8px;font-family:'Courier New',monospace;">${otp}</span>
-      </div>
-      <p style="color:#666;font-size:13px;margin:24px 0 0;">This code expires in <strong style="color:#fff;">5 minutes</strong></p>
-    </div>
-    <div style="text-align:center;padding-top:24px;border-top:1px solid #1a1a1a;">
-      <p style="color:#444;font-size:11px;margin:0;">If you didn't request this code, please ignore this email.</p>
-      <p style="color:#555;font-size:11px;margin:8px 0 0;">Sent by <span style="color:#00f2ff;">cyphrixtech.com</span></p>
-    </div>
-  </div>
-</body>
-</html>`;
-}

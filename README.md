@@ -1,5 +1,12 @@
 # React + TypeScript + Vite
 
+## OTP API Configuration
+
+The frontend sends OTP requests to the standalone backend service.
+
+- Copy `.env.example` to `.env`
+- Set `VITE_OTP_API_BASE_URL` to your backend URL (example: `http://localhost:8080`)
+
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
 Currently, two official plugins are available:

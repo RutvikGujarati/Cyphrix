@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import * as THREE from 'three';
 import { motion } from 'framer-motion';
 import { Shield, Lock, Send } from 'lucide-react';
+import { OTP_API_BASE_URL } from '../config/api';
 
 const AuditVisual: React.FC = () => {
     const mountRef = useRef<HTMLDivElement>(null);
@@ -143,8 +144,6 @@ const RequestAuditPage: React.FC = () => {
     const [otpSent, setOtpSent] = useState(false);
     const [otpVerified, setOtpVerified] = useState(false);
     const [otpValue, setOtpValue] = useState('');
-    const [otpToken, setOtpToken] = useState('');
-    const [otpExpiry, setOtpExpiry] = useState(0);
     const [otpStatus, setOtpStatus] = useState<'idle' | 'sending' | 'sent' | 'error'>('idle');
     const [otpError, setOtpError] = useState('');
     const [cooldown, setCooldown] = useState(0);
@@ -158,7 +157,7 @@ const RequestAuditPage: React.FC = () => {
 
     useEffect(() => {
         if (verifiedEmail && formData.contactEmail !== verifiedEmail) {
-            setOtpSent(false); setOtpVerified(false); setOtpValue(''); setOtpToken(''); setOtpExpiry(0); setVerifiedEmail('');
+            setOtpSent(false); setOtpVerified(false); setOtpValue(''); setVerifiedEmail('');
         }
     }, [formData.contactEmail, verifiedEmail]);
 
@@ -170,21 +169,39 @@ const RequestAuditPage: React.FC = () => {
         if (!emailRegex.test(formData.contactEmail)) { setOtpError('Enter a valid email first'); setOtpStatus('error'); setTimeout(() => setOtpStatus('idle'), 3000); return; }
         setOtpStatus('sending'); setOtpError('');
         try {
-            const res = await fetch('/api/send-otp', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email: formData.contactEmail }) });
+            const res = await fetch(`${OTP_API_BASE_URL}/api/otp/send`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email: formData.contactEmail }) });
             const text = await res.text();
             let result: any;
             try { result = JSON.parse(text); } catch { throw new Error('Server returned an unexpected response. Please try again.'); }
             if (!res.ok) throw new Error(result.detail || result.error || 'Failed');
-            setOtpToken(result.token); setOtpExpiry(result.expiresAt); setOtpSent(true); setOtpStatus('sent'); setCooldown(60);
+            setOtpSent(true); setOtpStatus('sent'); setCooldown(60);
         } catch (err: any) {
             setOtpError(err.message || 'Failed to send OTP'); setOtpStatus('error'); setTimeout(() => setOtpStatus('idle'), 5000);
         }
     };
 
-    const handleVerifyOtp = () => {
+    const handleVerifyOtp = async () => {
         if (otpValue.length !== 6) return;
-        setOtpVerified(true);
-        setVerifiedEmail(formData.contactEmail);
+        setOtpStatus('sending');
+        setOtpError('');
+        try {
+            const res = await fetch(`${OTP_API_BASE_URL}/api/otp/verify`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email: formData.contactEmail, otp: otpValue }),
+            });
+            const text = await res.text();
+            let result: any;
+            try { result = JSON.parse(text); } catch { throw new Error('Server returned an unexpected response. Please try again.'); }
+            if (!res.ok) throw new Error(result.detail || result.error || 'OTP verification failed');
+            setOtpVerified(true);
+            setVerifiedEmail(formData.contactEmail);
+            setOtpStatus('sent');
+        } catch (err: any) {
+            setOtpError(err.message || 'Failed to verify OTP');
+            setOtpStatus('error');
+            setTimeout(() => setOtpStatus('idle'), 5000);
+        }
     };
 
     const handleSubmit = async (e: React.FormEvent) => {
@@ -224,9 +241,6 @@ const RequestAuditPage: React.FC = () => {
                     name: formData.projectName,
                     email: formData.contactEmail,
                     audit: { auditType: formData.auditType, telegram: formData.telegram, details, notes: formData.additionalNotes },
-                    otp: otpValue,
-                    otpToken,
-                    otpExpiry,
                 }),
             });
             const resText = await res.text();
@@ -236,7 +250,7 @@ const RequestAuditPage: React.FC = () => {
             setStatus('success');
             setTimeout(() => setStatus('idle'), 5000);
             setFormData({ projectName: '', contactEmail: '', telegram: '', auditType: 'Smart Contract Audit', nContracts: '', loc: '', blockchain: 'Ethereum', additionalNotes: '', testingType: 'Black Box', targetAsset: '', pentestScope: 'Web Application', verificationScope: 'Invariants & Safety Properties', consultTopic: 'Smart Contract Architecture', timeline: '' });
-            setOtpSent(false); setOtpVerified(false); setOtpValue(''); setOtpToken(''); setOtpExpiry(0); setVerifiedEmail('');
+            setOtpSent(false); setOtpVerified(false); setOtpValue(''); setVerifiedEmail('');
         } catch (error: any) {
             console.error('Email Error:', error);
             setErrorMsg(error.message || 'Unknown error');

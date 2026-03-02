@@ -2,8 +2,7 @@ import { defineConfig, loadEnv } from 'vite'
 import react from '@vitejs/plugin-react'
 import nodemailer from 'nodemailer'
 import type { Plugin } from 'vite'
-import { contactEmailHtml, auditEmailHtml, otpEmailHtml } from './api/email-template'
-import { generateOtp, createOtpToken, verifyOtpToken } from './api/otp-utils'
+import { contactEmailHtml, auditEmailHtml } from './api/email-template'
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 
@@ -30,47 +29,14 @@ function localApis(): Plugin {
   return {
     name: 'local-email-api',
     configureServer(server) {
-
-      // --- /api/send-otp ---
-      server.middlewares.use('/api/send-otp', async (req, res) => {
-        if (req.method !== 'POST') { res.statusCode = 405; res.end(JSON.stringify({ error: 'Method not allowed' })); return; }
-        try {
-          const { email } = await parseBody(req);
-          if (!email || !EMAIL_RE.test(email)) { res.statusCode = 400; res.end(JSON.stringify({ error: 'A valid email address is required' })); return; }
-
-          const otp = generateOtp();
-          const { token, expiresAt } = createOtpToken(email, otp);
-          console.log('[OTP] Sending to:', email);
-
-          await createTransporter().sendMail({
-            from: `"Cyphrix Verification" <${process.env.SMTP_USER}>`,
-            to: email,
-            subject: `${otp} — Your Cyphrix Verification Code`,
-            text: `Your Cyphrix verification code is: ${otp}\n\nThis code expires in 5 minutes.`,
-            html: otpEmailHtml(otp),
-          });
-
-          res.setHeader('Content-Type', 'application/json');
-          res.end(JSON.stringify({ success: true, token, expiresAt }));
-        } catch (err: any) {
-          console.error('OTP Error:', err);
-          res.statusCode = 500;
-          res.end(JSON.stringify({ error: 'Failed to send verification code', detail: err.message }));
-        }
-      });
-
       // --- /api/send-email ---
       server.middlewares.use('/api/send-email', async (req, res) => {
         if (req.method !== 'POST') { res.statusCode = 405; res.end(JSON.stringify({ error: 'Method not allowed' })); return; }
         try {
-          const { type, subject, name, email, company, message, audit, otp, otpToken, otpExpiry } = await parseBody(req);
+          const { type, subject, name, email, company, message, audit } = await parseBody(req);
 
           if (!email || !EMAIL_RE.test(email)) { res.statusCode = 400; res.end(JSON.stringify({ error: 'A valid email address is required' })); return; }
           if (!name?.trim()) { res.statusCode = 400; res.end(JSON.stringify({ error: 'Name is required' })); return; }
-
-          if (!otp || !otpToken || !otpExpiry) { res.statusCode = 400; res.end(JSON.stringify({ error: 'Email verification is required' })); return; }
-          const otpResult = verifyOtpToken(email, otp, otpExpiry, otpToken);
-          if (!otpResult.valid) { res.statusCode = 403; res.end(JSON.stringify({ error: otpResult.error })); return; }
 
           console.log('[SMTP] Sending:', type || 'contact', '| From:', email, '| Subject:', subject);
 
@@ -109,7 +75,6 @@ export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), '');
   process.env.SMTP_USER = env.SMTP_USER;
   process.env.SMTP_PASS = env.SMTP_PASS;
-  process.env.OTP_SECRET = env.OTP_SECRET;
   return {
     plugins: [react(), localApis()],
   };

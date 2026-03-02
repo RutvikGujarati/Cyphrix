@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import * as THREE from 'three';
 import { ExternalLink } from 'lucide-react';
+import { OTP_API_BASE_URL } from '../config/api';
 
 const ContactVisual = () => {
     const mountRef = useRef<HTMLDivElement>(null);
@@ -121,8 +122,6 @@ const ContactForm = () => {
     const [otpSent, setOtpSent] = useState(false);
     const [otpVerified, setOtpVerified] = useState(false);
     const [otpValue, setOtpValue] = useState('');
-    const [otpToken, setOtpToken] = useState('');
-    const [otpExpiry, setOtpExpiry] = useState(0);
     const [otpStatus, setOtpStatus] = useState<'idle' | 'sending' | 'sent' | 'error'>('idle');
     const [otpError, setOtpError] = useState('');
     const [cooldown, setCooldown] = useState(0);
@@ -139,8 +138,6 @@ const ContactForm = () => {
             setOtpSent(false);
             setOtpVerified(false);
             setOtpValue('');
-            setOtpToken('');
-            setOtpExpiry(0);
             setVerifiedEmail('');
         }
     }, [formData.email, verifiedEmail]);
@@ -154,7 +151,7 @@ const ContactForm = () => {
         setOtpStatus('sending');
         setOtpError('');
         try {
-            const res = await fetch('/api/send-otp', {
+            const res = await fetch(`${OTP_API_BASE_URL}/api/otp/send`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ email: formData.email }),
@@ -163,8 +160,6 @@ const ContactForm = () => {
             let result: any;
             try { result = JSON.parse(text); } catch { throw new Error('Server returned an unexpected response. Please try again.'); }
             if (!res.ok) throw new Error(result.detail || result.error || 'Failed');
-            setOtpToken(result.token);
-            setOtpExpiry(result.expiresAt);
             setOtpSent(true);
             setOtpStatus('sent');
             setCooldown(60);
@@ -175,10 +170,28 @@ const ContactForm = () => {
         }
     };
 
-    const handleVerifyOtp = () => {
+    const handleVerifyOtp = async () => {
         if (otpValue.length !== 6) return;
-        setOtpVerified(true);
-        setVerifiedEmail(formData.email);
+        setOtpStatus('sending');
+        setOtpError('');
+        try {
+            const res = await fetch(`${OTP_API_BASE_URL}/api/otp/verify`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email: formData.email, otp: otpValue }),
+            });
+            const text = await res.text();
+            let result: any;
+            try { result = JSON.parse(text); } catch { throw new Error('Server returned an unexpected response. Please try again.'); }
+            if (!res.ok) throw new Error(result.detail || result.error || 'OTP verification failed');
+            setOtpVerified(true);
+            setVerifiedEmail(formData.email);
+            setOtpStatus('sent');
+        } catch (err: any) {
+            setOtpError(err.message || 'Failed to verify OTP');
+            setOtpStatus('error');
+            setTimeout(() => setOtpStatus('idle'), 5000);
+        }
     };
 
     const handleSubmit = async (e: React.FormEvent) => {
@@ -200,9 +213,6 @@ const ContactForm = () => {
                     email: formData.email,
                     company: formData.company,
                     message: formData.message,
-                    otp: otpValue,
-                    otpToken,
-                    otpExpiry,
                 }),
             });
             const text = await res.text();
@@ -211,7 +221,7 @@ const ContactForm = () => {
             if (!res.ok) throw new Error(result.detail || result.error || 'Send failed');
             setStatus('success');
             setFormData({ name: '', company: '', email: '', message: '' });
-            setOtpSent(false); setOtpVerified(false); setOtpValue(''); setOtpToken(''); setOtpExpiry(0); setVerifiedEmail('');
+            setOtpSent(false); setOtpVerified(false); setOtpValue(''); setVerifiedEmail('');
             setTimeout(() => setStatus('idle'), 5000);
         } catch (error: any) {
             console.error('Email Error:', error);
