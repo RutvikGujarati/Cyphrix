@@ -4,26 +4,10 @@ import { contactEmailHtml, auditEmailHtml } from './email-template';
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 
-function getApiBaseUrl(): string | null {
-  const url = process.env.API_BASE_URL || process.env.VITE_API_BASE_URL;
-  return url?.trim() || null;
-}
-
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   try {
     if (req.method !== 'POST') {
       return res.status(405).json({ error: 'Method not allowed' });
-    }
-
-    const apiBase = getApiBaseUrl();
-    if (apiBase) {
-      const proxyRes = await fetch(`${apiBase.replace(/\/$/, '')}/api/send-email`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(req.body),
-      });
-      const payload = await proxyRes.json().catch(() => ({}));
-      return res.status(proxyRes.status).json(proxyRes.ok ? payload : { error: payload.error || 'Send failed', detail: payload.detail }));
     }
 
     const { type, subject, name, email, company, message, audit } = req.body;
