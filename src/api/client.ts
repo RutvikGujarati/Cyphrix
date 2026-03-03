@@ -1,17 +1,9 @@
-/**
- * API client for Cyphrix backend.
- * Uses VITE_API_BASE_URL from env. Defaults to http://localhost:8080 in dev when not set.
- */
-const getBaseUrl = (): string => {
-  const url = import.meta.env.VITE_API_BASE_URL;
-  if (url !== undefined && url !== null) {
-    const trimmed = String(url).trim();
-    if (trimmed) return trimmed.replace(/\/$/, '');
-  }
-  return import.meta.env.DEV ? 'http://localhost:8080' : '';
-};
+/** Production: always use server. Dev: use VITE_API_BASE_URL or localhost:8080 */
+const API_BASE = import.meta.env.DEV
+  ? (String(import.meta.env.VITE_API_BASE_URL || '').trim() || 'http://localhost:8080').replace(/\/$/, '')
+  : 'https://cyphrixtech-server.vercel.app';
 
-const BASE = getBaseUrl();
+const BASE = API_BASE;
 
 async function request<T = unknown>(path: string, options: RequestInit = {}): Promise<T> {
   const url = path.startsWith('http') ? path : `${BASE}${path}`;
