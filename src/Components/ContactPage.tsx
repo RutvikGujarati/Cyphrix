@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import * as THREE from 'three';
-import { ExternalLink } from 'lucide-react';
-import { OTP_API_BASE_URL } from '../config/api';
+import { ExternalLink, ShieldCheck } from 'lucide-react';
+import { api } from '../api/client';
 
 const ContactVisual = () => {
     const mountRef = useRef<HTMLDivElement>(null);
@@ -115,117 +115,73 @@ const ContactVisual = () => {
 
 const ContactForm = () => {
     const [formData, setFormData] = useState({ name: '', company: '', email: '', message: '' });
+    const [otp, setOtp] = useState('');
+    const [emailVerified, setEmailVerified] = useState(false);
+    const [otpStatus, setOtpStatus] = useState<'idle' | 'sending' | 'verifying' | 'success' | 'error'>('idle');
     const [status, setStatus] = useState<'idle' | 'sending' | 'success' | 'error'>('idle');
     const [errorMsg, setErrorMsg] = useState('');
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 
-    const [otpSent, setOtpSent] = useState(false);
-    const [otpVerified, setOtpVerified] = useState(false);
-    const [otpValue, setOtpValue] = useState('');
-    const [otpStatus, setOtpStatus] = useState<'idle' | 'sending' | 'sent' | 'error'>('idle');
-    const [otpError, setOtpError] = useState('');
-    const [cooldown, setCooldown] = useState(0);
-    const [verifiedEmail, setVerifiedEmail] = useState('');
-
-    useEffect(() => {
-        if (cooldown <= 0) return;
-        const t = setTimeout(() => setCooldown(c => c - 1), 1000);
-        return () => clearTimeout(t);
-    }, [cooldown]);
-
-    useEffect(() => {
-        if (verifiedEmail && formData.email !== verifiedEmail) {
-            setOtpSent(false);
-            setOtpVerified(false);
-            setOtpValue('');
-            setVerifiedEmail('');
-        }
-    }, [formData.email, verifiedEmail]);
-
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
+        if (e.target.name === 'email') setEmailVerified(false);
     };
 
     const handleSendOtp = async () => {
-        if (!emailRegex.test(formData.email)) { setOtpError('Enter a valid email first'); setOtpStatus('error'); setTimeout(() => setOtpStatus('idle'), 3000); return; }
+        if (!emailRegex.test(formData.email)) { setErrorMsg('Please enter a valid email first'); setOtpStatus('error'); setTimeout(() => setOtpStatus('idle'), 4000); return; }
         setOtpStatus('sending');
-        setOtpError('');
+        setErrorMsg('');
         try {
-            const res = await fetch(`${OTP_API_BASE_URL}/api/otp/send`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ email: formData.email }),
-            });
-            const text = await res.text();
-            let result: any;
-            try { result = JSON.parse(text); } catch { throw new Error('Server returned an unexpected response. Please try again.'); }
-            if (!res.ok) throw new Error(result.detail || result.error || 'Failed');
-            setOtpSent(true);
-            setOtpStatus('sent');
-            setCooldown(60);
-        } catch (err: any) {
-            setOtpError(err.message || 'Failed to send OTP');
+            await api.sendOtp(formData.email);
+            setOtpStatus('idle');
+        } catch (err: unknown) {
+            setErrorMsg(err instanceof Error ? err.message : 'Failed to send code');
             setOtpStatus('error');
-            setTimeout(() => setOtpStatus('idle'), 5000);
+            setTimeout(() => setOtpStatus('idle'), 6000);
         }
     };
 
     const handleVerifyOtp = async () => {
-        if (otpValue.length !== 6) return;
-        setOtpStatus('sending');
-        setOtpError('');
+        if (!/^\d{6}$/.test(otp)) { setErrorMsg('Enter a 6-digit code'); setOtpStatus('error'); setTimeout(() => setOtpStatus('idle'), 3000); return; }
+        setOtpStatus('verifying');
+        setErrorMsg('');
         try {
-            const res = await fetch(`${OTP_API_BASE_URL}/api/otp/verify`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ email: formData.email, otp: otpValue }),
-            });
-            const text = await res.text();
-            let result: any;
-            try { result = JSON.parse(text); } catch { throw new Error('Server returned an unexpected response. Please try again.'); }
-            if (!res.ok) throw new Error(result.detail || result.error || 'OTP verification failed');
-            setOtpVerified(true);
-            setVerifiedEmail(formData.email);
-            setOtpStatus('sent');
-        } catch (err: any) {
-            setOtpError(err.message || 'Failed to verify OTP');
+            await api.verifyOtp(formData.email, otp);
+            setEmailVerified(true);
+            setOtpStatus('success');
+            setOtp('');
+        } catch (err: unknown) {
+            setErrorMsg(err instanceof Error ? err.message : 'Invalid code');
             setOtpStatus('error');
-            setTimeout(() => setOtpStatus('idle'), 5000);
+            setTimeout(() => setOtpStatus('idle'), 4000);
         }
     };
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+        if (!emailVerified) { setErrorMsg('Please verify your email first'); setStatus('error'); setTimeout(() => setStatus('idle'), 4000); return; }
         if (!formData.name.trim()) { setErrorMsg('Name is required'); setStatus('error'); setTimeout(() => setStatus('idle'), 4000); return; }
         if (!emailRegex.test(formData.email)) { setErrorMsg('Please enter a valid email address'); setStatus('error'); setTimeout(() => setStatus('idle'), 4000); return; }
-        if (!otpVerified) { setErrorMsg('Please verify your email first'); setStatus('error'); setTimeout(() => setStatus('idle'), 4000); return; }
         if (!formData.message.trim()) { setErrorMsg('Message is required'); setStatus('error'); setTimeout(() => setStatus('idle'), 4000); return; }
 
         setStatus('sending');
+        setErrorMsg('');
         try {
-            const res = await fetch('/api/send-email', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    type: 'contact',
-                    subject: `Contact: ${formData.name}${formData.company ? ` (${formData.company})` : ''}`,
-                    name: formData.name,
-                    email: formData.email,
-                    company: formData.company,
-                    message: formData.message,
-                }),
+            await api.sendEmail({
+                type: 'contact',
+                subject: `Contact: ${formData.name}${formData.company ? ` (${formData.company})` : ''}`,
+                name: formData.name,
+                email: formData.email,
+                company: formData.company,
+                message: formData.message,
             });
-            const text = await res.text();
-            let result: any;
-            try { result = JSON.parse(text); } catch { throw new Error('Server returned an unexpected response. Please try again.'); }
-            if (!res.ok) throw new Error(result.detail || result.error || 'Send failed');
             setStatus('success');
             setFormData({ name: '', company: '', email: '', message: '' });
-            setOtpSent(false); setOtpVerified(false); setOtpValue(''); setVerifiedEmail('');
+            setEmailVerified(false);
             setTimeout(() => setStatus('idle'), 5000);
-        } catch (error: any) {
+        } catch (error: unknown) {
             console.error('Email Error:', error);
-            setErrorMsg(error.message || 'Unknown error');
+            setErrorMsg(error instanceof Error ? error.message : 'Unknown error');
             setStatus('error');
             setTimeout(() => setStatus('idle'), 8000);
         }
@@ -245,52 +201,42 @@ const ContactForm = () => {
             </div>
             <div>
                 <label className="form-label small text-white-50">Email <span className="text-danger">*</span></label>
-                <div className="d-flex gap-2">
+                <div className="d-flex flex-wrap align-items-center gap-2">
                     <input
                         type="email" name="email" value={formData.email} onChange={handleChange}
-                        className={`form-control bg-dark border-secondary text-white rounded-2 py-2 shadow-none ${otpVerified ? 'border-success' : ''}`}
-                        placeholder="john@acme.com" required disabled={otpVerified}
+                        className="form-control bg-dark border-secondary text-white rounded-2 py-2 shadow-none" style={{ flex: '1 1 180px' }}
+                        placeholder="john@acme.com" required readOnly={emailVerified}
                     />
-                    {!otpVerified ? (
-                        <button type="button" onClick={handleSendOtp} disabled={otpStatus === 'sending' || cooldown > 0}
-                            className="btn btn-outline-info btn-sm rounded-pill px-3 text-nowrap">
-                            {otpStatus === 'sending' ? 'Sending...' : cooldown > 0 ? `Resend (${cooldown}s)` : otpSent ? 'Resend OTP' : 'Verify Email'}
-                        </button>
+                    {!emailVerified ? (
+                        <>
+                            <button type="button" onClick={handleSendOtp} disabled={otpStatus === 'sending'} className="btn btn-outline-info py-2 px-3 rounded-2 text-nowrap">
+                                {otpStatus === 'sending' ? 'Sending...' : 'Send OTP'}
+                            </button>
+                            <input
+                                type="text" inputMode="numeric" maxLength={6} value={otp} onChange={(e) => setOtp(e.target.value.replace(/\D/g, ''))}
+                                className="form-control bg-dark border-secondary text-white rounded-2 py-2 shadow-none text-center" style={{ width: '90px' }}
+                                placeholder="000000"
+                            />
+                            <button type="button" onClick={handleVerifyOtp} disabled={otpStatus === 'verifying' || otp.length !== 6} className="btn btn-info text-dark fw-bold py-2 px-3 rounded-2 text-nowrap d-inline-flex align-items-center gap-1">
+                                {otpStatus === 'verifying' ? 'Verifying...' : <>Verify <ShieldCheck size={14} /></>}
+                            </button>
+                        </>
                     ) : (
-                        <span className="btn btn-success btn-sm rounded-pill px-3 text-nowrap disabled d-flex align-items-center gap-1">Verified</span>
+                        <span className="badge bg-success py-2 px-3 d-inline-flex align-items-center gap-1">Verified <ShieldCheck size={14} /></span>
                     )}
                 </div>
-                {otpStatus === 'error' && <small className="text-danger mt-1 d-block">{otpError}</small>}
+                {(otpStatus === 'error' || status === 'error') && <span className="text-danger small mt-1 d-block">{errorMsg}</span>}
             </div>
-            {otpSent && !otpVerified && (
-                <div>
-                    <label className="form-label small text-white-50">Enter 6-digit verification code</label>
-                    <div className="d-flex gap-2">
-                        <input
-                            type="text" maxLength={6} value={otpValue}
-                            onChange={e => setOtpValue(e.target.value.replace(/\D/g, '').slice(0, 6))}
-                            className="form-control bg-dark border-secondary text-white rounded-2 py-2 shadow-none text-center fw-bold"
-                            style={{ letterSpacing: '6px', maxWidth: '200px', fontFamily: 'monospace' }}
-                            placeholder="------"
-                        />
-                        <button type="button" onClick={handleVerifyOtp} disabled={otpValue.length !== 6}
-                            className="btn btn-info btn-sm text-dark rounded-pill px-3 fw-bold">
-                            Confirm
-                        </button>
-                    </div>
-                    <small className="text-white-50 mt-1 d-block">Check your inbox for the code. Expires in 5 minutes.</small>
-                </div>
-            )}
             <div>
                 <label className="form-label small text-white-50">Message <span className="text-danger">*</span></label>
                 <textarea name="message" value={formData.message} onChange={handleChange} className="form-control bg-dark border-secondary text-white rounded-2 py-2 shadow-none" rows={4} placeholder="How can we help you?" required></textarea>
             </div>
             <div className="d-flex flex-column flex-sm-row align-items-sm-center gap-3 mt-2">
-                <button type="submit" disabled={status === 'sending' || status === 'success' || !otpVerified}
+                <button type="submit" disabled={status === 'sending' || status === 'success' || !emailVerified}
                     className={`btn ${status === 'success' ? 'btn-success' : 'btn-info text-dark'} fw-bold py-2 px-4 rounded-pill transition-all w-100 w-sm-auto`}>
                     {status === 'sending' ? 'Sending...' : status === 'success' ? 'Message Sent!' : 'Send Message'}
                 </button>
-                {status === 'error' && <span className="text-danger small text-center text-sm-start">{errorMsg || 'Transmission Failed.'}</span>}
+                {!emailVerified && <span className="text-white-50 small">Verify your email to send.</span>}
             </div>
         </form>
     );

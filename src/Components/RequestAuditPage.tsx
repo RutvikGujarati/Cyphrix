@@ -1,8 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react';
 import * as THREE from 'three';
 import { motion } from 'framer-motion';
-import { Shield, Lock, Send } from 'lucide-react';
-import { OTP_API_BASE_URL } from '../config/api';
+import { Shield, Lock, Send, ShieldCheck } from 'lucide-react';
+import { api } from '../api/client';
 
 const AuditVisual: React.FC = () => {
     const mountRef = useRef<HTMLDivElement>(null);
@@ -137,80 +137,56 @@ const RequestAuditPage: React.FC = () => {
         consultTopic: 'Smart Contract Architecture',
         timeline: '',
     });
+    const [otp, setOtp] = useState('');
+    const [emailVerified, setEmailVerified] = useState(false);
+    const [otpStatus, setOtpStatus] = useState<'idle' | 'sending' | 'verifying' | 'success' | 'error'>('idle');
     const [status, setStatus] = useState<'idle' | 'sending' | 'success' | 'error'>('idle');
     const [errorMsg, setErrorMsg] = useState('');
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 
-    const [otpSent, setOtpSent] = useState(false);
-    const [otpVerified, setOtpVerified] = useState(false);
-    const [otpValue, setOtpValue] = useState('');
-    const [otpStatus, setOtpStatus] = useState<'idle' | 'sending' | 'sent' | 'error'>('idle');
-    const [otpError, setOtpError] = useState('');
-    const [cooldown, setCooldown] = useState(0);
-    const [verifiedEmail, setVerifiedEmail] = useState('');
-
-    useEffect(() => {
-        if (cooldown <= 0) return;
-        const t = setTimeout(() => setCooldown(c => c - 1), 1000);
-        return () => clearTimeout(t);
-    }, [cooldown]);
-
-    useEffect(() => {
-        if (verifiedEmail && formData.contactEmail !== verifiedEmail) {
-            setOtpSent(false); setOtpVerified(false); setOtpValue(''); setVerifiedEmail('');
-        }
-    }, [formData.contactEmail, verifiedEmail]);
-
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
+        if (e.target.name === 'contactEmail') setEmailVerified(false);
     };
 
     const handleSendOtp = async () => {
-        if (!emailRegex.test(formData.contactEmail)) { setOtpError('Enter a valid email first'); setOtpStatus('error'); setTimeout(() => setOtpStatus('idle'), 3000); return; }
-        setOtpStatus('sending'); setOtpError('');
+        if (!emailRegex.test(formData.contactEmail)) { setErrorMsg('Please enter a valid email first'); setOtpStatus('error'); setTimeout(() => setOtpStatus('idle'), 4000); return; }
+        setOtpStatus('sending');
+        setErrorMsg('');
         try {
-            const res = await fetch(`${OTP_API_BASE_URL}/api/otp/send`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email: formData.contactEmail }) });
-            const text = await res.text();
-            let result: any;
-            try { result = JSON.parse(text); } catch { throw new Error('Server returned an unexpected response. Please try again.'); }
-            if (!res.ok) throw new Error(result.detail || result.error || 'Failed');
-            setOtpSent(true); setOtpStatus('sent'); setCooldown(60);
-        } catch (err: any) {
-            setOtpError(err.message || 'Failed to send OTP'); setOtpStatus('error'); setTimeout(() => setOtpStatus('idle'), 5000);
+            await api.sendOtp(formData.contactEmail);
+            setOtpStatus('idle');
+        } catch (err: unknown) {
+            setErrorMsg(err instanceof Error ? err.message : 'Failed to send code');
+            setOtpStatus('error');
+            setTimeout(() => setOtpStatus('idle'), 6000);
         }
     };
 
     const handleVerifyOtp = async () => {
-        if (otpValue.length !== 6) return;
-        setOtpStatus('sending');
-        setOtpError('');
+        if (!/^\d{6}$/.test(otp)) { setErrorMsg('Enter a 6-digit code'); setOtpStatus('error'); setTimeout(() => setOtpStatus('idle'), 3000); return; }
+        setOtpStatus('verifying');
+        setErrorMsg('');
         try {
-            const res = await fetch(`${OTP_API_BASE_URL}/api/otp/verify`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ email: formData.contactEmail, otp: otpValue }),
-            });
-            const text = await res.text();
-            let result: any;
-            try { result = JSON.parse(text); } catch { throw new Error('Server returned an unexpected response. Please try again.'); }
-            if (!res.ok) throw new Error(result.detail || result.error || 'OTP verification failed');
-            setOtpVerified(true);
-            setVerifiedEmail(formData.contactEmail);
-            setOtpStatus('sent');
-        } catch (err: any) {
-            setOtpError(err.message || 'Failed to verify OTP');
+            await api.verifyOtp(formData.contactEmail, otp);
+            setEmailVerified(true);
+            setOtpStatus('success');
+            setOtp('');
+        } catch (err: unknown) {
+            setErrorMsg(err instanceof Error ? err.message : 'Invalid code');
             setOtpStatus('error');
-            setTimeout(() => setOtpStatus('idle'), 5000);
+            setTimeout(() => setOtpStatus('idle'), 4000);
         }
     };
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+        if (!emailVerified) { setErrorMsg('Please verify your email first'); setStatus('error'); setTimeout(() => setStatus('idle'), 4000); return; }
         if (!formData.projectName.trim()) { setErrorMsg('Project name is required'); setStatus('error'); setTimeout(() => setStatus('idle'), 4000); return; }
         if (!emailRegex.test(formData.contactEmail)) { setErrorMsg('Please enter a valid email address'); setStatus('error'); setTimeout(() => setStatus('idle'), 4000); return; }
-        if (!otpVerified) { setErrorMsg('Please verify your email first'); setStatus('error'); setTimeout(() => setStatus('idle'), 4000); return; }
 
         setStatus('sending');
+        setErrorMsg('');
 
         const details: Record<string, string> = {};
         if (formData.auditType === 'Smart Contract Audit') {
@@ -232,28 +208,20 @@ const RequestAuditPage: React.FC = () => {
         }
 
         try {
-            const res = await fetch('/api/send-email', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    type: 'audit',
-                    subject: `Audit Request: ${formData.auditType} — ${formData.projectName}`,
-                    name: formData.projectName,
-                    email: formData.contactEmail,
-                    audit: { auditType: formData.auditType, telegram: formData.telegram, details, notes: formData.additionalNotes },
-                }),
+            await api.sendEmail({
+                type: 'audit',
+                subject: `Audit Request: ${formData.auditType} — ${formData.projectName}`,
+                name: formData.projectName,
+                email: formData.contactEmail,
+                audit: { auditType: formData.auditType, telegram: formData.telegram, details, notes: formData.additionalNotes },
             });
-            const resText = await res.text();
-            let result: any;
-            try { result = JSON.parse(resText); } catch { throw new Error('Server returned an unexpected response. Please try again.'); }
-            if (!res.ok) throw new Error(result.detail || result.error || 'Send failed');
             setStatus('success');
             setTimeout(() => setStatus('idle'), 5000);
             setFormData({ projectName: '', contactEmail: '', telegram: '', auditType: 'Smart Contract Audit', nContracts: '', loc: '', blockchain: 'Ethereum', additionalNotes: '', testingType: 'Black Box', targetAsset: '', pentestScope: 'Web Application', verificationScope: 'Invariants & Safety Properties', consultTopic: 'Smart Contract Architecture', timeline: '' });
-            setOtpSent(false); setOtpVerified(false); setOtpValue(''); setVerifiedEmail('');
-        } catch (error: any) {
+            setEmailVerified(false);
+        } catch (error: unknown) {
             console.error('Email Error:', error);
-            setErrorMsg(error.message || 'Unknown error');
+            setErrorMsg(error instanceof Error ? error.message : 'Unknown error');
             setStatus('error');
             setTimeout(() => setStatus('idle'), 8000);
         }
@@ -461,41 +429,32 @@ const RequestAuditPage: React.FC = () => {
 
                                 <div>
                                     <label className="form-label small text-info fw-bold">Contact Email <span className="text-danger">*</span></label>
-                                    <div className="d-flex gap-2">
+                                    <div className="d-flex flex-wrap align-items-center gap-2">
                                         <input
                                             type="email" name="contactEmail" value={formData.contactEmail} onChange={handleChange}
-                                            className={`form-control bg-black border-secondary text-white shadow-none ${otpVerified ? 'border-success' : ''}`}
-                                            placeholder="security@project.io" required disabled={otpVerified}
+                                            className="form-control bg-black border-secondary text-white shadow-none" style={{ flex: '1 1 180px' }}
+                                            placeholder="security@project.io" required readOnly={emailVerified}
                                         />
-                                        {!otpVerified ? (
-                                            <button type="button" onClick={handleSendOtp} disabled={otpStatus === 'sending' || cooldown > 0}
-                                                className="btn btn-outline-info btn-sm rounded-pill px-3 text-nowrap">
-                                                {otpStatus === 'sending' ? 'Sending...' : cooldown > 0 ? `Resend (${cooldown}s)` : otpSent ? 'Resend OTP' : 'Verify Email'}
-                                            </button>
+                                        {!emailVerified ? (
+                                            <>
+                                                <button type="button" onClick={handleSendOtp} disabled={otpStatus === 'sending'} className="btn btn-outline-info py-2 px-3 rounded-2 text-nowrap">
+                                                    {otpStatus === 'sending' ? 'Sending...' : 'Send OTP'}
+                                                </button>
+                                                <input
+                                                    type="text" inputMode="numeric" maxLength={6} value={otp} onChange={(e) => setOtp(e.target.value.replace(/\D/g, ''))}
+                                                    className="form-control bg-black border-secondary text-white shadow-none text-center" style={{ width: '90px' }}
+                                                    placeholder="000000"
+                                                />
+                                                <button type="button" onClick={handleVerifyOtp} disabled={otpStatus === 'verifying' || otp.length !== 6} className="btn btn-info text-dark fw-bold py-2 px-3 rounded-2 text-nowrap d-inline-flex align-items-center gap-1">
+                                                    {otpStatus === 'verifying' ? 'Verifying...' : <>Verify <ShieldCheck size={14} /></>}
+                                                </button>
+                                            </>
                                         ) : (
-                                            <span className="btn btn-success btn-sm rounded-pill px-3 text-nowrap disabled d-flex align-items-center gap-1">Verified</span>
+                                            <span className="badge bg-success py-2 px-3 d-inline-flex align-items-center gap-1">Verified <ShieldCheck size={14} /></span>
                                         )}
                                     </div>
-                                    {otpStatus === 'error' && <small className="text-danger mt-1 d-block">{otpError}</small>}
+                                    {(otpStatus === 'error' || status === 'error') && <span className="text-danger small mt-1 d-block">{errorMsg}</span>}
                                 </div>
-
-                                {otpSent && !otpVerified && (
-                                    <div>
-                                        <label className="form-label small text-info fw-bold">Enter 6-digit verification code</label>
-                                        <div className="d-flex gap-2">
-                                            <input
-                                                type="text" maxLength={6} value={otpValue}
-                                                onChange={e => setOtpValue(e.target.value.replace(/\D/g, '').slice(0, 6))}
-                                                className="form-control bg-black border-secondary text-white shadow-none text-center fw-bold"
-                                                style={{ letterSpacing: '6px', maxWidth: '200px', fontFamily: 'monospace' }}
-                                                placeholder="------"
-                                            />
-                                            <button type="button" onClick={handleVerifyOtp} disabled={otpValue.length !== 6}
-                                                className="btn btn-info btn-sm text-dark rounded-pill px-3 fw-bold">Confirm</button>
-                                        </div>
-                                        <small className="text-white-50 mt-1 d-block">Check your inbox for the code. Expires in 5 minutes.</small>
-                                    </div>
-                                )}
 
                                 <div className="row g-3">
                                     <div className="col-12">
@@ -511,7 +470,7 @@ const RequestAuditPage: React.FC = () => {
 
                                 <button
                                     type="submit"
-                                    disabled={status === 'sending' || status === 'success' || !otpVerified}
+                                    disabled={status === 'sending' || status === 'success' || !emailVerified}
                                     className={`btn ${status === 'success' ? 'btn-success' : 'btn-info'} text-dark fw-bold py-3 mt-3 w-100 rounded-pill d-flex align-items-center justify-content-center gap-2`}
                                 >
                                     {status === 'sending' ? (
@@ -522,6 +481,7 @@ const RequestAuditPage: React.FC = () => {
                                         <>Submit Request <Send size={18} /></>
                                     )}
                                 </button>
+                                {!emailVerified && <p className="text-white-50 small text-center mt-2">Verify your email to submit the request.</p>}
                                 {status === 'success' && <p className="text-success small text-center mt-2">We will review your request and get back to you shortly via secure channel.</p>}
                                 {status === 'error' && <p className="text-danger small text-center mt-2">{errorMsg || 'Failed to send request. Please try again or email us directly.'}</p>}
                             </form>
