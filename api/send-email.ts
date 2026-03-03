@@ -5,28 +5,40 @@ import { contactEmailHtml, auditEmailHtml } from './email-template';
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
+  const json = (status: number, body: object) => {
+    res.setHeader('Content-Type', 'application/json');
+    return res.status(status).json(body);
+  };
+
   try {
     if (req.method !== 'POST') {
-      return res.status(405).json({ error: 'Method not allowed' });
+      return json(405, { error: 'Method not allowed' });
     }
 
-    const { type, subject, name, email, company, message, audit } = req.body;
+    const smtpUser = process.env.SMTP_USER;
+    const smtpPass = process.env.SMTP_PASS;
+    if (!smtpUser || !smtpPass) {
+      console.error('[send-email] SMTP_USER or SMTP_PASS not configured in Vercel');
+      return json(500, { error: 'Email service not configured', detail: 'Contact administrator' });
+    }
+
+    const { type, subject, name, email, company, message, audit } = req.body || {};
 
     if (!email || !EMAIL_RE.test(email)) {
-      return res.status(400).json({ error: 'A valid email address is required' });
+      return json(400, { error: 'A valid email address is required' });
     }
     if (!name?.trim()) {
-      return res.status(400).json({ error: 'Name is required' });
+      return json(400, { error: 'Name is required' });
+    }
+    if (type !== 'audit' && (!message || !String(message).trim())) {
+      return json(400, { error: 'Message is required' });
     }
 
     const transporter = nodemailer.createTransport({
       host: 'smtp.zoho.in',
       port: 465,
       secure: true,
-      auth: {
-        user: process.env.SMTP_USER,
-        pass: process.env.SMTP_PASS,
-      },
+      auth: { user: smtpUser, pass: smtpPass },
     });
 
     let html: string;
@@ -43,22 +55,23 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       });
       text = message || `Audit Request: ${audit.auditType} from ${name} (${email})`;
     } else {
-      html = contactEmailHtml({ name, email, company, message });
-      text = message;
+      html = contactEmailHtml({ name, email, company, message: String(message || '') });
+      text = String(message || '');
     }
 
     await transporter.sendMail({
-      from: `"${name} via Cyphrix" <${process.env.SMTP_USER}>`,
-      to: process.env.SMTP_USER,
+      from: `"${name} via Cyphrix" <${smtpUser}>`,
+      to: smtpUser,
       replyTo: `"${name}" <${email}>`,
       subject: subject || `New message from ${name}`,
       text,
       html,
     });
 
-    return res.status(200).json({ success: true });
-  } catch (error: any) {
-    console.error('SMTP Error:', error);
-    return res.status(500).json({ error: 'Failed to send email', detail: error.message });
+    return json(200, { success: true });
+  } catch (err: unknown) {
+    const msg = err instanceof Error ? err.message : 'Unknown error';
+    console.error('[send-email] Error:', err);
+    return json(500, { error: 'Failed to send email', detail: msg });
   }
 }
