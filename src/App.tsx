@@ -10,6 +10,7 @@ import ResearchPage from './Components/ResearchPage';
 
 import RequestAuditPage from './Components/RequestAuditPage';
 import ServicesPage from './Components/ServicesPage';
+import FlowOfAuditPage from './Components/FlowOfAuditPage';
 
 // Wrapper to inject navigation into Header pending refactor
 const Layout = ({ children }: { children: React.ReactNode }) => {
@@ -21,13 +22,14 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
     window.scrollTo(0, 0);
   }, [location.pathname]);
 
-  const handleNavigate = (page: 'home' | 'projects' | 'contact' | 'research' | 'audit' | 'services') => {
+  const handleNavigate = (page: 'home' | 'projects' | 'contact' | 'research' | 'audit' | 'services' | 'flowofaudit') => {
     if (page === 'home') navigate('/');
     if (page === 'projects') navigate('/projects');
     if (page === 'contact') navigate('/inquiry');
     if (page === 'research') navigate('/research');
     if (page === 'audit') navigate('/request-audit');
     if (page === 'services') navigate('/services');
+    if (page === 'flowofaudit') navigate('/flowofaudit');
   };
 
   return (
@@ -52,6 +54,7 @@ function App() {
           <Route path="/inquiry" element={<ContactPage />} />
           <Route path="/request-audit" element={<RequestAuditPage />} />
           <Route path="/services" element={<ServicesPage />} />
+          <Route path="/flowofaudit" element={<FlowOfAuditPage />} />
         </Routes>
       </Layout>
     </Router>

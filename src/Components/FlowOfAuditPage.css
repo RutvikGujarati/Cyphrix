@@ -1,0 +1,176 @@
+.flow-audit-inner {
+  padding-top: 140px;
+  padding-bottom: 4rem;
+  max-width: 900px;
+}
+
+.flow-audit-glass {
+  background: rgba(0, 0, 0, 0.45) !important;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.flow-audit-title {
+  font-size: clamp(1.85rem, 4vw, 2.5rem);
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  text-transform: capitalize;
+}
+
+.flow-audit-lead {
+  font-size: 1.05rem;
+  line-height: 1.6;
+  max-width: 42rem;
+}
+
+.flow-audit-section-title {
+  font-weight: 600;
+  letter-spacing: 0.03em;
+}
+
+.flow-audit-card {
+  background: rgba(0, 242, 255, 0.03);
+}
+
+.flow-audit-overview li:last-child {
+  margin-bottom: 0 !important;
+}
+
+.flow-audit-step-label {
+  font-weight: 600;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.flow-audit-list-two-col {
+  display: grid;
+  gap: 0.35rem 2rem;
+  grid-template-columns: 1fr;
+  padding-left: 1.25rem;
+}
+
+@media (min-width: 576px) {
+  .flow-audit-list-two-col {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.flow-audit-step-title {
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: #fff;
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  line-height: 1.35;
+}
+
+.flow-audit-step-num {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  background: rgba(0, 242, 255, 0.15);
+  border: 1px solid rgba(0, 242, 255, 0.35);
+  color: #5ee7ff;
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
+.flow-audit-step-body {
+  padding-left: 0;
+}
+
+@media (min-width: 576px) {
+  .flow-audit-step-body {
+    padding-left: calc(2rem + 0.75rem);
+  }
+}
+
+.flow-audit-step-body p {
+  margin-bottom: 1rem;
+}
+
+.flow-audit-step-body p:last-child {
+  margin-bottom: 0;
+}
+
+.flow-audit-step-body ul {
+  margin-bottom: 1rem;
+  padding-left: 1.25rem;
+}
+
+.flow-audit-step-body li {
+  margin-bottom: 0.35rem;
+}
+
+.flow-audit-subheading {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.85);
+  margin-top: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+.flow-audit-tools-inline {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 0.25rem 1rem;
+  padding-left: 1.25rem;
+}
+
+.flow-audit-chip-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.flow-audit-chip {
+  font-size: 0.8rem;
+  padding: 0.35rem 0.75rem;
+  border-radius: 999px;
+  border: 1px solid rgba(0, 242, 255, 0.25);
+  background: rgba(0, 242, 255, 0.06);
+  color: rgba(255, 255, 255, 0.85);
+}
+
+@media print {
+  .flow-audit-bg-layer {
+    display: none !important;
+  }
+
+  .flow-audit-page {
+    background: #fff !important;
+    color: #111 !important;
+  }
+
+  .flow-audit-title,
+  .flow-audit-step-title,
+  .flow-audit-section-title {
+    color: #111 !important;
+  }
+
+  .flow-audit-step-body,
+  .flow-audit-lead,
+  .text-white-50 {
+    color: #333 !important;
+  }
+
+  .flow-audit-card,
+  .flow-audit-glass {
+    border-color: #ccc !important;
+    background: #fafafa !important;
+    backdrop-filter: none !important;
+  }
+
+  .flow-audit-step-num {
+    border-color: #999 !important;
+    color: #222 !important;
+    background: #eee !important;
+  }
+}
