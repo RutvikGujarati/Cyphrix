@@ -207,9 +207,7 @@ const FlowOfAuditPage = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7 }}
           >
-            <span className="badge border border-info text-info rounded-pill px-3 py-2 mb-3 bg-transparent d-inline-block">
-              METHODOLOGY
-            </span>
+  
             <h1 className="flow-audit-title mb-3">
               Flow of <span className="text-info">audit</span>
             </h1>

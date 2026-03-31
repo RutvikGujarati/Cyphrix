@@ -3,13 +3,13 @@ import logo from "/Cyphrix.svg";
 import './NavBar.css';
 
 interface HeaderProps {
-    onNavigate: (page: 'home' | 'projects' | 'contact' | 'research' | 'audit' | 'services' | 'flowofaudit') => void;
+    onNavigate: (page: 'home' | 'projects' | 'contact' | 'research' | 'audit' | 'services' | 'flowofaudit' | 'partnerwithus') => void;
 }
 
 const Header: React.FC<HeaderProps> = ({ onNavigate }) => {
     const [isOpen, setIsOpen] = useState(false);
 
-    const handleNav = (page: 'home' | 'projects' | 'contact' | 'research' | 'audit' | 'services' | 'flowofaudit') => {
+    const handleNav = (page: 'home' | 'projects' | 'contact' | 'research' | 'audit' | 'services' | 'flowofaudit' | 'partnerwithus') => {
         onNavigate(page);
         setIsOpen(false);
     };
@@ -44,8 +44,9 @@ const Header: React.FC<HeaderProps> = ({ onNavigate }) => {
                                     <button onClick={() => handleNav('projects')} className="nav-link-btn">Projects</button>
                                     <button onClick={() => handleNav('services')} className="nav-link-btn">Services</button>
                                     <button onClick={() => handleNav('research')} className="nav-link-btn">R&D</button>
-                                    <button onClick={() => handleNav('contact')} className="nav-link-btn">Contact</button>
                                     <button onClick={() => handleNav('flowofaudit')} className="nav-link-btn">Flow of Audit</button>
+                                    <button onClick={() => handleNav('partnerwithus')} className="nav-link-btn">Partner With Us</button>
+                                    <button onClick={() => handleNav('contact')} className="nav-link-btn">Contact</button>
                                 </div>
                                 <button onClick={() => handleNav('audit')} className="btn btn-info rounded-pill px-4 py-2 fw-bold text-uppercase small text-dark border-0 mt-3 mt-lg-0">
                                     Request Audit

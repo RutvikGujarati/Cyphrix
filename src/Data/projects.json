@@ -1,32 +1,6 @@
 [
   {
     "id": 1,
-    "title": "Decentralized Exchange Infrastructure",
-    "tagline": "On-Chain Trading & Liquidity Primitives",
-    "description": "A modular decentralized exchange architecture featuring swap modules, limit orders, balance management, and oracle-driven pricing. Designed with upgradeability, security testing, and gas efficiency in mind.",
-    "link": "https://dex-trend.com",
-    "techStack": [
-      "Solidity",
-      "Ethereum",
-      "Ethers.js",
-      "Foundry",
-      "OpenZeppelin"
-    ],
-    "image": "dex-infra.jpg",
-    "color": "#00c2ff",
-    "stats": [
-      {
-        "label": "Architecture",
-        "value": "Modular"
-      },
-      {
-        "label": "Focus",
-        "value": "Security-First"
-      }
-    ]
-  },
-  {
-    "id": 2,
     "title": "Decentralized Synthetic Stablecoin",
     "tagline": "Over-collateralized synthetic asset protocol with dynamic debt pooling.",
     "description": "An algorithmic stablecoin system inspired by Synthetix. Features include multi-collateral backing, a global debt pool for liquidity, and Chainlink-powered price feeds to maintain peg stability and system solvency.",
@@ -55,7 +29,7 @@
     ]
   },
   {
-    "id": 3,
+    "id": 2,
     "title": "Dominix Token Launchpad",
     "tagline": "A secure ICO platform for decentralized token fundraising.",
     "description": "A high-performance fundraising engine featuring multi-tiered token presales, automated whitelisting, and dynamic pricing tiers. The platform handles secure asset exchange, token vesting schedules, and provides a seamless user interface for early-stage investors.",
@@ -85,7 +59,7 @@
     ]
   },
   {
-    "id": 4,
+    "id": 3,
     "title": "Protocol Security Audit: Rarity Town",
     "tagline": "Comprehensive vulnerability assessment and security hardening.",
     "description": "A deep-dive security audit of the Rarity Town NFT protocol. Performed manual code review and automated analysis to identify high-severity vulnerabilities. Implemented a robust testing suite including Fuzzing and Invariant testing to ensure protocol-level safety and reentrancy resistance.",

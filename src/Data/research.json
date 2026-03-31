@@ -1,58 +1,42 @@
 [
-    {
-        "id": 1,
-        "title": "Quantum-Resistant Cryptography",
-        "category": "Security Research",
-        "status": "In Progress",
-        "description": "Exploration of lattice-based cryptography to secure blockchain networks against future quantum computing threats. Developing a prototype signature scheme compatible with EVM.",
-        "tags": [
-            "Cryptography",
-            "Quantum Computing",
-            "Lattice-Based"
-        ],
-        "date": "2025-11-15",
-        "link": "#"
-    },
-    {
-        "id": 2,
-        "title": "Zero-Knowledge Rollup Optimization",
-        "category": "Scaling Solutions",
-        "status": "Published",
-        "description": "A neovel approach to batch processing in ZK-Rollups, reducing gas costs by 30% through improved recursive proof generation techniques.",
-        "tags": [
-            "ZK-Snarks",
-            "Layer 2",
-            "Scaling"
-        ],
-        "date": "2025-08-22",
-        "link": "#"
-    },
-    {
-        "id": 3,
-        "title": "AI-Driven Smart Contract Auditing",
-        "category": "AI & Security",
-        "status": "Prototype",
-        "description": "Integrating LLMs with static analysis tools to detect complex logic vulnerabilities in smart contracts that traditional tools miss.",
-        "tags": [
-            "AI",
-            "Auditing",
-            "Smart Contracts"
-        ],
-        "date": "2025-05-10",
-        "link": "#"
-    },
-    {
-        "id": 4,
-        "title": "Decentralized Identity (DID) Framework",
-        "category": "Identity",
-        "status": "Concept",
-        "description": "Designing a privacy-preserving identity layer for DeFi applications, allowing compliance without compromising user anonymity.",
-        "tags": [
-            "DID",
-            "Privacy",
-            "Compliance"
-        ],
-        "date": "2025-02-01",
-        "link": "#"
-    }
+  {
+    "id": 1,
+    "title": "Blockchain security research",
+    "category": "Protocol & DeFi Security",
+    "status": "Active",
+    "description": "Continuous research on smart contract vulnerabilities, blockchain protocol risks, and DeFi exploit patterns including reentrancy, flash-loan abuse, oracle manipulation, and governance attacks.",
+    "tags": ["Smart Contracts", "DeFi", "Attack Vectors", "Exploit Prevention"]
+  },
+  {
+    "id": 2,
+    "title": "Smart contract analysis & security tools",
+    "category": "Security Engineering",
+    "status": "Active",
+    "description": "Development and refinement of internal analysis tooling for static analysis, dynamic testing, and automated vulnerability detection to increase audit depth and speed.",
+    "tags": ["Static Analysis", "Dynamic Testing", "Tooling", "Automation"]
+  },
+  {
+    "id": 3,
+    "title": "Cybersecurity threat intelligence",
+    "category": "Threat Intelligence",
+    "status": "Continuous",
+    "description": "Monitoring global vulnerability disclosures, adversary behavior, and emerging threat patterns to strengthen audits, infrastructure testing, and risk assessment workflows.",
+    "tags": ["Threat Intel", "Risk Assessment", "Security Monitoring", "Incident Readiness"]
+  },
+  {
+    "id": 4,
+    "title": "Cryptography & protocol research",
+    "category": "Applied Cryptography",
+    "status": "Active",
+    "description": "Research into modern cryptographic and protocol design primitives including zero-knowledge proofs, MPC, encryption systems, and secure key-management models.",
+    "tags": ["ZKP", "MPC", "Encryption", "Key Management"]
+  },
+  {
+    "id": 5,
+    "title": "AI in security automation",
+    "category": "AI Security",
+    "status": "Exploration",
+    "description": "Exploring AI/ML for anomaly detection, vulnerability triage, security monitoring, and faster incident response in blockchain and cloud-native environments.",
+    "tags": ["AI", "ML", "Anomaly Detection", "Security Ops"]
+  }
 ]

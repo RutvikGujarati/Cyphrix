@@ -1,5 +1,5 @@
 import React from 'react';
-import { Github, Twitter, Linkedin } from 'lucide-react';
+import { Github, Twitter, Linkedin, MapPin } from 'lucide-react';
 
 const Footer: React.FC = () => {
     return (
@@ -9,9 +9,12 @@ const Footer: React.FC = () => {
                     <div className="col-md-6 text-center text-md-start mb-3 mb-md-0">
                         <span className="h5 fw-bold tracking-tight mb-0">CYPHRIX</span>
                         <small className="d-block text-white-50 mt-1">&copy; {new Date().getFullYear()} Cyphrix Technologies. All rights reserved.</small>
-                        <address className="text-white-50 small mt-2 mb-0 fst-normal">
-                            B/75, Sukhsagar Society, Chitra,<br />
-                            Bhavnagar
+                        <address className="text-white-50 small mt-2 mb-0 fst-normal d-flex align-items-start gap-2 justify-content-center justify-content-md-start">
+                            <MapPin size={14} className="mt-1 flex-shrink-0" />
+                            <span>
+                                B/75, Sukhsagar Society, Chitra,<br />
+                                Bhavnagar
+                            </span>
                         </address>
                     </div>
                     <div className="col-md-6 text-center text-md-end">
