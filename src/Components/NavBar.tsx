@@ -45,7 +45,7 @@ const Header: React.FC<HeaderProps> = ({ onNavigate }) => {
                                     <button onClick={() => handleNav('services')} className="nav-link-btn">Services</button>
                                     <button onClick={() => handleNav('research')} className="nav-link-btn">R&D</button>
                                     <button onClick={() => handleNav('flowofaudit')} className="nav-link-btn">Flow of Audit</button>
-                                    <button onClick={() => handleNav('partnerwithus')} className="nav-link-btn">Partner With Us</button>
+                                    <button onClick={() => handleNav('partnerwithus')} className="nav-link-btn">Partner Alliance</button>
                                     <button onClick={() => handleNav('contact')} className="nav-link-btn">Contact</button>
                                 </div>
                                 <button onClick={() => handleNav('audit')} className="btn btn-info rounded-pill px-4 py-2 fw-bold text-uppercase small text-dark border-0 mt-3 mt-lg-0">
