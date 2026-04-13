@@ -1,5 +1,5 @@
 import React from 'react';
-import { Github, Twitter, Linkedin, MapPin } from 'lucide-react';
+import { Github, Twitter, Linkedin, MapPin, Instagram } from 'lucide-react';
 
 const Footer: React.FC = () => {
     return (
@@ -21,7 +21,8 @@ const Footer: React.FC = () => {
                         <div className="d-flex justify-content-center justify-content-md-end gap-3 text-white-50">
                             <a href="#" className="text-reset hover-white transition-colors"><Twitter size={18} /></a>
                             <a href="#" className="text-reset hover-white transition-colors"><Github size={18} /></a>
-                            <a href="#" className="text-reset hover-white transition-colors"><Linkedin size={18} /></a>
+                            <a href="https://www.linkedin.com/company/cyphrixtechnologies/about/" target="_blank" rel="noopener noreferrer" className="text-reset hover-white transition-colors"><Linkedin size={18} /></a>
+                            <a href="https://www.instagram.com/cyphrixtechnologies?igsh=MXZoOTA1eWZlOXpoeg==" target="_blank" rel="noopener noreferrer" className="text-reset hover-white transition-colors"><Instagram size={18} /></a>
                         </div>
                     </div>
                 </div>

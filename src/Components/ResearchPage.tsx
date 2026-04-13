@@ -1,23 +1,8 @@
 import React, { Activity } from 'react';
 import { motion } from 'framer-motion';
-import { Shield, ScanSearch, Radar, KeyRound, Bot, FlaskConical, Database, Code2, Server, Lock, Cpu, Globe, Zap, ArrowRight, Truck, FileCheck, CircleUserRound, Layout } from 'lucide-react';
+import { Shield, ScanSearch, Radar, KeyRound, Bot, FlaskConical, Database, Code2, Server, Lock, Cpu, Globe, Zap,Layout } from 'lucide-react';
 import researchData from '../Data/research.json';
 import NeuralNetworkBackground from './NeuralNetworkBackground';
-
-const extraTracks = [
-  {
-    title: 'Secure-by-design architecture reviews',
-    text: 'We evaluate protocol architecture before deployment to reduce exploitable assumptions early in the lifecycle.',
-  },
-  {
-    title: 'Responsible vulnerability disclosure',
-    text: 'Findings are validated and communicated with actionable remediation guidance and severity context.',
-  },
-  {
-    title: 'Adversarial simulation workflows',
-    text: 'We run scenario-based attack simulations to test real-world resilience beyond unit-level checks.',
-  },
-];
 
 const iconList = [Shield, ScanSearch, Radar, KeyRound, Bot];
 
