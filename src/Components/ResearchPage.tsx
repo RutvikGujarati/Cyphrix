@@ -1,6 +1,6 @@
-import React, { Activity } from 'react';
+import React from 'react';
 import { motion } from 'framer-motion';
-import { Shield, ScanSearch, Radar, KeyRound, Bot, FlaskConical, Database, Code2, Server, Lock, Cpu, Globe, Zap,Layout } from 'lucide-react';
+import { Shield, ScanSearch, Radar, KeyRound, Bot, FlaskConical, Database, Code2, Server, Lock, Cpu, Globe, Zap, Layout, Activity } from 'lucide-react';
 import researchData from '../Data/research.json';
 import NeuralNetworkBackground from './NeuralNetworkBackground';
 
