@@ -283,8 +283,8 @@ const HeroVisual = ({ logoProgress, onVisualComplete }: HeroVisualProps) => {
     const mouseLerp = 0.06;
     const waveSpeed = 320;
     const waveWidth = 280;
-    const scrollLerp = 0.025;
-    const positionLerp = 0.035;
+    const scrollLerp = 0.1;
+    const positionLerp = 0.08;
 
     let time = 0;
     const animate = () => {
@@ -374,7 +374,7 @@ const HeroVisual = ({ logoProgress, onVisualComplete }: HeroVisualProps) => {
           const lz = logo[i3 + 2];
           targetX = baseX * waveInfluence + lx * easedS;
           targetZ = baseZ * waveInfluence + lz * easedS;
-          const  waveY = (waveBase + waveLayer) * waveInfluence;
+          const waveY = (waveBase + waveLayer) * waveInfluence;
           targetY = waveY + ly * easedS;
         } else {
           targetX = baseX;

@@ -300,20 +300,6 @@ export default function ContactPage() {
                                         </a>
                                     </div>
                                 </div>
-                                <div className="col-md-4">
-                                    <div className="p-3 rounded-4 border border-white border-opacity-10 bg-dark bg-opacity-25 h-100 d-flex flex-column align-items-center hover-lift transition-all">
-                                        <div className="mb-3 position-relative">
-                                            <div className="rounded-circle overflow-hidden p-1" style={{ width: '80px', height: '80px', background: 'linear-gradient(135deg, #f59e0b, #ef4444)' }}>
-                                                <img src="https://api.dicebear.com/9.x/identicon/svg?seed=Aneka" alt="Kinal Makavana" className="w-100 h-100 rounded-circle bg-black" />
-                                            </div>
-                                            <div className="position-absolute bottom-0 end-0 bg-success border border-black rounded-circle p-1" style={{ width: '10px', height: '10px' }}></div>
-                                        </div>
-                                        <h6 className="fw-bold mb-1">Kinal Makavana</h6>
-                                        <a target="_blank" rel="noopener noreferrer" href="https://www.upwork.com/freelancers/~01aab1fed28d527e46?mp_source=share" className="btn btn-sm btn-outline-light rounded-pill px-3 mt-auto d-flex align-items-center gap-1" style={{ fontSize: '0.8rem' }}>
-                                            <span>Upwork</span> <ExternalLink size={12} />
-                                        </a>
-                                    </div>
-                                </div>
                             </div>
                         </div>
                     </div>

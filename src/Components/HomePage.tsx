@@ -2,7 +2,7 @@ import { useEffect, useState, useRef, useCallback } from 'react';
 import HeroVisual from './HeroVisual';
 import BeyondSection from './BeyondSection';
 
-const SCROLL_THRESHOLD = 800;
+const SCROLL_THRESHOLD = 100;
 
 export default function HomePage() {
     const [logoProgress, setLogoProgress] = useState(0);
@@ -12,7 +12,9 @@ export default function HomePage() {
 
     // Unified logic to update progress
     const updateProgress = useCallback((delta: number) => {
-        virtualY.current += delta;
+        // High sensitivity: one scroll usually completes it
+        const multiplier = delta > 0 ? 5 : 1; 
+        virtualY.current += delta * multiplier;
         virtualY.current = Math.max(0, Math.min(SCROLL_THRESHOLD, virtualY.current));
 
         const currentProgress = virtualY.current / SCROLL_THRESHOLD;
