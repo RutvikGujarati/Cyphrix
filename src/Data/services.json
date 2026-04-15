@@ -84,6 +84,87 @@
       "tagline": "End-to-end protection for your Web3 infrastructure.",
       "bullets": ["Web Application Security Testing (OWASP)", "Infrastructure VAPT", "Cloud security & IAM review"],
       "keywords": "VAPT services company, cloud security services, web application security testing"
+    },
+    {
+      "id": 9,
+      "icon": "CheckCircle",
+      "title": "Functional Testing Services",
+      "summary": "Ensure your software operates exactly as intended with rigorous functional validation.",
+      "detail": "We verify each function of the software application operates in conformance with the requirement specifications, covering unit testing, integration testing, and system testing.",
+      "tagline": "Precision in every function, excellence in every feature.",
+      "keywords": "functional testing services, software validation, unit testing"
+    },
+    {
+      "id": 10,
+      "icon": "Zap",
+      "title": "Performance Testing Services",
+      "summary": "Optimize speed, scalability, and stability under various load conditions.",
+      "detail": "We identify performance bottlenecks and ensure your application can handle peak traffic without compromise using load, stress, and endurance testing.",
+      "tagline": "Built for speed, engineered for scale.",
+      "keywords": "performance testing, load testing, scalability testing"
+    },
+    {
+      "id": 11,
+      "icon": "Shield",
+      "title": "Security Testing Services",
+      "summary": "Protect your digital assets with advanced vulnerability assessments and penetration testing.",
+      "detail": "Our security experts identify and mitigate risks, ensuring your application meets global security standards and is protected against evolving cyber threats.",
+      "tagline": "Hardening your defenses against evolving threats.",
+      "keywords": "security testing services, vulnerability assessment, penetration testing"
+    },
+    {
+      "id": 12,
+      "icon": "Layout",
+      "title": "Compatibility Testing",
+      "summary": "Seamless user experience across all devices, browsers, and operating systems.",
+      "detail": "We ensure your application performs consistently across a diverse range of hardware and software configurations, including mobile devices and legacy systems.",
+      "tagline": "Consistent performance, everywhere.",
+      "keywords": "compatibility testing, cross-browser testing, mobile testing"
+    },
+    {
+      "id": 13,
+      "icon": "UserCheck",
+      "title": "Usability Testing",
+      "summary": "Enhance user satisfaction by validating the intuitiveness and ease of use.",
+      "detail": "We gather feedback from real-world scenarios to refine user interfaces and improve overall engagement, ensuring your product is truly user-friendly.",
+      "tagline": "User-centric design, validated by users.",
+      "keywords": "usability testing, UX testing, user experience validation"
+    },
+    {
+      "id": 14,
+      "icon": "Webhook",
+      "title": "API Testing",
+      "summary": "Robust validation of application programming interfaces for reliability and security.",
+      "detail": "We test the functionality, reliability, performance, and security of your APIs to ensure seamless integration and data integrity between systems.",
+      "tagline": "Reliable connections, secure data flow.",
+      "keywords": "API testing services, REST API testing, integration testing"
+    },
+    {
+      "id": 15,
+      "icon": "Infinity",
+      "title": "CI/CD & DevOps Testing",
+      "summary": "Accelerate delivery with automated testing integrated into your DevOps pipeline.",
+      "detail": "We implement continuous testing strategies to ensure quality at every stage of the development lifecycle, enabling faster and more reliable releases.",
+      "tagline": "Faster delivery, zero compromise on quality.",
+      "keywords": "DevOps testing, CI/CD automation, continuous testing"
+    },
+    {
+      "id": 16,
+      "icon": "Component",
+      "title": "Specialized Testing Services",
+      "summary": "Tailored testing solutions for niche requirements including AI, IoT, and Big Data.",
+      "detail": "We provide deep expertise in testing emerging technologies and complex enterprise ecosystems, ensuring reliability in specialized domains.",
+      "tagline": "Specialized expertise for complex challenges.",
+      "keywords": "AI testing, IoT testing, Big Data validation"
+    },
+    {
+      "id": 17,
+      "icon": "ClipboardList",
+      "title": "QA Consulting & Process Services",
+      "summary": "Elevate your QA maturity with strategic consulting and process optimization.",
+      "detail": "We help you build a high-performing QA culture through strategy development, framework design, and implementation of industry best practices.",
+      "tagline": "Transforming QA into a strategic asset.",
+      "keywords": "QA consulting, process optimization, testing strategy"
     }
   ]
 }

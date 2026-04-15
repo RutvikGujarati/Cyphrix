@@ -9,6 +9,15 @@ import {
   Coins,
   MonitorSmartphone,
   CloudCog,
+  CheckCircle,
+  Zap,
+  Shield,
+  Layout,
+  UserCheck,
+  Webhook,
+  Infinity,
+  Component,
+  ClipboardList,
   type LucideIcon,
 } from 'lucide-react';
 import servicesData from '../Data/services.json';
@@ -23,6 +32,15 @@ const ICON_MAP: Record<string, LucideIcon> = {
   Coins,
   MonitorSmartphone,
   CloudCog,
+  CheckCircle,
+  Zap,
+  Shield,
+  Layout,
+  UserCheck,
+  Webhook,
+  Infinity,
+  Component,
+  ClipboardList,
 };
 
 const ServicesPage: React.FC = () => {
