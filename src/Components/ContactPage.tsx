@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import * as THREE from 'three';
 import { ExternalLink, ShieldCheck } from 'lucide-react';
+import { motion } from 'framer-motion';
 import { api } from '../api/client';
 
 const ContactVisual = () => {
@@ -264,45 +265,190 @@ export default function ContactPage() {
                     </div>
                 </div>
 
-                <section className="border-top border-white border-opacity-10 pt-5 mt-5">
+                <section className="team-section-enhanced border-top border-white border-opacity-10 pt-5 mt-5">
                     <div className="row justify-content-center">
-                        <div className="col-lg-8 text-center">
-                            <h3 className="display-6 fw-bold mb-4 text-uppercase tracking-widest">
-                                <span className="text-white">The</span> <span className="text-info">Team</span>
-                            </h3>
-                            <p className="text-white-50 mb-5">Architects of the decentralized future.</p>
-                            <div className="row justify-content-center g-3">
-                                <div className="col-md-4">
-                                    <div className="p-3 rounded-4 border border-white border-opacity-10 bg-dark bg-opacity-25 h-100 d-flex flex-column align-items-center hover-lift transition-all">
-                                        <div className="mb-3 position-relative">
-                                            <div className="rounded-circle overflow-hidden p-1" style={{ width: '80px', height: '80px', background: 'linear-gradient(135deg, #06b6d4, #2563eb)' }}>
-                                                <img src="https://api.dicebear.com/9.x/identicon/svg?seed=Felix" alt="Rutvik Gujarati" className="w-100 h-100 rounded-circle bg-black" />
+                        <div className="col-lg-10 text-center">
+                            <motion.div
+                                initial={{ opacity: 0, y: 20 }}
+                                whileInView={{ opacity: 1, y: 0 }}
+                                viewport={{ once: true }}
+                                className="mb-5"
+                            >
+                                <h3 className="display-6 fw-bold mb-3 text-uppercase tracking-widest">
+                                    <span className="text-white">The</span> <span className="text-info">Team</span>
+                                </h3>
+                                <p className="text-white-50">Mastering the architecture of decentralized security.</p>
+                            </motion.div>
+
+                            <div className="row justify-content-center g-4">
+                                {[
+                                    {
+                                        id: '01',
+                                        name: 'Rutvik Gujarati',
+                                        upwork: 'https://www.upwork.com/freelancers/~0119617106c07ee432?viewMode=1',
+                                        seed: 'Felix',
+                                        color: '#00f2ff',
+                                        expertise: ['AUDITING', 'CRYPTOGRAPHY']
+                                    },
+                                    {
+                                        id: '02',
+                                        name: 'Vishal Baraiya',
+                                        upwork: 'https://www.upwork.com/freelancers/vishalb43?mp_source=share',
+                                        seed: 'Luna',
+                                        color: '#a855f7',
+                                        expertise: ['ARCHITECTURE', 'DAPPS']
+                                    }
+                                ].map((member, idx) => (
+                                    <div className="col-12 col-md-5 col-lg-4" key={idx}>
+                                        <motion.div
+                                            initial={{ opacity: 0, scale: 0.9 }}
+                                            whileInView={{ opacity: 1, scale: 1 }}
+                                            viewport={{ once: true }}
+                                            transition={{ duration: 0.8, delay: idx * 0.15, ease: [0.16, 1, 0.3, 1] }}
+                                            className="team-card-premium position-relative p-1 rounded-4 overflow-hidden h-100"
+                                        >
+                                            <div className="neon-border-anim" style={{ background: `conic-gradient(from 0deg, transparent, ${member.color}, transparent 50%)` }} />
+                                            
+                                            <div className="team-card-inner p-5 rounded-4 bg-black d-flex flex-column align-items-center h-100 position-relative border-0 shadow-lg">
+                                                <div className="card-scanline" />
+                                                <div className="card-grid" />
+                                                
+                                                <div className="d-flex justify-content-between w-100 position-absolute top-0 start-0 p-3 opacity-25 font-monospace" style={{ fontSize: '0.65rem' }}>
+                                                    <span>STATUS: ACTIVE</span>
+                                                    <span># {member.id}</span>
+                                                </div>
+
+                                                <div className="mb-4 position-relative">
+                                                    <div className="avatar-ring-container p-2 rounded-circle">
+                                                        <div className="avatar-wrapper rounded-circle p-1" 
+                                                              style={{ 
+                                                                  width: '120px', 
+                                                                  height: '120px', 
+                                                                  background: `linear-gradient(45deg, ${member.color}, transparent)`,
+                                                                  boxShadow: `0 0 30px ${member.color}22`
+                                                              }}>
+                                                            <img 
+                                                                src={`https://api.dicebear.com/9.x/identicon/svg?seed=${member.seed}`} 
+                                                                alt={member.name} 
+                                                                className="w-100 h-100 rounded-circle bg-black grayscale-to-color transition-all duration-500" 
+                                                            />
+                                                        </div>
+                                                        <div className="status-indicator-pulse position-absolute bottom-0 end-0 rounded-circle" 
+                                                             style={{ 
+                                                                 width: '14px', 
+                                                                 height: '14px', 
+                                                                 backgroundColor: '#10b981',
+                                                                 margin: '12px',
+                                                                 boxShadow: '0 0 15px #10b981',
+                                                                 border: '2px solid rgba(0,0,0,0.5)'
+                                                             }}></div>
+                                                    </div>
+                                                </div>
+                                                
+                                                <h4 className="fw-bold mb-3 text-white tracking-tighter">{member.name}</h4>
+                                                
+                                                <div className="meta-reveal small font-monospace opacity-0 mb-4 text-info transition-all" style={{ fontSize: '0.7rem' }}>
+                                                    {member.expertise.join(' • ')}
+                                                </div>
+
+                                                <a 
+                                                    target="_blank" 
+                                                    rel="noopener noreferrer" 
+                                                    href={member.upwork} 
+                                                    className="btn btn-sm btn-outline-info rounded-0 border-0 border-bottom border-info border-opacity-25 px-0 mt-auto d-flex align-items-center gap-3 transition-all hover-nav-glow"
+                                                    style={{ fontSize: '0.75rem' }}
+                                                >
+                                                    <span className="text-uppercase tracking-widest fw-bold opacity-75">ACCESS UPWORK PROFILE</span> 
+                                                    <ExternalLink size={14} className="opacity-50" />
+                                                </a>
+
+                                                <div className="corner-accent top-0 start-0 border-top border-start border-info border-opacity-25" style={{ width: '10px', height: '10px' }} />
+                                                <div className="corner-accent bottom-0 end-0 border-bottom border-end border-info border-opacity-25" style={{ width: '10px', height: '10px' }} />
                                             </div>
-                                            <div className="position-absolute bottom-0 end-0 bg-success border border-black rounded-circle p-1" style={{ width: '10px', height: '10px' }}></div>
-                                        </div>
-                                        <h6 className="fw-bold mb-1">Rutvik Gujarati</h6>
-                                        <a target="_blank" rel="noopener noreferrer" href="https://www.upwork.com/freelancers/~0119617106c07ee432?viewMode=1" className="btn btn-sm btn-outline-light rounded-pill px-3 mt-auto d-flex align-items-center gap-1" style={{ fontSize: '0.8rem' }}>
-                                            <span>Upwork</span> <ExternalLink size={12} />
-                                        </a>
+                                        </motion.div>
                                     </div>
-                                </div>
-                                <div className="col-md-4">
-                                    <div className="p-3 rounded-4 border border-white border-opacity-10 bg-dark bg-opacity-25 h-100 d-flex flex-column align-items-center hover-lift transition-all">
-                                        <div className="mb-3 position-relative">
-                                            <div className="rounded-circle overflow-hidden p-1" style={{ width: '80px', height: '80px', background: 'linear-gradient(135deg, #a855f7, #db2777)' }}>
-                                                <img src="https://api.dicebear.com/9.x/identicon/svg?seed=Luna" alt="Vishal Baraiya" className="w-100 h-100 rounded-circle bg-black" />
-                                            </div>
-                                            <div className="position-absolute bottom-0 end-0 bg-success border border-black rounded-circle p-1" style={{ width: '10px', height: '10px' }}></div>
-                                        </div>
-                                        <h6 className="fw-bold mb-1">Vishal Baraiya</h6>
-                                        <a target="_blank" rel="noopener noreferrer" href="https://www.upwork.com/freelancers/vishalb43?mp_source=share" className="btn btn-sm btn-outline-light rounded-pill px-3 mt-auto d-flex align-items-center gap-1" style={{ fontSize: '0.8rem' }}>
-                                            <span>Upwork</span> <ExternalLink size={12} />
-                                        </a>
-                                    </div>
-                                </div>
+                                ))}
                             </div>
                         </div>
                     </div>
+                    <style>{`
+                        .team-card-premium {
+                            background: rgba(255, 255, 255, 0.03);
+                            transition: all 0.5s ease;
+                        }
+                        .team-card-inner {
+                            backdrop-filter: blur(40px);
+                            -webkit-backdrop-filter: blur(40px);
+                            z-index: 1;
+                        }
+                        .neon-border-anim {
+                            position: absolute;
+                            top: -50%;
+                            left: -50%;
+                            width: 200%;
+                            height: 200%;
+                            animation: rotate-neon 8s linear infinite;
+                            z-index: 0;
+                            opacity: 0;
+                            transition: opacity 0.5s ease;
+                        }
+                        .team-card-premium:hover .neon-border-anim {
+                            opacity: 0.6;
+                        }
+                        @keyframes rotate-neon {
+                            from { transform: rotate(0deg); }
+                            to { transform: rotate(360deg); }
+                        }
+                        .card-scanline {
+                            position: absolute;
+                            inset: 0;
+                            background: linear-gradient(
+                                to bottom,
+                                transparent,
+                                rgba(0, 242, 255, 0.05) 50%,
+                                transparent
+                            );
+                            background-size: 100% 20px;
+                            animation: scanline 12s linear infinite;
+                            pointer-events: none;
+                            z-index: 2;
+                        }
+                        @keyframes scanline {
+                            from { background-position: 0 0; }
+                            to { background-position: 0 100%; }
+                        }
+                        .card-grid {
+                            position: absolute;
+                            inset: 0;
+                            background-image: linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+                                              linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+                            background-size: 30px 30px;
+                            pointer-events: none;
+                        }
+                        .team-card-premium:hover .meta-reveal {
+                            opacity: 0.8;
+                            transform: translateY(-5px);
+                        }
+                        .grayscale-to-color {
+                            filter: grayscale(1);
+                        }
+                        .team-card-premium:hover .grayscale-to-color {
+                            filter: grayscale(0);
+                        }
+                        .hover-nav-glow:hover {
+                            color: #0dcaf0 !important;
+                            border-color: #0dcaf0 !important;
+                            text-shadow: 0 0 8px rgba(13, 202, 240, 0.5);
+                        }
+                        .status-indicator-pulse {
+                            animation: pulse-indicator 2s infinite;
+                        }
+                        @keyframes pulse-indicator {
+                            0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); }
+                            70% { transform: scale(1.1); box-shadow: 0 0 0 10px rgba(16, 185, 129, 0); }
+                            100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+                        }
+                    `}</style>
                 </section>
             </div>
         </div>

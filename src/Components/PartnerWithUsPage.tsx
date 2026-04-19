@@ -39,10 +39,10 @@ const PartnerWithUsPage = () => {
           </span>
           <h1 className="display-5 fw-bold mb-3">Partner With Us</h1>
           <p className="text-white-50 lead mx-auto" style={{ maxWidth: '760px' }}>
-            Referral Program - <span className="text-info fw-semibold">15% commission on total project value</span>
+            Referral Program - <span className="text-info fw-semibold">10% commission on total project value</span>
           </p>
           <div className="partner-hero-chip mt-3 mx-auto">
-            Earn 15% on every successful referred project
+            Earn 10% on every successful referred project
           </div>
         </motion.header>
 
@@ -55,7 +55,7 @@ const PartnerWithUsPage = () => {
         >
           <div className="col-12 col-md-4">
             <div className="partner-metric p-3 rounded-4 h-100">
-              <div className="partner-metric-value">15%</div>
+              <div className="partner-metric-value">10%</div>
               <div className="partner-metric-label">Commission Rate</div>
             </div>
           </div>
@@ -87,7 +87,7 @@ const PartnerWithUsPage = () => {
           <p className="text-white-50 mb-0">
             We reward individuals and partners who help us grow by introducing new clients and projects to Cyphrix.
             If your referral signs a project agreement with us, you will receive a
-            <span className="text-info fw-semibold"> 15% commission </span>
+            <span className="text-info fw-semibold"> 10% commission </span>
             on the total project cost (excluding taxes and applicable third-party costs).
           </p>
         </motion.section>
@@ -147,7 +147,7 @@ const PartnerWithUsPage = () => {
           </div>
           <p className="text-white-50 mb-0">
             If the total project value is <strong>$10,000</strong>, your referral commission will be
-            <strong className="text-info"> $1,500 (15%)</strong>.
+            <strong className="text-info"> $1,000 (10%)</strong>.
           </p>
         </motion.section>
 
