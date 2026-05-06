@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { Shield, ExternalLink } from 'lucide-react';
+import {  ExternalLink } from 'lucide-react';
 import NeuralNetworkBackground from './NeuralNetworkBackground';
 import './FlowOfAuditPage.css';
 
