@@ -1,4 +1,5 @@
 import { motion } from 'framer-motion';
+import { Shield, ExternalLink } from 'lucide-react';
 import NeuralNetworkBackground from './NeuralNetworkBackground';
 import './FlowOfAuditPage.css';
 
@@ -270,6 +271,30 @@ const FlowOfAuditPage = () => {
               </motion.article>
             ))}
           </div>
+
+          <motion.section
+            className="flow-audit-footer-cta pb-5 mb-5"
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+          >
+            <div className="p-4 p-md-5 rounded-4 border border-white border-opacity-10 backdrop-blur-md text-center bg-transparent">
+              <h2 className="h4 fw-bold mb-1">Security & Cloud Assurance</h2>
+              <p className="text-info small mb-4 tracking-widest text-uppercase" style={{ fontSize: '0.7rem' }}>Infrastructure Protection Framework</p>
+              <p className="text-white-50 mb-4 mx-auto small" style={{ maxWidth: '500px' }}>
+                End-to-end security spanning web applications, infrastructure VAPT, and cloud assurance.
+              </p>
+              <a 
+                href="https://gold-favourable-bonobo-219.mypinata.cloud/ipfs/bafkreidiir2cnaauu2syqs3ewlitagocvaj3xgkj3xwirwtsgjd5i5hpzq" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="btn btn-sm btn-outline-light fw-bold px-4 py-2 rounded-pill transition-all d-inline-flex align-items-center gap-2 opacity-75 hover-opacity-100"
+              >
+                View brochure <ExternalLink size={14} />
+              </a>
+            </div>
+          </motion.section>
         </div>
       </div>
     </div>

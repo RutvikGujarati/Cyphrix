@@ -47,7 +47,7 @@ const Testimonials: React.FC = () => {
                                 whileInView={{ opacity: 1, y: 0 }}
                                 viewport={{ once: true }}
                                 transition={{ delay: index * 0.15, duration: 0.5 }}
-                                style={{ y: index % 2 === 1 ? y : 0 }}
+                                style={{ y: index % 2 === 1 ? y : 0 } as any}
                                 className="h-100 p-0 position-relative group"
                             >
                                 {/* Card Glow Effect */}
