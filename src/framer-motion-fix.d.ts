@@ -9,5 +9,7 @@ declare module 'framer-motion' {
         whileInView?: any;
         viewport?: any;
         transition?: any;
+        variants?: any;
+        exit?: any;
     }
 }

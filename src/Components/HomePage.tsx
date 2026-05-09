@@ -1,112 +1,429 @@
-import { useEffect, useState, useRef, useCallback } from 'react';
-import HeroVisual from './HeroVisual';
-import BeyondSection from './BeyondSection';
+import React from "react";
+import { motion } from "framer-motion";
+import {
+  Binary,
+  Network,
+  ShieldCheck,
+  Layers,
+  Lock,
+  Activity,
+} from "lucide-react";
 
-const SCROLL_THRESHOLD = 100;
+const HomePage: React.FC = () => {
+  const revealVariant = {
+    hidden: { opacity: 0, y: 10 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: { duration: 0.4, ease: "easeOut" },
+    },
+  };
 
-export default function HomePage() {
-    const [logoProgress, setLogoProgress] = useState(0);
-    const [isLocked, setIsLocked] = useState(true);
-    const virtualY = useRef(0);
-    const touchStartY = useRef(0);
+  const containerVariant = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.05,
+      },
+    },
+  };
 
-    // Unified logic to update progress
-    const updateProgress = useCallback((delta: number) => {
-        // High sensitivity: one scroll usually completes it
-        const multiplier = delta > 0 ? 5 : 1; 
-        virtualY.current += delta * multiplier;
-        virtualY.current = Math.max(0, Math.min(SCROLL_THRESHOLD, virtualY.current));
-
-        const currentProgress = virtualY.current / SCROLL_THRESHOLD;
-        setLogoProgress(currentProgress);
-    }, []);
-
-    useEffect(() => {
-        if (logoProgress < 1) {
-            setIsLocked(true);
-        }
-    }, [logoProgress]);
-
-    const handleVisualComplete = useCallback(() => {
-        setIsLocked(false);
-    }, []);
-
-    const handleWheel = useCallback((e: WheelEvent) => {
-        if (isLocked || (window.scrollY <= 0 && e.deltaY < 0)) {
-            if (e.cancelable) e.preventDefault();
-            updateProgress(e.deltaY);
-        }
-    }, [isLocked, updateProgress]);
-
-    const handleTouchStart = (e: TouchEvent) => {
-        touchStartY.current = e.touches[0].clientY;
-    };
-
-    const handleTouchMove = useCallback((e: TouchEvent) => {
-        if (isLocked || (window.scrollY <= 0)) {
-            const currentY = e.touches[0].clientY;
-            const deltaY = touchStartY.current - currentY;
-            touchStartY.current = currentY;
-
-            if (isLocked || deltaY < 0) {
-                if (e.cancelable) e.preventDefault();
-                updateProgress(deltaY * 1.5);
-            }
-        }
-    }, [isLocked, updateProgress]);
-
-    useEffect(() => {
-        window.scrollTo(0, 0);
-        window.addEventListener('wheel', handleWheel, { passive: false });
-        window.addEventListener('touchstart', handleTouchStart, { passive: true });
-        window.addEventListener('touchmove', handleTouchMove, { passive: false });
-
-        return () => {
-            window.removeEventListener('wheel', handleWheel);
-            window.removeEventListener('touchstart', handleTouchStart);
-            window.removeEventListener('touchmove', handleTouchMove);
-        };
-    }, [handleWheel, handleTouchMove]);
-
-    return (
-        <div className={`bg-black text-white font-monospace overflow-x-hidden ${isLocked ? 'vh-100' : ''}`}
+  return (
+    <div className="homepage">
+      {/* HERO */}
+      <section
+        className="hero"
+        style={{
+          padding: "200px 0 100px",
+          textAlign: "center",
+          position: "relative",
+          overflow: "hidden",
+        }}
+      >
+        <motion.div
+          className="container"
+          animate="visible"
+          variants={revealVariant}
+        >
+          <span className="section-label">
+            Enterprise Smart Contract Security
+          </span>
+          <h1>
+            Secure the Future of{" "}
+            <span className="text-gradient">Decentralized Web</span>
+          </h1>
+          <p
             style={{
-                minHeight: isLocked ? '100vh' : '200vh',
-                msOverflowStyle: 'none',
-                scrollbarWidth: 'none'
-            }}>
+              maxWidth: "800px",
+              margin: "32px auto",
+              fontSize: "20px",
+              color: "var(--text-muted)",
+            }}
+          >
+            Cyphrix builds industrial-grade blockchain infrastructure and
+            rigorous security architectures — so your protocol ships without
+            compromise.
+          </p>
+          <div
+            style={{
+              display: "flex",
+              gap: "20px",
+              justifyContent: "center",
+              marginTop: "48px",
+            }}
+          >
+            <button
+              className="btn-primary"
+              onClick={() => (window.location.href = "/request-audit")}
+            >
+              Request Security Audit
+            </button>
+            <button
+              className="btn-ghost"
+              onClick={() => (window.location.href = "/projects")}
+            >
+              View Case Studies
+            </button>
+          </div>
 
-            <div className="position-fixed top-0 start-0 w-100 h-100 z-0">
-                <HeroVisual logoProgress={logoProgress} onVisualComplete={handleVisualComplete} />
-            </div>
+          <motion.div
+            style={{
+              display: "grid",
+              gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))",
+              gap: "40px",
+              marginTop: "100px",
+              borderTop: "1px solid var(--border)",
+              paddingTop: "60px",
+            }}
+            animate="visible"
+            variants={containerVariant}
+          >
+            <motion.div
+              className="stat"
+              animate="visible"
+              variants={revealVariant}
+            >
+              <div
+                style={{
+                  fontSize: "40px",
+                  fontWeight: "800",
+                  color: "var(--accent-mint)",
+                }}
+              >
+                $400K+
+              </div>
+              <div
+                style={{
+                  fontSize: "14px",
+                  textTransform: "uppercase",
+                  letterSpacing: "0.1em",
+                  color: "var(--text-muted)",
+                }}
+              >
+                Assets Protected
+              </div>
+            </motion.div>
+            <motion.div
+              className="stat"
+              animate="visible"
+              variants={revealVariant}
+            >
+              <div
+                style={{
+                  fontSize: "40px",
+                  fontWeight: "800",
+                  color: "var(--accent-blue)",
+                }}
+              >
+                10+
+              </div>
+              <div
+                style={{
+                  fontSize: "14px",
+                  textTransform: "uppercase",
+                  letterSpacing: "0.1em",
+                  color: "var(--text-muted)",
+                }}
+              >
+                Protocols Audited
+              </div>
+            </motion.div>
+            <motion.div
+              className="stat"
+              animate="visible"
+              variants={revealVariant}
+            >
+              <div
+                style={{ fontSize: "40px", fontWeight: "800", color: "#fff" }}
+              >
+                0
+              </div>
+              <div
+                style={{
+                  fontSize: "14px",
+                  textTransform: "uppercase",
+                  letterSpacing: "0.1em",
+                  color: "var(--text-muted)",
+                }}
+              >
+                Post-Audit Exploits
+              </div>
+            </motion.div>
+            <motion.div
+              className="stat"
+              animate="visible"
+              variants={revealVariant}
+            >
+              <div
+                style={{
+                  fontSize: "40px",
+                  fontWeight: "800",
+                  color: "var(--accent-gold)",
+                }}
+              >
+                5h
+              </div>
+              <div
+                style={{
+                  fontSize: "14px",
+                  textTransform: "uppercase",
+                  letterSpacing: "0.1em",
+                  color: "var(--text-muted)",
+                }}
+              >
+                Response Time
+              </div>
+            </motion.div>
+          </motion.div>
+        </motion.div>
+      </section>
 
-            {isLocked && (
-                <section className="position-fixed bottom-0 start-0 w-100 d-flex flex-column align-items-center justify-content-end px-4 pb-5 z-2"
-                    style={{ opacity: Math.max(0, 1 - logoProgress * 2), pointerEvents: 'none' }}>
-                    <h1 className="display-4 fw-bold text-uppercase m-0 p-0 opacity-25 text-center">
-                        Cyphrix Technologies
-                    </h1>
-                    <div className="mt-3 pt-3 border-top border-white border-opacity-10 opacity-50 small text-center text-uppercase">
-                        {logoProgress < 0.9 ? 'Swipe to Initialize' : 'Security Ready'}
-                    </div>
-                </section>
-            )}
+      {/* ADVANCED INTEGRITY (RESTORED DETAILS) */}
+      <section
+        style={{
+          padding: "120px 0",
+          background: "rgba(0, 255, 204, 0.02)",
+          borderTop: "1px solid var(--border)",
+          borderBottom: "1px solid var(--border)",
+        }}
+      >
+        <div className="container">
+          <motion.div
+            style={{ textAlign: "center", marginBottom: "80px" }}
+            animate="visible"
+            variants={revealVariant}
+          >
+            <span className="section-label">Institutional Defense</span>
+            <h2>
+              Advanced <span className="text-gradient">Protocol Integrity</span>
+            </h2>
+          </motion.div>
 
-            <main className="position-relative z-1">
-                <div className="vh-100" />
-                {!isLocked && (
-                    <div className="min-vh-100 bg-black" style={{ animation: 'fadeIn 1s ease-in-out' }}>
-                        <BeyondSection />
-                    </div>
-                )}
-            </main>
+          <div className="services-grid">
+            <motion.div
+              className="service-card"
+              animate="visible"
+              variants={revealVariant}
+            >
+              <div className="s-icon">
+                <Binary />
+              </div>
+              <h3>Bytecode Analysis</h3>
+              <p>
+                Securing the logical foundation of the decentralized web through
+                rigorous manual inspection and formal verification.
+              </p>
+              <div
+                style={{
+                  display: "flex",
+                  gap: "16px",
+                  marginTop: "auto",
+                  opacity: 0.6,
+                  fontSize: "11px",
+                  fontWeight: "800",
+                  letterSpacing: "0.1em",
+                }}
+              >
+                <span style={{ color: "var(--accent-mint)" }}>
+                  [ NODE VALIDATION ]
+                </span>
+                <span style={{ color: "var(--accent-blue)" }}>
+                  [ GAS OPTIMIZATION ]
+                </span>
+              </div>
+            </motion.div>
 
-            <footer className="position-fixed bottom-0 start-0 w-100 p-4 z-3 d-flex justify-content-between opacity-25 small pointer-event-none">
-                <div>PROTOCOL: <span className={isLocked ? "text-warning" : "text-info"}>
-                    {isLocked ? "GATED" : "ACTIVE"}
-                </span></div>
-                <div className="fw-bold">{Math.round(logoProgress * 100)}%</div>
-            </footer>
+            <motion.div
+              className="service-card"
+              animate="visible"
+              variants={revealVariant}
+            >
+              <div className="s-icon">
+                <Lock />
+              </div>
+              <h3>Consensus Security</h3>
+              <p>
+                Architecting resilient cryptographic primitives and consensus
+                mechanisms to ensure zero-trust ledger immutability.
+              </p>
+              <div
+                style={{
+                  display: "flex",
+                  gap: "16px",
+                  marginTop: "auto",
+                  opacity: 0.6,
+                  fontSize: "11px",
+                  fontWeight: "800",
+                  letterSpacing: "0.1em",
+                }}
+              >
+                <span style={{ color: "var(--accent-mint)" }}>
+                  [ CRYPTO PROOFS ]
+                </span>
+                <span style={{ color: "var(--accent-gold)" }}>
+                  [ BFT ANALYSIS ]
+                </span>
+              </div>
+            </motion.div>
+
+            <motion.div
+              className="service-card"
+              animate="visible"
+              variants={revealVariant}
+            >
+              <div className="s-icon">
+                <Activity />
+              </div>
+              <h3>Ecosystem Defense</h3>
+              <p>
+                A comprehensive shield merging blockchain transparency with
+                enterprise-grade cybersecurity protocols.
+              </p>
+              <div
+                style={{
+                  display: "flex",
+                  flexWrap: "wrap",
+                  gap: "12px",
+                  marginTop: "auto",
+                  opacity: 0.6,
+                  fontSize: "10px",
+                  fontWeight: "800",
+                  letterSpacing: "0.05em",
+                }}
+              >
+                <span>DEFI SECURITY</span>
+                <span>•</span>
+                <span>FORENSICS</span>
+                <span>•</span>
+                <span>GOVERNANCE</span>
+              </div>
+            </motion.div>
+          </div>
         </div>
-    );
-}
+      </section>
+
+      {/* SERVICES */}
+      <section style={{ padding: "120px 0" }}>
+        <div className="container">
+          <motion.div
+            style={{ textAlign: "center", marginBottom: "80px" }}
+            animate="visible"
+            variants={revealVariant}
+          >
+            <span className="section-label">Capabilities</span>
+            <h2>
+              Engineered <span className="text-gradient">Resilience</span>
+            </h2>
+          </motion.div>
+
+          <motion.div
+            className="services-grid"
+            animate="visible"
+            variants={containerVariant}
+          >
+            {[
+              {
+                icon: <Binary />,
+                title: "Smart Contract Auditing",
+                text: "Manual code review + deep invariant analysis to identify logic flaws.",
+                tags: ["Solidity", "Rust", "Move"],
+              },
+              {
+                icon: <Network />,
+                title: "Web3 Infrastructure",
+                text: "High-availability node clusters and validator operations.",
+                tags: ["EVM", "Solana"],
+              },
+              {
+                icon: <ShieldCheck />,
+                title: "Penetration Testing",
+                text: "Full-spectrum adversarial simulations targeting dApps and bridges.",
+                tags: ["Red Team", "OWASP"],
+              },
+              {
+                icon: <Layers />,
+                title: "ZK-Proof Engineering",
+                text: "Development of zero-knowledge circuits and privacy architectures.",
+                tags: ["zkSNARKs", "Circom"],
+              },
+            ].map((s, i) => (
+              <motion.div
+                className="service-card"
+                key={i}
+                animate="visible"
+                variants={revealVariant}
+              >
+                <div className="s-icon">{s.icon}</div>
+                <h3>{s.title}</h3>
+                <p>{s.text}</p>
+                <div className="s-tags">
+                  {s.tags.map((t) => (
+                    <span className="tag" key={t}>
+                      {t}
+                    </span>
+                  ))}
+                </div>
+              </motion.div>
+            ))}
+          </motion.div>
+        </div>
+      </section>
+
+      {/* CTA */}
+      <motion.section
+        className="cta-section"
+        style={{ textAlign: "center" }}
+        animate="visible"
+        variants={revealVariant}
+      >
+        <div className="container">
+          <span className="section-label">Get Started</span>
+          <h2>Ready to secure your protocol?</h2>
+          <p
+            style={{
+              maxWidth: "600px",
+              margin: "24px auto 40px",
+              color: "var(--text-muted)",
+              fontSize: "18px",
+            }}
+          >
+            Join the protocols that trust Cyphrix for institutional-grade
+            security and high-performance infrastructure.
+          </p>
+          <div style={{ display: "flex", justifyContent: "center" }}>
+            <button
+              className="nav-cta"
+              style={{ padding: "16px 48px", fontSize: "14px" }}
+              onClick={() => (window.location.href = "/request-audit")}
+            >
+              Request Free Scope Review
+            </button>
+          </div>
+        </div>
+      </motion.section>
+    </div>
+  );
+};
+
+export default HomePage;

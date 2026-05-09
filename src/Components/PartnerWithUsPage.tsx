@@ -1,186 +1,338 @@
-import { motion } from 'framer-motion';
-import { Handshake, Percent, CircleCheckBig, BadgeDollarSign, Mail } from 'lucide-react';
-import './PartnerWithUsPage.css';
-import AuroraCanvas from './AuroraCanvas';
+import { motion } from "framer-motion";
+import { Handshake, CircleCheckBig, BadgeDollarSign } from "lucide-react";
 
 const eligibility = [
-  'The referred client must be a new client.',
-  'The referral must be communicated to our team before or at the time of the first client meeting.',
-  'The commission is applicable only after the client makes the first payment for the project.',
+  "The referred client must be a new protocol/entity.",
+  "Referral must be communicated before initial scoping.",
+  "Applicable only after the first milestone payment.",
 ];
 
 const payments = [
-  'The referral commission will be paid after we receive the initial payment from the client.',
-  'Payments will be processed via bank transfer or any mutually agreed payment method.',
-  'If the project is executed in multiple phases, commission may be paid proportionally based on payments received.',
+  "Commission paid within 72h of client settlement.",
+  "Processed via Stablecoins (USDC/USDT) or Bank Transfer.",
+  "Milestone-based payouts for complex multi-phase audits.",
 ];
 
 const PartnerWithUsPage = () => {
+  const revealVariant = {
+    hidden: { opacity: 0, y: 30 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: { duration: 0.8, ease: "easeOut" },
+    },
+  };
+
+  const containerVariant = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.2,
+      },
+    },
+  };
+
   return (
-    <div className="partner-page text-white min-vh-100 position-relative overflow-x-hidden bg-black">
-      <AuroraCanvas />
-      <div className="partner-wave partner-wave-a" />
-      <div className="partner-wave partner-wave-b" />
-      <div className="partner-wave partner-wave-c" />
-      <div className="partner-rings" />
-      <div className="partner-accent partner-accent-a" />
-      <div className="partner-accent partner-accent-b" />
-      <div className="partner-grid-overlay" />
-
-      <div className="position-relative z-1 partner-inner container px-3 px-md-4">
-        <motion.header
-          initial={{ opacity: 0, y: 24 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7 }}
-          className="text-center mb-5"
+    <div className="partner-page">
+      <header className="page-hero">
+        <motion.div
+          className="container"
+          animate="visible"
+          variants={revealVariant}
         >
-          <span className="badge border border-info text-info rounded-pill px-3 py-2 mb-3 bg-transparent">
-            PARTNERSHIP PROGRAM
-          </span>
-          <h1 className="display-5 fw-bold mb-3">Partner With Us</h1>
-          <p className="text-white-50 lead mx-auto" style={{ maxWidth: '760px' }}>
-            Referral Program - <span className="text-info fw-semibold">10% commission on total project value</span>
+          <span className="section-label">Partnership Program</span>
+          <h1>
+            Partner With <span className="text-gradient">Cyphrix</span>
+          </h1>
+          <p
+            style={{
+              maxWidth: "700px",
+              margin: "24px auto",
+              fontSize: "18px",
+              color: "var(--text-muted)",
+            }}
+          >
+            Earn a{" "}
+            <span style={{ color: "var(--accent-mint)", fontWeight: "800" }}>
+              10% commission
+            </span>{" "}
+            on every successful protocol referral. Help us harden the Web3
+            ecosystem.
           </p>
-          <div className="partner-hero-chip mt-3 mx-auto">
-            Earn 10% on every successful referred project
-          </div>
-        </motion.header>
+        </motion.div>
+      </header>
 
-        <motion.section
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: '-60px' }}
-          transition={{ duration: 0.45 }}
-          className="row g-3 mb-4"
-        >
-          <div className="col-12 col-md-4">
-            <div className="partner-metric p-3 rounded-4 h-100">
-              <div className="partner-metric-value">10%</div>
-              <div className="partner-metric-label">Commission Rate</div>
-            </div>
-          </div>
-          <div className="col-12 col-md-4">
-            <div className="partner-metric p-3 rounded-4 h-100">
-              <div className="partner-metric-value">New Clients</div>
-              <div className="partner-metric-label">Valid Referral Type</div>
-            </div>
-          </div>
-          <div className="col-12 col-md-4">
-            <div className="partner-metric p-3 rounded-4 h-100">
-              <div className="partner-metric-value">Fast Payout</div>
-              <div className="partner-metric-label">After First Payment Received</div>
-            </div>
-          </div>
-        </motion.section>
+      <section style={{ padding: "80px 0" }}>
+        <div className="container">
+          <motion.div
+            style={{
+              display: "flex",
+              gap: "48px",
+              justifyContent: "center",
+              flexWrap: "wrap",
+              marginBottom: "80px",
+            }}
+            animate="visible"
+            variants={containerVariant}
+          >
+            <motion.div
+              style={{ textAlign: "center" }}
+              animate="visible"
+              variants={revealVariant}
+            >
+              <div
+                style={{
+                  fontSize: "3rem",
+                  fontWeight: "800",
+                  color: "var(--accent-mint)",
+                }}
+              >
+                10%
+              </div>
+              <div
+                style={{
+                  fontSize: "12px",
+                  fontWeight: "800",
+                  color: "var(--text-muted)",
+                  textTransform: "uppercase",
+                  letterSpacing: "0.1em",
+                }}
+              >
+                Commission Rate
+              </div>
+            </motion.div>
+            <motion.div
+              style={{ textAlign: "center" }}
+              animate="visible"
+              variants={revealVariant}
+            >
+              <div
+                style={{
+                  fontSize: "3rem",
+                  fontWeight: "800",
+                  color: "var(--accent-blue)",
+                }}
+              >
+                $20k+
+              </div>
+              <div
+                style={{
+                  fontSize: "12px",
+                  fontWeight: "800",
+                  color: "var(--text-muted)",
+                  textTransform: "uppercase",
+                  letterSpacing: "0.1em",
+                }}
+              >
+                Avg. Referral Value
+              </div>
+            </motion.div>
+            <motion.div
+              style={{ textAlign: "center" }}
+              animate="visible"
+              variants={revealVariant}
+            >
+              <div
+                style={{
+                  fontSize: "3rem",
+                  fontWeight: "800",
+                  color: "var(--accent-gold)",
+                }}
+              >
+                Fast
+              </div>
+              <div
+                style={{
+                  fontSize: "12px",
+                  fontWeight: "800",
+                  color: "var(--text-muted)",
+                  textTransform: "uppercase",
+                  letterSpacing: "0.1em",
+                }}
+              >
+                Settlement
+              </div>
+            </motion.div>
+          </motion.div>
 
-        <motion.section
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: '-60px' }}
-          transition={{ duration: 0.45 }}
-          className="partner-glass rounded-4 border border-info border-opacity-25 p-4 p-md-5 mb-4"
-        >
-          <div className="d-flex align-items-center gap-2 mb-3">
-            <Handshake size={22} className="text-info" />
-            <h2 className="h4 mb-0">Referral Program Overview</h2>
-          </div>
-          <p className="text-white-50 mb-0">
-            We reward individuals and partners who help us grow by introducing new clients and projects to Cyphrix.
-            If your referral signs a project agreement with us, you will receive a
-            <span className="text-info fw-semibold"> 10% commission </span>
-            on the total project cost (excluding taxes and applicable third-party costs).
+          <motion.div
+            className="service-card"
+            style={{ marginBottom: "64px" }}
+            animate="visible"
+            variants={revealVariant}
+          >
+            <h3
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: "12px",
+                marginBottom: "24px",
+              }}
+            >
+              <Handshake size={24} color="var(--accent-mint)" /> Referral
+              Program Overview
+            </h3>
+            <p
+              style={{
+                color: "var(--text-muted)",
+                fontSize: "18px",
+                lineHeight: "1.7",
+              }}
+            >
+              We reward individuals and ecosystem partners who help us secure
+              new protocols. If your referral signs a project agreement, you
+              receive a{" "}
+              <span style={{ color: "var(--accent-mint)", fontWeight: "700" }}>
+                10% commission
+              </span>{" "}
+              on the total audit value, paid instantly upon client settlement.
+            </p>
+          </motion.div>
+
+          <motion.div
+            className="services-grid"
+            style={{ marginBottom: "64px" }}
+            animate="visible"
+            variants={containerVariant}
+          >
+            <motion.div
+              className="service-card"
+              animate="visible"
+              variants={revealVariant}
+            >
+              <div className="s-icon">
+                <CircleCheckBig size={24} />
+              </div>
+              <h3>Eligibility</h3>
+              <div style={{ marginTop: "24px" }}>
+                {eligibility.map((item, i) => (
+                  <div
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "12px",
+                      marginBottom: "16px",
+                    }}
+                    key={i}
+                  >
+                    <div
+                      style={{
+                        width: "6px",
+                        height: "6px",
+                        borderRadius: "50%",
+                        background: "var(--accent-mint)",
+                      }}
+                    ></div>
+                    <span
+                      style={{
+                        fontSize: "14px",
+                        fontWeight: "600",
+                        color: "var(--text-muted)",
+                      }}
+                    >
+                      {item}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </motion.div>
+            <motion.div
+              className="service-card"
+              animate="visible"
+              variants={revealVariant}
+            >
+              <div className="s-icon">
+                <BadgeDollarSign size={24} />
+              </div>
+              <h3>Commission Payouts</h3>
+              <div style={{ marginTop: "24px" }}>
+                {payments.map((item, i) => (
+                  <div
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "12px",
+                      marginBottom: "16px",
+                    }}
+                    key={i}
+                  >
+                    <div
+                      style={{
+                        width: "6px",
+                        height: "6px",
+                        borderRadius: "50%",
+                        background: "var(--accent-blue)",
+                      }}
+                    ></div>
+                    <span
+                      style={{
+                        fontSize: "14px",
+                        fontWeight: "600",
+                        color: "var(--text-muted)",
+                      }}
+                    >
+                      {item}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </motion.div>
+          </motion.div>
+
+          <motion.div
+            className="service-card"
+            style={{ textAlign: "center", marginBottom: "80px" }}
+            animate="visible"
+            variants={revealVariant}
+          >
+            <h3 style={{ marginBottom: "16px", color: "var(--accent-gold)" }}>
+              Example Calculation
+            </h3>
+            <p style={{ fontSize: "20px", color: "var(--text-muted)" }}>
+              On a{" "}
+              <span style={{ color: "#fff", fontWeight: "800" }}>$15,000</span>{" "}
+              project, your referral commission will be{" "}
+              <span style={{ color: "var(--accent-mint)", fontWeight: "800" }}>
+                $1,500 (10%)
+              </span>
+              .
+            </p>
+          </motion.div>
+        </div>
+      </section>
+
+      <motion.div
+        className="cta-section"
+        style={{ textAlign: "center" }}
+        animate="visible"
+        variants={revealVariant}
+      >
+        <div className="container">
+          <span className="section-label">Join the Network</span>
+          <h2>Start Referring Today</h2>
+          <p
+            style={{
+              maxWidth: "600px",
+              margin: "24px auto 40px",
+              color: "var(--text-muted)",
+              fontSize: "18px",
+            }}
+          >
+            Connect with our partnership team to join the Cyphrix network and
+            start securing protocol incentives.
           </p>
-        </motion.section>
-
-        <div className="row g-4 mb-4">
-          <div className="col-12 col-lg-6">
-            <motion.section
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: '-60px' }}
-              transition={{ duration: 0.45, delay: 0.05 }}
-              className="partner-glass rounded-4 border border-white border-opacity-10 p-4 h-100"
+          <div style={{ display: "flex", justifyContent: "center" }}>
+            <a
+              href="mailto:cyphrixsupport@cyphrixtech.com"
+              className="nav-cta"
+              style={{ padding: "16px 48px" }}
             >
-              <div className="d-flex align-items-center gap-2 mb-3">
-                <CircleCheckBig size={20} className="text-info" />
-                <h3 className="h5 mb-0">Eligibility</h3>
-              </div>
-              <ul className="mb-0 text-white-50 partner-list">
-                {eligibility.map((item) => (
-                  <li key={item}>{item}</li>
-                ))}
-              </ul>
-            </motion.section>
-          </div>
-
-          <div className="col-12 col-lg-6">
-            <motion.section
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: '-60px' }}
-              transition={{ duration: 0.45, delay: 0.08 }}
-              className="partner-glass rounded-4 border border-white border-opacity-10 p-4 h-100"
-            >
-              <div className="d-flex align-items-center gap-2 mb-3">
-                <BadgeDollarSign size={20} className="text-info" />
-                <h3 className="h5 mb-0">Commission Payment</h3>
-              </div>
-              <ul className="mb-0 text-white-50 partner-list">
-                {payments.map((item) => (
-                  <li key={item}>{item}</li>
-                ))}
-              </ul>
-            </motion.section>
+              cyphrixsupport@cyphrixtech.com
+            </a>
           </div>
         </div>
-
-        <motion.section
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: '-60px' }}
-          transition={{ duration: 0.45, delay: 0.1 }}
-          className="partner-glass rounded-4 border border-white border-opacity-10 p-4 p-md-5 mb-4"
-        >
-          <div className="d-flex align-items-center gap-2 mb-3">
-            <Percent size={20} className="text-info" />
-            <h3 className="h5 mb-0">Example</h3>
-          </div>
-          <p className="text-white-50 mb-0">
-            If the total project value is <strong>$10,000</strong>, your referral commission will be
-            <strong className="text-info"> $1,000 (10%)</strong>.
-          </p>
-        </motion.section>
-
-        <motion.section
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: '-60px' }}
-          transition={{ duration: 0.45, delay: 0.12 }}
-          className="partner-glass rounded-4 border border-info border-opacity-25 p-4 p-md-5 mb-4"
-        >
-          <h3 className="h5 mb-2">Our goal</h3>
-          <p className="text-white-50 mb-0">
-            This program is built to create long-term partnerships and reward contributors who help us expand our
-            network and business opportunities.
-          </p>
-        </motion.section>
-
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: '-60px' }}
-          transition={{ duration: 0.45, delay: 0.14 }}
-          className="partner-contact rounded-4 border border-white border-opacity-10 p-4 mb-5"
-        >
-          <div className="d-flex align-items-center gap-2 mb-2">
-            <Mail size={18} className="text-info" />
-            <span className="fw-semibold">For referrals or more details:</span>
-          </div>
-          <a href="mailto:cyphrixsupport@cyphrixtech.com" className="text-info text-decoration-none">
-            cyphrixsupport@cyphrixtech.com
-          </a>
-        </motion.div>
-      </div>
+      </motion.div>
     </div>
   );
 };

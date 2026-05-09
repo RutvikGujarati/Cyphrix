@@ -1,159 +1,178 @@
-import React from 'react';
-import { motion } from 'framer-motion';
-import {
-  Sparkles,
-  FileCode,
-  ShieldCheck,
-  Globe,
-  Network,
-  Coins,
-  MonitorSmartphone,
-  CloudCog,
-  CheckCircle,
-  Zap,
-  Shield,
-  Layout,
-  UserCheck,
-  Webhook,
-  Infinity,
-  Component,
-  ClipboardList,
-  type LucideIcon,
-} from 'lucide-react';
+import React, { useState, useMemo, useEffect, useRef, type JSX } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import servicesData from '../Data/services.json';
-import './Services.css';
-
-const ICON_MAP: Record<string, LucideIcon> = {
-  Sparkles,
-  FileCode,
-  ShieldCheck,
-  Globe,
-  Network,
-  Coins,
-  MonitorSmartphone,
-  CloudCog,
-  CheckCircle,
-  Zap,
-  Shield,
-  Layout,
-  UserCheck,
-  Webhook,
-  Infinity,
-  Component,
-  ClipboardList,
-};
+import { 
+    ShieldCheck, Link, Zap, Lock, Cpu, Coins, Binary, Layers, 
+    Network, CheckCircle, Shield, Layout, UserCheck, Webhook, 
+    Infinity, Component, ClipboardList, ArrowRight, Code2, ShieldAlert, TestTube2
+} from 'lucide-react';
+import SecurityCTA from './SecurityCTA';
 
 const ServicesPage: React.FC = () => {
+    const [activeTab, setActiveTab] = useState<'Development' | 'Security' | 'QA'>('Development');
+    const sectionRef = useRef<HTMLDivElement>(null);
 
+    const data = servicesData as any;
 
+    const categories = [
+        { id: 'Development', icon: <Code2 size={18} />, label: 'Development' }, // Shortened for mobile
+        { id: 'Security', icon: <ShieldAlert size={18} />, label: 'Security' },
+        { id: 'QA', icon: <TestTube2 size={18} />, label: 'Assurance' }
+    ];
 
-  const data = servicesData as {
-    tagline: string;
-    intro: string;
-    closing: string;
-    pageTitle: string;
-    pageIntro: string;
-    services: Array<{
-      id: number;
-      icon: string;
-      title: string;
-      summary: string;
-      detail: string;
-      tagline: string;
-      platforms?: string[];
-      bullets?: string[];
-      methodology?: string[];
-      deliverables?: string;
-      keywords?: string;
-    }>;
-  };
+    // Auto-scroll to top of services when category changes
+    useEffect(() => {
+        if (sectionRef.current) {
+            const yOffset = -140; // Offset for sticky header
+            const y = sectionRef.current.getBoundingClientRect().top + window.pageYOffset + yOffset;
+            window.scrollTo({ top: y, behavior: 'smooth' });
+        }
+    }, [activeTab]);
 
-  return (
-    <div className="services-page min-vh-100 text-white position-relative">
-      {/* Scroll-driven Three.js background */}
-  
-      <div className="position-relative services-page-content" style={{ zIndex: 1, paddingTop: '100px' }}>
+    const getIcon = (iconName: string) => {
+        const iconProps = { size: 24 };
+        const iconMap: Record<string, JSX.Element> = {
+            'FileCode': <Binary {...iconProps} />,
+            'ShieldCheck': <ShieldCheck {...iconProps} />,
+            'Globe': <Network {...iconProps} />,
+            'Zap': <Zap {...iconProps} />,
+            'MonitorSmartphone': <Layers {...iconProps} />,
+            'CloudCog': <Cpu {...iconProps} />,
+            'Sparkles': <Link {...iconProps} />,
+            'Network': <Lock {...iconProps} />,
+            'Coins': <Coins {...iconProps} />,
+            'CheckCircle': <CheckCircle {...iconProps} />,
+            'Shield': <Shield {...iconProps} />,
+            'Layout': <Layout {...iconProps} />,
+            'UserCheck': <UserCheck {...iconProps} />,
+            'Webhook': <Webhook {...iconProps} />,
+            'Infinity': <Infinity {...iconProps} />,
+            'Component': <Component {...iconProps} />,
+            'ClipboardList': <ClipboardList {...iconProps} />
+        };
+        return iconMap[iconName] || <ShieldCheck {...iconProps} />;
+    };
 
-        {/* Services - main content */}
-        <div className="container">
-        {/* Page title (SEO / detailed section) */}
-        <section className="py-4 border-top border-white border-opacity-10">
-          <h2 className="h3 fw-bold text-info mb-3">{data.pageTitle}</h2>
-          <p className="text-white-50 mb-0">{data.pageIntro}</p>
-        </section>
+    const categorizedServices = useMemo(() => {
+        return {
+            Development: data.services.filter((s: any) => [1, 2, 4, 5, 6, 7].includes(s.id)),
+            Security: data.services.filter((s: any) => [3, 8, 11].includes(s.id)),
+            QA: data.services.filter((s: any) => [9, 10, 12, 13, 14, 15, 16, 17].includes(s.id))
+        };
+    }, [data.services]);
 
-        {/* Service cards - scrollable sections */}
-        {data.services.map((service, index) => (
-          <motion.section
-            key={service.id}
-            className="py-5 border-top border-white border-opacity-10 service-detail-section"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: '-80px' }}
-            transition={{ duration: 0.4, delay: index * 0.05 }}
-          >
-            <div className="row align-items-start">
-              <div className="col-lg-4 mb-4 mb-lg-0">
-                <span className="service-icon-display d-inline-flex align-items-center justify-content-center mb-2" aria-hidden>
-                  {(() => {
-                    const IconComponent = ICON_MAP[service.icon];
-                    return IconComponent ? <IconComponent size={40} strokeWidth={1.5} className="text-info" /> : null;
-                  })()}
-                </span>
-                <h3 className="h4 fw-bold text-info">
-                  {service.title}
-                </h3>
-                <p className="small text-white-50 mb-0 mt-2">
-                  {service.tagline}
-                </p>
-              </div>
-              <div className="col-lg-8">
-                <p className="text-white mb-3">{service.summary}</p>
-                <p className="text-white-50 small mb-3">{service.detail}</p>
-                {service.platforms && service.platforms.length > 0 && (
-                  <div className="mb-3">
-                    <span className="small fw-bold text-info text-uppercase">Platforms</span>
-                    <ul className="list-unstyled small text-white-50 mb-0 mt-1">
-                      {service.platforms.map((p, i) => (
-                        <li key={i} className="mb-1">• {p}</li>
-                      ))}
-                    </ul>
-                  </div>
-                )}
-                {service.bullets && service.bullets.length > 0 && (
-                  <ul className="list-unstyled small text-white-50 mb-3">
-                    {service.bullets.map((b, i) => (
-                      <li key={i} className="mb-1 d-flex align-items-center gap-2">
-                        <span className="text-info">✔</span> {b}
-                      </li>
-                    ))}
-                  </ul>
-                )}
-                {service.methodology && service.methodology.length > 0 && (
-                  <div className="mb-3">
-                    <span className="small fw-bold text-info text-uppercase">Audit methodology</span>
-                    <ul className="list-unstyled small text-white-50 mb-0 mt-1">
-                      {service.methodology.map((m, i) => (
-                        <li key={i} className="mb-1">• {m}</li>
-                      ))}
-                    </ul>
-                  </div>
-                )}
-                {service.deliverables && (
-                  <p className="small text-white-50 mb-0">
-                    <span className="text-info">Deliverables:</span> {service.deliverables}
-                  </p>
-                )}
-              </div>
+    const activeServices = categorizedServices[activeTab];
+
+    return (
+        <div className="services-page">
+            <header className="page-hero" style={{ paddingBottom: '20px' }}>
+                <motion.div 
+                    className="container"
+                    animate={{ opacity: 1, y: 0 }}
+                    
+                >
+                    <span className="section-label">Engineering Hub</span>
+                    <h1 style={{ fontSize: 'clamp(32px, 8vw, 72px)' }}>Our <span className="text-gradient">Core Matrix</span></h1>
+                    <p style={{ maxWidth: '700px', margin: '24px auto', fontSize: '16px', color: 'var(--text-muted)' }}>
+                        Precision-engineered solutions for the next generation of decentralized infrastructure.
+                    </p>
+                </motion.div>
+            </header>
+
+            {/* STICKY TAB SWITCHER - OPTIMIZED FOR MOBILE */}
+            <div style={{ position: 'sticky', top: '70px', zIndex: 100, background: 'rgba(3, 5, 8, 0.95)', backdropFilter: 'blur(10px)', padding: '12px 0', borderBottom: '1px solid var(--border)' }}>
+                <div className="container">
+                    <div style={{ 
+                        display: 'flex', 
+                        justifyContent: 'center', 
+                        gap: '8px', 
+                        overflowX: 'auto', 
+                        padding: '4px 0',
+                        scrollbarWidth: 'none',
+                        msOverflowStyle: 'none'
+                    }}>
+                        {categories.map((cat) => (
+                            <button
+                                key={cat.id}
+                                onClick={() => setActiveTab(cat.id as any)}
+                                style={{
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    gap: '8px',
+                                    padding: '10px 18px',
+                                    borderRadius: '50px',
+                                    border: '1px solid',
+                                    borderColor: activeTab === cat.id ? 'var(--accent-blue)' : 'var(--border)',
+                                    background: activeTab === cat.id ? 'rgba(0, 212, 255, 0.1)' : 'transparent',
+                                    color: activeTab === cat.id ? '#fff' : 'var(--text-muted)',
+                                    fontSize: '11px',
+                                    fontWeight: '800',
+                                    textTransform: 'uppercase',
+                                    whiteSpace: 'nowrap',
+                                    transition: 'all 0.2s ease',
+                                    cursor: 'pointer'
+                                }}
+                            >
+                                {cat.icon}
+                                {cat.label}
+                            </button>
+                        ))}
+                    </div>
+                </div>
             </div>
-          </motion.section>
-        ))}
 
+            <section ref={sectionRef} style={{ padding: '60px 0' }}>
+                <div className="container">
+                    <AnimatePresence mode="wait">
+                        <motion.div 
+                            key={activeTab}
+                            initial={{ opacity: 0, x: 10 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            exit={{ opacity: 0, x: -10 }}
+                            transition={{ duration: 0.2 }}
+                            className="services-grid"
+                        >
+                            {activeServices.map((service: any, index: number) => (
+                                <motion.div 
+                                    className="service-card" 
+                                    key={service.id}
+                                    style={{ padding: '0', overflow: 'hidden', minHeight: '320px' }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    transition={{ delay: index * 0.02 }}
+                                >
+                                    <div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
+                                        <div style={{ padding: '24px', background: 'rgba(255,255,255,0.02)', borderBottom: '1px solid var(--border)' }}>
+                                            <div style={{ color: 'var(--accent-mint)', marginBottom: '16px' }}>
+                                                {getIcon(service.icon)}
+                                            </div>
+                                            <h3 style={{ fontSize: '18px', fontWeight: '800', marginBottom: '4px' }}>{service.title}</h3>
+                                            <p style={{ fontSize: '10px', fontWeight: '800', color: 'var(--accent-blue)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>{service.tagline}</p>
+                                        </div>
 
+                                        <div style={{ padding: '24px', flex: 1 }}>
+                                            <p style={{ fontSize: '13px', lineHeight: '1.6', color: 'var(--text-muted)', marginBottom: '20px' }}>
+                                                {service.detail || service.summary}
+                                            </p>
+                                        </div>
+
+                                        <div 
+                                            style={{ padding: '16px 24px', background: 'rgba(255,255,255,0.03)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', cursor: 'pointer' }}
+                                            onClick={() => window.location.href='/inquiry'}
+                                        >
+                                            <span style={{ fontSize: '10px', fontWeight: '900', letterSpacing: '0.1em' }}>INITIATE</span>
+                                            <ArrowRight size={14} />
+                                        </div>
+                                    </div>
+                                </motion.div>
+                            ))}
+                        </motion.div>
+                    </AnimatePresence>
+                </div>
+            </section>
+
+            <SecurityCTA />
         </div>
-      </div>
-    </div>
-  );
+    );
 };
 
 export default ServicesPage;

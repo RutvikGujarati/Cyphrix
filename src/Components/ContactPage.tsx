@@ -1,125 +1,13 @@
-import React, { useEffect, useRef, useState } from 'react';
-import * as THREE from 'three';
-import { ExternalLink, ShieldCheck } from 'lucide-react';
+import React, { useState } from 'react';
 import { motion } from 'framer-motion';
+import {  Mail, ShieldCheck, Zap, Linkedin,  ExternalLink } from 'lucide-react';
 import { api } from '../api/client';
-
-const MDiv = motion.div;
-
-const ContactVisual = () => {
-    const mountRef = useRef<HTMLDivElement>(null);
-
-    useEffect(() => {
-        const mount = mountRef.current;
-        if (!mount) return;
-
-        let width = mount.clientWidth;
-        let height = mount.clientHeight;
-
-        const scene = new THREE.Scene();
-        const camera = new THREE.PerspectiveCamera(45, width / height, 1, 1000);
-        camera.position.set(0, 80, 200);
-        camera.lookAt(0, 0, 0);
-
-        const renderer = new THREE.WebGLRenderer({
-            antialias: true,
-            alpha: true
-        });
-
-        renderer.setSize(width, height);
-        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-        mount.appendChild(renderer.domElement);
-
-        const ringGeo = new THREE.RingGeometry(20, 22, 128);
-        const ringMat = new THREE.MeshBasicMaterial({
-            color: 0x00f2ff,
-            transparent: true,
-            opacity: 0.4,
-            side: THREE.DoubleSide,
-            blending: THREE.AdditiveBlending
-        });
-
-        const scanRing = new THREE.Mesh(ringGeo, ringMat);
-        scanRing.rotation.x = -Math.PI / 2;
-        scene.add(scanRing);
-
-        const streamCount = 80;
-        const streamGeo = new THREE.BufferGeometry();
-        const positions = new Float32Array(streamCount * 6);
-
-        for (let i = 0; i < streamCount; i++) {
-            const x = (Math.random() - 0.5) * 300;
-            const z = (Math.random() - 0.5) * 300;
-            const yTop = Math.random() * 120 + 40;
-            positions.set([x, 0, z, x, yTop, z], i * 6);
-        }
-
-        streamGeo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-        const streamMat = new THREE.LineBasicMaterial({
-            color: 0x00c6fb,
-            transparent: true,
-            opacity: 0.35,
-            blending: THREE.AdditiveBlending
-        });
-
-        const streams = new THREE.LineSegments(streamGeo, streamMat);
-        scene.add(streams);
-
-        let ringScale = 1;
-        let frameId: number;
-
-        const animate = () => {
-            frameId = requestAnimationFrame(animate);
-            ringScale += 0.015;
-            scanRing.scale.set(ringScale, ringScale, ringScale);
-            scanRing.material.opacity = Math.max(0, 0.5 - ringScale * 0.05);
-
-            if (ringScale > 8) {
-                ringScale = 1;
-                scanRing.material.opacity = 0.4;
-            }
-            streams.rotation.y += 0.0006;
-            renderer.render(scene, camera);
-        };
-
-        animate();
-
-        const resize = () => {
-            if (!mount) return;
-            width = mount.clientWidth;
-            height = mount.clientHeight;
-            renderer.setSize(width, height);
-            camera.aspect = width / height;
-            camera.updateProjectionMatrix();
-        };
-
-        window.addEventListener('resize', resize);
-
-        return () => {
-            window.removeEventListener('resize', resize);
-            cancelAnimationFrame(frameId);
-            mount.removeChild(renderer.domElement);
-            renderer.dispose();
-            ringGeo.dispose();
-            ringMat.dispose();
-            streamGeo.dispose();
-            streamMat.dispose();
-        };
-    }, []);
-
-    return (
-        <div
-            ref={mountRef}
-            className="w-100 h-100 position-absolute top-0 start-0 z-0"
-            style={{ pointerEvents: 'none' }}
-        />
-    );
-};
 
 const ContactForm = () => {
     const [formData, setFormData] = useState({ name: '', company: '', email: '', message: '' });
     const [otp, setOtp] = useState('');
     const [emailVerified, setEmailVerified] = useState(false);
+    const [otpSent, setOtpSent] = useState(false);
     const [otpStatus, setOtpStatus] = useState<'idle' | 'sending' | 'verifying' | 'success' | 'error'>('idle');
     const [status, setStatus] = useState<'idle' | 'sending' | 'success' | 'error'>('idle');
     const [errorMsg, setErrorMsg] = useState('');
@@ -127,16 +15,20 @@ const ContactForm = () => {
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
-        if (e.target.name === 'email') setEmailVerified(false);
+        if (e.target.name === 'email') {
+            setEmailVerified(false);
+            setOtpSent(false);
+        }
     };
 
     const handleSendOtp = async () => {
-        if (!emailRegex.test(formData.email)) { setErrorMsg('Please enter a valid email first'); setOtpStatus('error'); setTimeout(() => setOtpStatus('idle'), 4000); return; }
+        if (!emailRegex.test(formData.email)) { setErrorMsg('Enter a valid email'); setOtpStatus('error'); setTimeout(() => setOtpStatus('idle'), 4000); return; }
         setOtpStatus('sending');
         setErrorMsg('');
         try {
             await api.sendOtp(formData.email);
             setOtpStatus('idle');
+            setOtpSent(true);
         } catch (err: unknown) {
             setErrorMsg(err instanceof Error ? err.message : 'Failed to send code');
             setOtpStatus('error');
@@ -145,7 +37,7 @@ const ContactForm = () => {
     };
 
     const handleVerifyOtp = async () => {
-        if (!/^\d{6}$/.test(otp)) { setErrorMsg('Enter a 6-digit code'); setOtpStatus('error'); setTimeout(() => setOtpStatus('idle'), 3000); return; }
+        if (!/^\d{6}$/.test(otp)) { setErrorMsg('Enter 6-digit code'); setOtpStatus('error'); setTimeout(() => setOtpStatus('idle'), 3000); return; }
         setOtpStatus('verifying');
         setErrorMsg('');
         try {
@@ -162,17 +54,13 @@ const ContactForm = () => {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        if (!emailVerified) { setErrorMsg('Please verify your email first'); setStatus('error'); setTimeout(() => setStatus('idle'), 4000); return; }
-        if (!formData.name.trim()) { setErrorMsg('Name is required'); setStatus('error'); setTimeout(() => setStatus('idle'), 4000); return; }
-        if (!emailRegex.test(formData.email)) { setErrorMsg('Please enter a valid email address'); setStatus('error'); setTimeout(() => setStatus('idle'), 4000); return; }
-        if (!formData.message.trim()) { setErrorMsg('Message is required'); setStatus('error'); setTimeout(() => setStatus('idle'), 4000); return; }
-
+        if (!emailVerified) { setErrorMsg('Verify email first'); setStatus('error'); setTimeout(() => setStatus('idle'), 4000); return; }
         setStatus('sending');
         setErrorMsg('');
         try {
             await api.sendEmail({
                 type: 'contact',
-                subject: `Contact: ${formData.name}${formData.company ? ` (${formData.company})` : ''}`,
+                subject: `Contact: ${formData.name}`,
                 name: formData.name,
                 email: formData.email,
                 company: formData.company,
@@ -181,238 +69,245 @@ const ContactForm = () => {
             setStatus('success');
             setFormData({ name: '', company: '', email: '', message: '' });
             setEmailVerified(false);
+            setOtpSent(false);
             setTimeout(() => setStatus('idle'), 5000);
         } catch (error: unknown) {
-            console.error('Email Error:', error);
-            setErrorMsg(error instanceof Error ? error.message : 'Unknown error');
+            setErrorMsg(error instanceof Error ? error.message : 'Error');
             setStatus('error');
-            setTimeout(() => setStatus('idle'), 8000);
         }
     };
 
+    const inputStyle = {
+        width: '100%',
+        background: 'rgba(255, 255, 255, 0.03)',
+        border: '1px solid var(--border)',
+        padding: '16px',
+        borderRadius: '16px',
+        color: '#fff',
+        fontSize: '15px',
+        outline: 'none',
+        transition: '0.3s'
+    };
+
     return (
-        <form className="d-flex flex-column gap-3" onSubmit={handleSubmit}>
-            <div className="row g-3">
-                <div className="col-12 col-md-6">
-                    <label className="form-label small text-white-50">Name <span className="text-danger">*</span></label>
-                    <input type="text" name="name" value={formData.name} onChange={handleChange} className="form-control bg-dark border-secondary text-white rounded-2 py-2 shadow-none" placeholder="John Doe" required />
+        <form onSubmit={handleSubmit}>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '24px', marginBottom: '32px' }}>
+                <div>
+                    <label className="section-label" style={{ fontSize: '10px', marginBottom: '12px' }}>Full Name</label>
+                    <input style={inputStyle} type="text" name="name" value={formData.name} onChange={handleChange} placeholder="John Doe" required />
                 </div>
-                <div className="col-12 col-md-6">
-                    <label className="form-label small text-white-50">Company</label>
-                    <input type="text" name="company" value={formData.company} onChange={handleChange} className="form-control bg-dark border-secondary text-white rounded-2 py-2 shadow-none" placeholder="Acme Corp" />
+                <div>
+                    <label className="section-label" style={{ fontSize: '10px', marginBottom: '12px' }}>Company</label>
+                    <input style={inputStyle} type="text" name="company" value={formData.company} onChange={handleChange} placeholder="Acme Corp" />
                 </div>
             </div>
-            <div>
-                <label className="form-label small text-white-50">Email <span className="text-danger">*</span></label>
-                <div className="d-flex flex-wrap align-items-center gap-2">
-                    <input
-                        type="email" name="email" value={formData.email} onChange={handleChange}
-                        className="form-control bg-dark border-secondary text-white rounded-2 py-2 shadow-none" style={{ flex: '1 1 180px' }}
-                        placeholder="john@acme.com" required readOnly={emailVerified}
-                    />
+            
+            <div style={{ marginBottom: '32px' }}>
+                <label className="section-label" style={{ fontSize: '10px', marginBottom: '12px' }}>Work Email</label>
+                <div style={{ display: 'flex', gap: '12px' }}>
+                    <input style={inputStyle} type="email" name="email" value={formData.email} onChange={handleChange} placeholder="john@acme.com" required readOnly={emailVerified} />
                     {!emailVerified ? (
-                        <>
-                            <button type="button" onClick={handleSendOtp} disabled={otpStatus === 'sending'} className="btn btn-outline-info py-2 px-3 rounded-2 text-nowrap">
-                                {otpStatus === 'sending' ? 'Sending...' : 'Send OTP'}
-                            </button>
-                            <input
-                                type="text" inputMode="numeric" maxLength={6} value={otp} onChange={(e) => setOtp(e.target.value.replace(/\D/g, ''))}
-                                className="form-control bg-dark border-secondary text-white rounded-2 py-2 shadow-none text-center" style={{ width: '90px' }}
-                                placeholder="000000"
-                            />
-                            <button type="button" onClick={handleVerifyOtp} disabled={otpStatus === 'verifying' || otp.length !== 6} className="btn btn-info text-dark fw-bold py-2 px-3 rounded-2 text-nowrap d-inline-flex align-items-center gap-1">
-                                {otpStatus === 'verifying' ? 'Verifying...' : <>Verify <ShieldCheck size={14} /></>}
-                            </button>
-                        </>
+                        <button type="button" className="tag" onClick={handleSendOtp} disabled={otpStatus === 'sending'} style={{ cursor: 'pointer', padding: '0 24px' }}>
+                            {otpStatus === 'sending' ? '...' : 'OTP'}
+                        </button>
                     ) : (
-                        <span className="badge bg-success py-2 px-3 d-inline-flex align-items-center gap-1">Verified <ShieldCheck size={14} /></span>
+                        <div className="tag" style={{ color: 'var(--accent-mint)', borderColor: 'var(--accent-mint)' }}>VERIFIED ✓</div>
                     )}
                 </div>
-                {(otpStatus === 'error' || status === 'error') && <span className="text-danger small mt-1 d-block">{errorMsg}</span>}
             </div>
-            <div>
-                <label className="form-label small text-white-50">Message <span className="text-danger">*</span></label>
-                <textarea name="message" value={formData.message} onChange={handleChange} className="form-control bg-dark border-secondary text-white rounded-2 py-2 shadow-none" rows={4} placeholder="How can we help you?" required></textarea>
+
+            {otpSent && !emailVerified && (
+                <div style={{ marginBottom: '32px' }}>
+                    <label className="section-label" style={{ fontSize: '10px', marginBottom: '12px', color: 'var(--accent-mint)' }}>OTP Code</label>
+                    <div style={{ display: 'flex', gap: '12px' }}>
+                        <input style={{ ...inputStyle, textAlign: 'center', letterSpacing: '0.4em' }} type="text" maxLength={6} value={otp} onChange={(e) => setOtp(e.target.value.replace(/\D/g, ''))} placeholder="000000" />
+                        <button type="button" className="btn-primary" style={{ padding: '0 24px' }} onClick={handleVerifyOtp} disabled={otpStatus === 'verifying' || otp.length !== 6}>VERIFY</button>
+                    </div>
+                </div>
+            )}
+
+            <div style={{ marginBottom: '40px' }}>
+                <label className="section-label" style={{ fontSize: '10px', marginBottom: '12px' }}>Message</label>
+                <textarea style={{ ...inputStyle, minHeight: '120px', borderRadius: '24px' }} name="message" value={formData.message} onChange={handleChange} rows={4} placeholder="Briefly describe your inquiry..." required></textarea>
             </div>
-            <div className="d-flex flex-column flex-sm-row align-items-sm-center gap-3 mt-2">
-                <button type="submit" disabled={status === 'sending' || status === 'success' || !emailVerified}
-                    className={`btn ${status === 'success' ? 'btn-success' : 'btn-info text-dark'} fw-bold py-2 px-4 rounded-pill transition-all w-100 w-sm-auto`}>
-                    {status === 'sending' ? 'Sending...' : status === 'success' ? 'Message Sent!' : 'Send Message'}
-                </button>
-                {!emailVerified && <span className="text-white-50 small">Verify your email to send.</span>}
-            </div>
+
+            {errorMsg && (
+                <div style={{ 
+                    padding: '12px 20px', 
+                    background: 'rgba(255, 50, 50, 0.1)', 
+                    border: '1px solid rgba(255, 50, 50, 0.2)', 
+                    borderRadius: '12px', 
+                    color: '#ff6b6b', 
+                    fontSize: '13px', 
+                    marginBottom: '24px',
+                    fontWeight: '600'
+                }}>
+                    Error: {errorMsg}
+                </div>
+            )}
+
+            <button type="submit" disabled={status === 'sending' || status === 'success' || !emailVerified} style={{ width: '100%' }} className="btn-primary">
+                {status === 'sending' ? 'TRANSMITTING...' : status === 'success' ? 'TRANSMITTED ✓' : 'Submit'}
+            </button>
         </form>
     );
 }
 
-export default function ContactPage() {
+const ContactPage = () => {
+    const revealVariant = {
+        hidden: { opacity: 0, y: 10 },
+        visible: { 
+            opacity: 1, 
+            y: 0,
+            transition: { duration: 0.4, ease: "easeOut" }
+        }
+    };
+
     return (
-        <div className="min-vh-100 w-100 position-relative bg-black text-white py-5 overflow-hidden">
-            <ContactVisual />
-            <div className="container position-relative z-1 py-5">
-                <div className="row align-items-center g-5 mb-5">
-                    <div className="col-lg-5 text-center text-lg-start">
-                        <div className="mb-4">
-                            <span className="badge border border-info text-info rounded-pill px-3 py-2 mb-3 bg-transparent">SECURE CHANNEL OPEN</span>
-                            <h1 className="display-4 display-md-3 fw-bold mb-4">Initialize<br className="d-none d-lg-block" /> Contact</h1>
-                            <p className="lead text-white-50 mx-auto mx-lg-0" style={{ maxWidth: '500px' }}>
-                                Ready to secure your infrastructure? Our elite team of auditors and security architects is standing by.
-                            </p>
-                        </div>
-                    </div>
-                    <div className="col-lg-6 offset-lg-1">
-                        <div className="p-3 p-sm-4 border border-white border-opacity-10 bg-black bg-opacity-50 rounded-4" style={{ backdropFilter: 'blur(12px)' }}>
+        <div className="contact-page">
+            <header className="page-hero">
+                <motion.div 
+                    className="container"
+                    animate="visible" 
+                    variants={revealVariant}
+                >
+                    <span className="section-label">Technical Intake</span>
+                    <h1>Initialize <span className="text-gradient">Secure Contact</span></h1>
+                    <p style={{ maxWidth: '700px', margin: '24px auto', fontSize: '18px', color: 'var(--text-muted)' }}>
+                        Our engineering team is available for high-criticality smart contract audits and infrastructure architecture review.
+                    </p>
+                </motion.div>
+            </header>
+
+            <section style={{ padding: '100px 0' }}>
+                <div className="container">
+                    <div className="services-grid">
+                        <motion.div className="service-card" animate="visible" variants={revealVariant}>
+                            <div className="s-icon"><Mail size={28} /></div>
+                            <h3>Inquiry Process</h3>
+                            <p>All inquiries are handled through a secure verification channel. We prioritize protocols with upcoming mainnet deployments.</p>
+                            <div style={{ marginTop: 'auto', display: 'flex', flexDirection: 'column', gap: '24px' }}>
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+                                    <ShieldCheck size={20} color="var(--accent-mint)" />
+                                    <div>
+                                        <div style={{ fontSize: '15px', fontWeight: '800' }}>Confidential Scope</div>
+                                        <div style={{ fontSize: '13px', color: 'var(--text-muted)' }}>Zero-disclosure scoping calls.</div>
+                                    </div>
+                                </div>
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+                                    <Zap size={20} color="var(--accent-blue)" />
+                                    <div>
+                                        <div style={{ fontSize: '15px', fontWeight: '800' }}>Rapid Response</div>
+                                        <div style={{ fontSize: '13px', color: 'var(--text-muted)' }}>Technical review within 24h.</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </motion.div>
+                        <motion.div className="service-card" style={{ padding: '56px' }} animate="visible" variants={revealVariant}>
                             <ContactForm />
-                        </div>
+                        </motion.div>
                     </div>
                 </div>
+            </section>
 
-                <section className="team-section-enhanced border-top border-white border-opacity-10 pt-5 mt-5">
-                    <div className="row justify-content-center">
-                        <div className="col-lg-10 text-center">
-                            <MDiv
-                                initial={{ opacity: 0, y: 20 }}
-                                whileInView={{ opacity: 1, y: 0 }}
-                                viewport={{ once: true }}
-                                className="mb-5"
-                            >
-                                <h3 className="display-6 fw-bold mb-3 text-uppercase tracking-widest">
-                                    <span className="text-white">The</span> <span className="text-info">Team</span>
-                                </h3>
-                                <p className="text-white-50">Mastering the architecture of decentralized security.</p>
-                            </MDiv>
-
-                            <div className="row justify-content-center g-4">
-                                {[
-                                    {
-                                        id: '01',
-                                        name: 'Rutvik Gujarati',
-                                        upwork: 'https://www.upwork.com/freelancers/~0119617106c07ee432?viewMode=1',
-                                        seed: 'Felix',
-                                        color: '#00f2ff'
-                                    },
-                                    {
-                                        id: '02',
-                                        name: 'Vishal Baraiya',
-                                        upwork: 'https://www.upwork.com/freelancers/vishalb43?mp_source=share',
-                                        seed: 'Luna',
-                                        color: '#a855f7'
-                                    }
-                                ].map((member, idx) => (
-                                    <div className="col-12 col-md-5 col-lg-4" key={idx}>
-                                        <MDiv
-                                            initial={{ opacity: 0, y: 30 }}
-                                            whileInView={{ opacity: 1, y: 0 }}
-                                            viewport={{ once: true }}
-                                            transition={{ duration: 0.6, delay: idx * 0.1 }}
-                                            whileHover={{ y: -10, scale: 1.02 }}
-                                            className="team-member-card py-5 px-4 rounded-4 border border-white border-opacity-10 bg-black bg-opacity-40 h-100 d-flex flex-column align-items-center position-relative overflow-hidden group"
-                                            style={{ backdropFilter: 'blur(20px)' }}
-                                        >
-                                            {/* Decorative Background Elements */}
-                                            <div className="card-pattern" />
-                                            <div className="card-shimmer" />
-                                            
-                                            <div className="mb-4 position-relative">
-                                                <div className="avatar-wrapper rounded-circle p-1 mb-2" 
-                                                      style={{ 
-                                                          width: '110px', 
-                                                          height: '110px', 
-                                                          background: `linear-gradient(45deg, ${member.color}, transparent 60%)`,
-                                                          boxShadow: `0 0 20px ${member.color}33`
-                                                      }}>
-                                                    <img 
-                                                        src={`https://api.dicebear.com/9.x/identicon/svg?seed=${member.seed}`} 
-                                                        alt={member.name} 
-                                                        className="w-100 h-100 rounded-circle bg-black grayscale-on-hover transition-all" 
-                                                    />
-                                                </div>
-                                                <div className="status-indicator-pulse position-absolute bottom-0 end-0 rounded-circle" 
-                                                     style={{ 
-                                                         width: '12px', 
-                                                         height: '12px', 
-                                                         backgroundColor: '#10b981',
-                                                         margin: '8px',
-                                                         boxShadow: '0 0 10px #10b981'
-                                                     }}></div>
+            {/* REDESIGNED TECHNICAL LEADERSHIP SECTION V2 */}
+            <section style={{ padding: '120px 0', borderTop: '1px solid var(--border)', background: 'linear-gradient(to bottom, transparent, rgba(0, 212, 255, 0.02))' }}>
+                <div className="container">
+                    <motion.div 
+                        style={{ textAlign: 'center', marginBottom: '80px' }}
+                        animate="visible" 
+                        variants={revealVariant}
+                    >
+                        <span className="section-label" style={{ color: 'var(--accent-mint)', background: 'rgba(0, 255, 204, 0.1)' }}>Elite Core</span>
+                        <h2 style={{ fontSize: '56px', fontWeight: '900', letterSpacing: '-0.02em' }}>Technical <span style={{ color: 'var(--accent-gold)' }}>Leadership</span></h2>
+                    </motion.div>
+                    
+                    <div className="row g-5 justify-content-center" style={{ maxWidth: '1200px', margin: '0 auto' }}>
+                        {[
+                            { 
+                                name: 'Rutvik Gujarati', 
+                                seed: 'Felix', 
+                                role: 'Lead Smart Contract Developer',
+                                linkedin: 'https://www.linkedin.com/in/rutvik-gujarati/',
+                                upwork: 'https://www.upwork.com/freelancers/~01344498305b18074d',
+                                specialty: 'Security-first architecture, Gas optimization, Multi-chain bridging.',
+                                accent: 'var(--accent-mint)'
+                            },
+                            { 
+                                name: 'Vishal Baraiya', 
+                                seed: 'Luna', 
+                                role: 'Senior Smart Contract Auditor',
+                                linkedin: 'https://www.linkedin.com/in/vishal-baraiya-05989a151/',
+                                upwork: 'https://www.upwork.com/freelancers/~01584c56637012678c',
+                                specialty: 'Formal verification, Invariant testing, DeFi logic vulnerability research.',
+                                accent: 'var(--accent-blue)'
+                            }
+                        ].map((member, idx) => (
+                            <div className="col-md-6 col-lg-5" key={idx}>
+                                <motion.div 
+                                    className="service-card" 
+                                    style={{ 
+                                        padding: '0', 
+                                        overflow: 'hidden', 
+                                        background: 'rgba(13, 17, 23, 0.8)',
+                                        border: '1px solid rgba(255, 255, 255, 0.05)',
+                                        borderRadius: '32px',
+                                        transition: 'all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)'
+                                    }}
+                                    animate="visible" 
+                                    variants={revealVariant}
+                                    whileHover={{ y: -10, borderColor: member.accent }}
+                                >
+                                    {/* CARD HEADER */}
+                                    <div style={{ position: 'relative', height: '140px', background: `linear-gradient(135deg, ${member.accent}11, transparent)` }}>
+                                        <div style={{ position: 'absolute', bottom: '-40px', left: '40px' }}>
+                                            <div style={{ 
+                                                width: '100px', height: '100px', borderRadius: '28px', 
+                                                background: 'var(--bg)', border: `2px solid ${member.accent}33`,
+                                                padding: '6px', boxShadow: `0 10px 30px -10px ${member.accent}66`
+                                            }}>
+                                                <img src={`https://api.dicebear.com/9.x/identicon/svg?seed=${member.seed}`} alt={member.name} style={{ width: '100%', height: '100%' }} />
                                             </div>
-                                            
-                                            <h5 className="fw-bold mb-4 text-white tracking-tight">{member.name}</h5>
-                                            
-                                            <a 
-                                                target="_blank" 
-                                                rel="noopener noreferrer" 
-                                                href={member.upwork} 
-                                                className="btn btn-sm btn-outline-info rounded-pill px-4 mt-auto d-flex align-items-center gap-2 transition-all hover-glow-btn"
-                                                style={{ fontSize: '0.8rem', borderWidth: '1px', borderColor: 'rgba(0, 242, 255, 0.3)' }}
-                                            >
-                                                <span className="text-uppercase tracking-widest fw-bold">Upwork</span> <ExternalLink size={12} />
-                                            </a>
-                                    </MDiv>
+                                        </div>
+                                      
                                     </div>
-                                ))}
+
+                                    {/* CARD CONTENT */}
+                                    <div style={{ padding: '60px 40px 40px' }}>
+                                        <h3 style={{ fontSize: '28px', fontWeight: '900', marginBottom: '8px', letterSpacing: '-0.01em' }}>{member.name}</h3>
+                                        <div style={{ fontSize: '12px', color: member.accent, fontWeight: '800', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '24px' }}>{member.role}</div>
+                                        
+                                        <p style={{ fontSize: '14px', color: 'var(--text-muted)', lineHeight: '1.7', marginBottom: '32px', minHeight: '50px' }}>
+                                            {member.specialty}
+                                        </p>
+
+
+                                        {/* DUAL CTAS */}
+                                        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
+                                            <button 
+                                                className="btn-ghost" 
+                                                style={{ width: '100%', fontSize: '10px', gap: '8px', padding: '12px 0' }}
+                                                onClick={() => window.open(member.linkedin, '_blank')}
+                                            >
+                                                <Linkedin size={14} /> LINKEDIN
+                                            </button>
+                                            <button 
+                                                className="btn-ghost" 
+                                                style={{ width: '100%', fontSize: '10px', gap: '8px', padding: '12px 0' }}
+                                                onClick={() => window.open(member.upwork, '_blank')}
+                                            >
+                                                <ExternalLink size={14} /> UPWORK
+                                            </button>
+                                        </div>
+                                    </div>
+                                </motion.div>
                             </div>
-                        </div>
+                        ))}
                     </div>
-                    <style>{`
-                        .team-member-card {
-                            transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
-                        }
-                        .card-pattern {
-                            position: absolute;
-                            inset: 0;
-                            background-image: radial-gradient(circle at 1px 1px, rgba(255,255,255,0.05) 1px, transparent 0);
-                            background-size: 20px 20px;
-                            pointer-events: none;
-                            z-index: -1;
-                        }
-                        .card-shimmer {
-                            position: absolute;
-                            top: 0;
-                            left: -100%;
-                            width: 50%;
-                            height: 100%;
-                            background: linear-gradient(
-                                to right,
-                                transparent,
-                                rgba(255, 255, 255, 0.03),
-                                transparent
-                            );
-                            transform: skewX(-25deg);
-                            transition: 0.75s;
-                            pointer-events: none;
-                        }
-                        .team-member-card:hover .card-shimmer {
-                            left: 150%;
-                        }
-                        .team-member-card:hover {
-                            border-color: rgba(0, 242, 255, 0.3) !important;
-                            background-color: rgba(0, 242, 255, 0.02) !important;
-                            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
-                        }
-                        .status-indicator-pulse {
-                            animation: pulse-green 2s infinite;
-                        }
-                        @keyframes pulse-green {
-                            0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); }
-                            70% { transform: scale(1); box-shadow: 0 0 0 10px rgba(16, 185, 129, 0); }
-                            100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
-                        }
-                        .hover-glow-btn:hover {
-                            background-color: #0dcaf0 !important;
-                            color: #000 !important;
-                            box-shadow: 0 0 15px rgba(13, 202, 240, 0.5);
-                            transform: scale(1.05);
-                        }
-                        .grayscale-on-hover {
-                            filter: grayscale(100%) brightness(0.8);
-                        }
-                        .team-member-card:hover .grayscale-on-hover {
-                            filter: grayscale(0%) brightness(1);
-                        }
-                    `}</style>
-                </section>
-            </div>
+                </div>
+            </section>
         </div>
     );
 }
+
+export default ContactPage;

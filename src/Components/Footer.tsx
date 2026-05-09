@@ -1,30 +1,31 @@
 import React from 'react';
-import { Github, Twitter, Linkedin, MapPin, Instagram } from 'lucide-react';
+import { Github, Twitter, Linkedin, Instagram } from 'lucide-react';
 
 const Footer: React.FC = () => {
     return (
-        <footer className="bg-transparent text-white pt-5 pb-4 border-top border-white border-opacity-10 position-relative z-theme-footer">
-            <div className="container">
-                <div className="row border-top border-white border-opacity-10 pt-4 align-items-center">
-                    <div className="col-md-6 text-center text-md-start mb-3 mb-md-0">
-                        <span className="h5 fw-bold tracking-tight mb-0">CYPHRIX</span>
-                        <small className="d-block text-white-50 mt-1">&copy; {new Date().getFullYear()} Cyphrix Technologies. All rights reserved.</small>
-                        <address className="text-white-50 small mt-2 mb-0 fst-normal d-flex align-items-start gap-2 justify-content-center justify-content-md-start">
-                            <MapPin size={14} className="mt-1 flex-shrink-0" />
-                            <span>
-                                B/75, Sukhsagar Society, Chitra,<br />
-                                Bhavnagar
-                            </span>
-                        </address>
+        <footer className="site-footer" style={{ marginTop: '100px', borderTop: '1px solid var(--border)', padding: '40px 0' }}>
+            <div className="container footer-inner" style={{ 
+                display: 'flex', 
+                justifyContent: 'space-between', 
+                alignItems: 'center', 
+                flexWrap: 'wrap', 
+                gap: '20px' 
+            }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '32px' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                        <img src="/Cyphrix.svg" alt="Cyphrix" style={{ height: '32px', width: 'auto' }} />
+                        <span style={{ fontWeight: '900', letterSpacing: '0.1em', fontSize: '18px' }}>CYPHRIX</span>
                     </div>
-                    <div className="col-md-6 text-center text-md-end">
-                        <div className="d-flex justify-content-center justify-content-md-end gap-3 text-white-50">
-                            <a href="#" className="text-reset hover-white transition-colors"><Twitter size={18} /></a>
-                            <a href="#" className="text-reset hover-white transition-colors"><Github size={18} /></a>
-                            <a href="https://www.linkedin.com/company/cyphrixtechnologies/about/" target="_blank" rel="noopener noreferrer" className="text-reset hover-white transition-colors"><Linkedin size={18} /></a>
-                            <a href="https://www.instagram.com/cyphrixtechnologies?igsh=MXZoOTA1eWZlOXpoeg==" target="_blank" rel="noopener noreferrer" className="text-reset hover-white transition-colors"><Instagram size={18} /></a>
-                        </div>
-                    </div>
+                    <span style={{ fontSize: '12px', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                        © {new Date().getFullYear()} CYPHRIX TECHNOLOGIES — ALL RIGHTS RESERVED
+                    </span>
+                </div>
+                
+                <div className="footer-socials" style={{ display: 'flex', alignItems: 'center', gap: '32px' }}>
+                    <a href="#" style={{ color: 'var(--accent-blue)', transition: '0.3s' }}><Twitter size={20} /></a>
+                    <a href="#" style={{ color: 'var(--accent-blue)', transition: '0.3s' }}><Github size={20} /></a>
+                    <a href="https://www.linkedin.com/company/cyphrixtechnologies/about/" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--accent-blue)', transition: '0.3s' }}><Linkedin size={20} /></a>
+                    <a href="https://www.instagram.com/cyphrixtechnologies?igsh=MXZoOTA1eWZlOXpoeg==" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--accent-blue)', transition: '0.3s' }}><Instagram size={20} /></a>
                 </div>
             </div>
         </footer>
