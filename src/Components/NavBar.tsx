@@ -43,7 +43,7 @@ const Header: React.FC<HeaderProps> = ({ onNavigate }) => {
                         <button className={isActive('projects') ? 'active' : ''} onClick={() => handleNav('projects')}>Projects</button>
                         <button className={isActive('research') ? 'active' : ''} onClick={() => handleNav('research')}>R&D</button>
                         <button className={isActive('flowofaudit') ? 'active' : ''} onClick={() => handleNav('flowofaudit')}>Flow of Audit</button>
-                        <button className={isActive('partnerwithus') ? 'active' : ''} onClick={() => handleNav('partnerwithus')}>Partners</button>
+                        <button className={isActive('partnerwithus') ? 'active' : ''} onClick={() => handleNav('partnerwithus')}>Partner Alliance</button>
                         <button className={isActive('contact') ? 'active' : ''} onClick={() => handleNav('contact')}>Contact</button>
                     </div>
 
