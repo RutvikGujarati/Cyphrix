@@ -1,5 +1,83 @@
 [
     {
+        "id": 12,
+        "client": "Cyphrix Protocol",
+        "protocol": "Oracle v2 Core Infrastructure Audit",
+        "date": "15 May 2026",
+        "verdict": "Secure",
+        "issues": {
+            "critical": 0,
+            "high": 0,
+            "medium": 1
+        },
+        "link": "https://gold-favourable-bonobo-219.mypinata.cloud/ipfs/bafkreibefuj5lkpgwkjuos735jkqamtxmyo4xdyazs5ueuen3b4r4yj52q"
+    },
+    {
+        "id": 13,
+        "client": "Cyphrix Protocol",
+        "protocol": "Oracle v2 Logic & Invariant Security Audit",
+        "date": "14 May 2026",
+        "verdict": "Secure",
+        "issues": {
+            "critical": 0,
+            "high": 0,
+            "medium": 0
+        },
+        "link": "https://gold-favourable-bonobo-219.mypinata.cloud/ipfs/bafkreignysxed7lapsenyjbkmpgk5jeyhbaersztdj2un3qsua6nqmheyq"
+    },
+    {
+        "id": 8,
+        "client": "AppDoc",
+        "protocol": "AppDoc Black Box Web VAPT (Phase A)",
+        "date": "14 May 2026",
+        "verdict": "Secure",
+        "issues": {
+            "critical": 0,
+            "high": 0,
+            "medium": 2
+        },
+        "link": "https://gold-favourable-bonobo-219.mypinata.cloud/ipfs/bafybeig6ncu5rzsa2vybcny4omxzf5pdsdwpywkukzq2zrzz7stl2pnmyu/Black%20Box%20Web%20VAPT%20Report%20A.pdf"
+    },
+    {
+        "id": 9,
+        "client": "AppDoc",
+        "protocol": "AppDoc Greybox Web VAPT Assessment",
+        "date": "12 May 2026",
+        "verdict": "Secure",
+        "issues": {
+            "critical": 0,
+            "high": 0,
+            "medium": 1
+        },
+        "link": "https://gold-favourable-bonobo-219.mypinata.cloud/ipfs/bafybeig6ncu5rzsa2vybcny4omxzf5pdsdwpywkukzq2zrzz7stl2pnmyu/Greybox-Web-VAPT-Report.pdf"
+    },
+    {
+        "id": 10,
+        "client": "AppDoc",
+        "protocol": "AppDoc Source Code Security Review",
+        "date": "10 May 2026",
+        "verdict": "Secure",
+        "issues": {
+            "critical": 0,
+            "high": 0,
+            "medium": 0
+        },
+        "link": "https://gold-favourable-bonobo-219.mypinata.cloud/ipfs/bafybeig6ncu5rzsa2vybcny4omxzf5pdsdwpywkukzq2zrzz7stl2pnmyu/Source-Code-Review.pdf"
+    },
+    {
+        "id": 11,
+        "client": "AppDoc",
+        "protocol": "AppDoc iOS Mobile Security Assessment",
+        "date": "08 May 2026",
+        "verdict": "Secure",
+        "issues": {
+            "critical": 0,
+            "high": 1,
+            "medium": 2
+        },
+        "link": "https://gold-favourable-bonobo-219.mypinata.cloud/ipfs/bafybeig6ncu5rzsa2vybcny4omxzf5pdsdwpywkukzq2zrzz7stl2pnmyu/iOS%20Re-Assessment%20AppDoc%20(1).pdf"
+    },
+    {
         "id": 1,
         "client": "8bit Protocol",
         "protocol": "8bit Protocol Smart Contract Audit",

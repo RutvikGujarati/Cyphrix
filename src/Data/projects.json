@@ -63,13 +63,7 @@
     "title": "Protocol Security Audit: Rarity Town",
     "tagline": "Comprehensive vulnerability assessment and security hardening.",
     "description": "A deep-dive security audit of the Rarity Town NFT protocol. Performed manual code review and automated analysis to identify high-severity vulnerabilities. Implemented a robust testing suite including Fuzzing and Invariant testing to ensure protocol-level safety and reentrancy resistance.",
-    "techStack": [
-      "Solidity",
-      "Foundry",
-      "Slither",
-      "Aderyn",
-      "Echidna"
-    ],
+    "techStack": ["Solidity", "Foundry", "Slither", "Aderyn", "Echidna"],
     "image": "contract-security.jpg",
     "color": "#8b0000",
     "stats": [
