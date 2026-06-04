@@ -29,3 +29,5 @@ extra
 src/Components/e-comp
 .vercel
 .env*.local
+
+PDFs

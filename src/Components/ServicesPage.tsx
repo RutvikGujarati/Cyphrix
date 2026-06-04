@@ -153,6 +153,30 @@ const ServicesPage: React.FC = () => {
                                             <p style={{ fontSize: '13px', lineHeight: '1.6', color: 'var(--text-muted)', marginBottom: '20px' }}>
                                                 {service.detail || service.summary}
                                             </p>
+                                            {service.pdfLink && (
+                                                <a 
+                                                    href={service.pdfLink}
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
+                                                    style={{
+                                                        display: 'inline-flex',
+                                                        alignItems: 'center',
+                                                        gap: '6px',
+                                                        fontSize: '11px',
+                                                        fontWeight: '800',
+                                                        color: 'var(--accent-blue)',
+                                                        textTransform: 'uppercase',
+                                                        textDecoration: 'none',
+                                                        marginTop: '8px',
+                                                        background: 'rgba(0, 212, 255, 0.1)',
+                                                        padding: '6px 12px',
+                                                        borderRadius: '4px',
+                                                        border: '1px solid rgba(0, 212, 255, 0.2)'
+                                                    }}
+                                                >
+                                                    <Link size={12} /> View Brochure
+                                                </a>
+                                            )}
                                         </div>
 
                                         <div 
