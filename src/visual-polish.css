@@ -1,0 +1,800 @@
+/* Shared verification-flow artwork used across every route. */
+:is(.tile-visual,.project-preview__diagram,.research-graph,.service-detail__diagram,.work-preview__visual,.lab-preview__graph,.flow-preview__scan) {
+  --node-size: 24px;
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  border: 1px solid rgba(255,255,255,.82);
+  border-radius: 26px;
+  background:
+    radial-gradient(circle at 22% 74%,rgba(183,154,116,.2),transparent 24%),
+    radial-gradient(circle at 76% 22%,rgba(107,126,134,.14),transparent 29%),
+    linear-gradient(145deg,rgba(255,255,255,.66),rgba(231,234,232,.34));
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.9),0 20px 45px rgba(54,62,72,.045);
+}
+
+:is(.tile-visual,.project-preview__diagram,.research-graph,.service-detail__diagram,.work-preview__visual,.lab-preview__graph,.flow-preview__scan)::before {
+  content: "";
+  position: absolute;
+  z-index: 0;
+  width: 122%;
+  height: 74%;
+  left: -12%;
+  top: 13%;
+  border: 1px solid rgba(67,76,88,.17);
+  border-radius: 50%;
+  box-shadow: 0 0 0 24px rgba(67,76,88,.045),0 0 0 70px rgba(170,144,111,.065);
+  transform: rotate(-8deg);
+}
+
+:is(.tile-visual,.project-preview__diagram,.research-graph,.service-detail__diagram,.work-preview__visual,.lab-preview__graph,.flow-preview__scan)::after {
+  content: "";
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+  opacity: .42;
+  background-image: radial-gradient(circle,rgba(62,70,80,.2) .7px,transparent .8px);
+  background-size: 18px 18px;
+  -webkit-mask-image: linear-gradient(110deg,transparent 5%,#000 45%,transparent 86%);
+  mask-image: linear-gradient(110deg,transparent 5%,#000 45%,transparent 86%);
+}
+
+:is(.tile-visual,.project-preview__diagram,.research-graph,.service-detail__diagram,.work-preview__visual,.lab-preview__graph,.flow-preview__scan) > i {
+  z-index: 3;
+  width: var(--node-size);
+  height: var(--node-size);
+  display: grid;
+  place-items: center;
+  border: 1px solid rgba(62,70,80,.2);
+  border-radius: 50%;
+  background: rgba(255,255,255,.78);
+  box-shadow: 0 9px 20px rgba(56,64,74,.1),inset 0 0 0 5px rgba(239,239,235,.72);
+  transform: none;
+}
+
+:is(.tile-visual,.project-preview__diagram,.research-graph,.service-detail__diagram,.work-preview__visual,.lab-preview__graph,.flow-preview__scan) > i::after {
+  content: "";
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: linear-gradient(145deg,#48515d,#b3946e);
+  box-shadow: 0 0 0 4px rgba(179,148,110,.12);
+}
+
+:is(.tile-visual,.project-preview__diagram,.research-graph,.service-detail__diagram,.work-preview__visual,.lab-preview__graph,.flow-preview__scan) > b {
+  z-index: 2;
+  height: 4px;
+  overflow: visible;
+  border-radius: 999px;
+  background: linear-gradient(90deg,transparent 0%,rgba(183,154,116,.7) 18%,rgba(255,255,255,.96) 48%,rgba(88,102,111,.74) 78%,transparent 100%);
+  box-shadow: 0 0 18px rgba(145,124,99,.22),0 8px 18px rgba(66,74,84,.08);
+  transform: rotate(-5deg);
+}
+
+:is(.tile-visual,.project-preview__diagram,.research-graph,.service-detail__diagram,.work-preview__visual,.lab-preview__graph,.flow-preview__scan) > b::before {
+  content: "";
+  position: absolute;
+  left: 48%;
+  top: 50%;
+  width: 27px;
+  height: 27px;
+  border: 1px solid rgba(67,76,88,.16);
+  border-radius: 9px;
+  background: radial-gradient(circle,#ae916e 0 3px,#f8f8f4 4px);
+  box-shadow: 0 9px 20px rgba(54,62,72,.12),inset 0 0 0 5px rgba(255,255,255,.75);
+  transform: translate(-50%,-50%) rotate(5deg);
+}
+
+:is(.tile-visual,.project-preview__diagram,.research-graph,.service-detail__diagram,.work-preview__visual,.lab-preview__graph) > b::after {
+  content: "VERIFIED FLOW";
+  position: absolute;
+  right: 1%;
+  top: 11px;
+  color: rgba(69,77,87,.58);
+  font: 500 7px/1 var(--mono);
+  letter-spacing: .13em;
+  white-space: nowrap;
+}
+
+:is(.project-preview__diagram,.service-detail__diagram,.work-preview__visual,.flow-preview__scan) {
+  --node-size: 46px;
+}
+
+:is(.project-preview__diagram,.service-detail__diagram,.work-preview__visual,.flow-preview__scan) > i {
+  border-radius: 15px;
+  box-shadow: 0 12px 26px rgba(56,64,74,.11),inset 0 0 0 8px rgba(239,239,235,.7);
+}
+
+.flow-preview__scan > b {
+  height: 5px;
+  transform: none;
+  transition: top .45s var(--ease-out);
+}
+
+.flow-preview__scan > b::before { transform: translate(-50%,-50%); }
+
+.flow-preview__scan > b::after {
+  content: "ACTIVE SCAN";
+  position: absolute;
+  right: 2%;
+  top: 12px;
+  color: rgba(69,77,87,.6);
+  font: 500 7px/1 var(--mono);
+  letter-spacing: .13em;
+  white-space: nowrap;
+}
+
+.capability-tile article,.research-module article,.lab-preview,.service-detail,.work-preview {
+  box-shadow: 0 24px 70px rgba(54,62,72,.045),inset 0 1px 0 rgba(255,255,255,.78);
+}
+
+.tile-head > span,.research-module header > b,.work-preview > header b,.lab-preview > header b,.flow-preview > header b {
+  display: inline-flex;
+  align-items: center;
+  min-height: 25px;
+  padding: 0 9px;
+  border: 1px solid rgba(61,69,79,.1);
+  border-radius: 999px;
+  color: #5f6670;
+  background: rgba(255,255,255,.55);
+}
+
+.alliance-map {
+  border-color: rgba(255,255,255,.84);
+  background:
+    conic-gradient(from 215deg,rgba(183,154,116,.19),transparent 22%,rgba(113,132,140,.12) 46%,transparent 67%,rgba(183,154,116,.14)),
+    rgba(255,255,255,.46);
+  box-shadow: inset 0 1px 0 white,0 30px 70px rgba(54,62,72,.06);
+}
+
+.alliance-map::before,.alliance-map::after {
+  border-color: rgba(67,76,88,.12);
+  box-shadow: 0 0 0 16px rgba(67,76,88,.025);
+}
+
+.alliance-map > span {
+  position: relative;
+  z-index: 2;
+  border-color: rgba(67,76,88,.14);
+  color: #424a56;
+  background: linear-gradient(145deg,#fff,#e9e8e3);
+  box-shadow: 0 15px 35px rgba(54,62,72,.12),inset 0 0 0 8px rgba(255,255,255,.62);
+}
+
+.alliance-map > i {
+  width: 25px;
+  height: 25px;
+  border-color: rgba(67,76,88,.18);
+  background: radial-gradient(circle,#b19572 0 3px,#f9f9f6 4px);
+  box-shadow: 0 9px 20px rgba(54,62,72,.1);
+}
+
+.alliance-map > b {
+  min-width: 90px;
+  padding: 10px 14px;
+  border: 1px solid rgba(67,76,88,.11);
+  border-radius: 999px;
+  color: #424a56;
+  background: rgba(255,255,255,.7);
+  box-shadow: 0 12px 30px rgba(54,62,72,.08);
+  font-size: clamp(24px,3vw,38px);
+  line-height: 1;
+  text-align: center;
+}
+
+.alliance-map > em {
+  padding: 7px 11px;
+  border: 1px solid rgba(67,76,88,.1);
+  border-radius: 999px;
+  background: rgba(255,255,255,.58);
+}
+
+@media (max-width:720px) {
+  :is(.tile-visual,.project-preview__diagram,.research-graph,.service-detail__diagram,.work-preview__visual,.lab-preview__graph,.flow-preview__scan) {
+    border-radius: 20px;
+  }
+  :is(.project-preview__diagram,.service-detail__diagram,.work-preview__visual,.flow-preview__scan) {
+    --node-size: 36px;
+  }
+}
+
+/* Structured audit path: a readable evolution of the original line motif. */
+:is(.tile-visual,.project-preview__diagram,.research-graph,.service-detail__diagram,.work-preview__visual,.lab-preview__graph,.flow-preview__scan) {
+  background:
+    radial-gradient(circle at 12% 50%,rgba(47,112,168,.1),transparent 24%),
+    radial-gradient(circle at 88% 50%,rgba(183,154,116,.1),transparent 22%),
+    linear-gradient(145deg,rgba(255,255,255,.78),rgba(233,237,237,.5));
+}
+
+:is(.tile-visual,.project-preview__diagram,.research-graph,.service-detail__diagram,.work-preview__visual,.lab-preview__graph,.flow-preview__scan)::before {
+  content:"";
+  position:absolute;
+  z-index:0;
+  left:5%;
+  right:5%;
+  top:50%;
+  width:auto;
+  height:104px;
+  border:1px solid rgba(52,73,94,.11);
+  border-radius:28px;
+  background:linear-gradient(180deg,rgba(255,255,255,.72),rgba(221,229,231,.35));
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.9),0 16px 35px rgba(54,68,82,.055);
+  transform:translateY(-50%);
+}
+
+:is(.tile-visual,.project-preview__diagram,.research-graph,.service-detail__diagram,.work-preview__visual,.lab-preview__graph,.flow-preview__scan)::after {
+  content:"";
+  position:absolute;
+  z-index:0;
+  inset:0;
+  opacity:.38;
+  background-image:
+    linear-gradient(rgba(44,77,106,.045) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(44,77,106,.045) 1px,transparent 1px),
+    radial-gradient(circle,rgba(44,77,106,.16) .7px,transparent .8px);
+  background-size:32px 32px,32px 32px,16px 16px;
+  -webkit-mask-image:linear-gradient(90deg,transparent,#000 12%,#000 88%,transparent);
+  mask-image:linear-gradient(90deg,transparent,#000 12%,#000 88%,transparent);
+}
+
+:is(.tile-visual,.project-preview__diagram,.research-graph,.service-detail__diagram,.work-preview__visual,.lab-preview__graph,.flow-preview__scan) > b {
+  left:9%!important;
+  right:9%!important;
+  height:7px;
+  border:1px solid rgba(36,77,116,.15);
+  border-radius:999px;
+  background:linear-gradient(90deg,#274f7c 0%,#4b87b1 38%,#83a9bb 68%,#aa906f 100%);
+  box-shadow:0 0 0 5px rgba(255,255,255,.66),0 10px 24px rgba(39,79,124,.16);
+  transform:none;
+}
+
+:is(.tile-visual,.project-preview__diagram,.research-graph,.service-detail__diagram,.work-preview__visual,.lab-preview__graph) > b {
+  top:50%!important;
+}
+
+:is(.tile-visual,.project-preview__diagram,.research-graph,.service-detail__diagram,.work-preview__visual,.lab-preview__graph,.flow-preview__scan) > b::before {
+  content:"";
+  position:absolute;
+  left:0;
+  top:0;
+  width:28%;
+  height:100%;
+  border:0;
+  border-radius:999px;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.95),transparent);
+  box-shadow:none;
+  transform:none;
+  animation:verification-travel 5.4s var(--ease-out) infinite;
+}
+
+:is(.tile-visual,.project-preview__diagram,.research-graph,.service-detail__diagram,.work-preview__visual,.lab-preview__graph) > b::after {
+  content:"AUDIT PATH  /  VERIFIED";
+  right:0;
+  top:20px;
+  color:rgba(40,68,93,.62);
+  font:600 7px/1 var(--mono);
+  letter-spacing:.14em;
+}
+
+.flow-preview__scan > b::after {
+  content:"ACTIVE SECURITY SCAN";
+  right:0;
+  top:20px;
+  color:rgba(40,68,93,.62);
+  font:600 7px/1 var(--mono);
+  letter-spacing:.14em;
+}
+
+:is(.tile-visual,.project-preview__diagram,.research-graph,.service-detail__diagram,.work-preview__visual,.lab-preview__graph,.flow-preview__scan) > i {
+  top:50%!important;
+  right:auto!important;
+  z-index:3;
+  border-color:rgba(38,78,116,.2);
+  border-radius:14px;
+  background:linear-gradient(145deg,#fff,#edf2f3);
+  box-shadow:0 10px 24px rgba(43,72,99,.13),inset 0 0 0 7px rgba(255,255,255,.72);
+  transform:translate(-50%,-50%)!important;
+}
+
+:is(.tile-visual,.project-preview__diagram,.research-graph,.service-detail__diagram,.work-preview__visual,.lab-preview__graph,.flow-preview__scan) > i::after {
+  width:8px;
+  height:8px;
+  background:linear-gradient(145deg,#244d7e,#66a0c2);
+  box-shadow:0 0 0 5px rgba(62,126,169,.12);
+}
+
+:is(.tile-visual,.project-preview__diagram,.research-graph,.service-detail__diagram,.work-preview__visual,.lab-preview__graph,.flow-preview__scan) > i::before {
+  position:absolute;
+  left:50%;
+  top:-24px;
+  color:rgba(42,67,89,.64);
+  font:600 7px/1 var(--mono);
+  letter-spacing:.11em;
+  transform:translateX(-50%);
+  white-space:nowrap;
+}
+
+:is(.project-preview__diagram,.research-graph,.work-preview__visual,.lab-preview__graph) > i:nth-child(1){left:10%!important}
+:is(.project-preview__diagram,.research-graph,.work-preview__visual,.lab-preview__graph) > i:nth-child(2){left:37%!important}
+:is(.project-preview__diagram,.research-graph,.work-preview__visual,.lab-preview__graph) > i:nth-child(3){left:64%!important}
+:is(.project-preview__diagram,.research-graph,.work-preview__visual,.lab-preview__graph) > i:nth-child(4){left:90%!important}
+
+:is(.tile-visual,.service-detail__diagram,.flow-preview__scan) > i:nth-child(1){left:12%!important}
+:is(.tile-visual,.service-detail__diagram,.flow-preview__scan) > i:nth-child(2){left:50%!important}
+:is(.tile-visual,.service-detail__diagram,.flow-preview__scan) > i:nth-child(3){left:88%!important}
+
+:is(.tile-visual,.project-preview__diagram,.research-graph,.service-detail__diagram,.work-preview__visual,.lab-preview__graph,.flow-preview__scan) > i:nth-child(1)::before{content:"INPUT"}
+:is(.tile-visual,.project-preview__diagram,.research-graph,.service-detail__diagram,.work-preview__visual,.lab-preview__graph,.flow-preview__scan) > i:nth-child(2)::before{content:"SCAN"}
+:is(.tile-visual,.project-preview__diagram,.research-graph,.service-detail__diagram,.work-preview__visual,.lab-preview__graph,.flow-preview__scan) > i:nth-child(3)::before{content:"PROOF"}
+:is(.project-preview__diagram,.research-graph,.work-preview__visual,.lab-preview__graph) > i:nth-child(4)::before{content:"VERIFIED"}
+:is(.tile-visual,.service-detail__diagram,.flow-preview__scan) > i:nth-child(3)::before{content:"VERIFIED"}
+
+@keyframes verification-travel {
+  0%,12%{transform:translateX(-30%);opacity:0}
+  24%{opacity:1}
+  78%{opacity:1}
+  92%,100%{transform:translateX(280%);opacity:0}
+}
+
+@media(max-width:720px){
+  :is(.tile-visual,.project-preview__diagram,.research-graph,.service-detail__diagram,.work-preview__visual,.lab-preview__graph,.flow-preview__scan)::before{height:82px;border-radius:22px}
+  :is(.tile-visual,.project-preview__diagram,.research-graph,.service-detail__diagram,.work-preview__visual,.lab-preview__graph,.flow-preview__scan)>i::before{top:-19px;font-size:6px}
+  :is(.tile-visual,.project-preview__diagram,.research-graph,.service-detail__diagram,.work-preview__visual,.lab-preview__graph,.flow-preview__scan)>b::after{top:17px;font-size:6px}
+}
+
+/* Capability cards each describe their own discipline. */
+.capability-tile:nth-child(2) .tile-visual::before{
+  left:50%;right:auto;top:50%;width:72px;height:72px;border-radius:22px;
+  background:radial-gradient(circle,#3477aa 0 5px,#f7faf9 6px 18px,rgba(74,128,164,.18) 19px);
+  box-shadow:0 0 0 22px rgba(52,119,170,.045),0 0 0 45px rgba(52,119,170,.025),0 15px 32px rgba(39,79,124,.12);
+  transform:translate(-50%,-50%);
+}
+.capability-tile:nth-child(2) .tile-visual>b{left:18%!important;right:18%!important;top:50%!important;height:2px;background:linear-gradient(90deg,#315f8d,rgba(74,135,177,.35),#315f8d);box-shadow:none;transform:rotate(-7deg)}
+.capability-tile:nth-child(2) .tile-visual>b::before{left:50%;top:-58px;width:1px;height:116px;background:linear-gradient(transparent,#5486a9,transparent);animation:none;transform:rotate(7deg)}
+.capability-tile:nth-child(2) .tile-visual>b::after{content:"NODE MESH  /  ONLINE";top:18px}
+.capability-tile:nth-child(2) .tile-visual>i:nth-child(1){left:18%!important;top:66%!important}
+.capability-tile:nth-child(2) .tile-visual>i:nth-child(2){left:50%!important;top:20%!important}
+.capability-tile:nth-child(2) .tile-visual>i:nth-child(3){left:82%!important;top:58%!important}
+.capability-tile:nth-child(2) .tile-visual>i:nth-child(1)::before{content:"EDGE"}
+.capability-tile:nth-child(2) .tile-visual>i:nth-child(2)::before{content:"VALIDATOR"}
+.capability-tile:nth-child(2) .tile-visual>i:nth-child(3)::before{content:"RPC"}
+
+.capability-tile:nth-child(3) .tile-visual::before{
+  left:50%;right:auto;top:50%;width:154px;height:154px;border-radius:50%;
+  background:repeating-radial-gradient(circle,transparent 0 23px,rgba(45,95,138,.12) 24px 25px),conic-gradient(from 210deg,rgba(58,126,169,.18),transparent 33%,rgba(183,154,116,.12),transparent 72%);
+  box-shadow:inset 0 0 0 1px rgba(45,95,138,.12),0 18px 38px rgba(39,79,124,.08);
+  transform:translate(-50%,-50%);
+}
+.capability-tile:nth-child(3) .tile-visual>b{left:50%!important;right:auto!important;top:50%!important;width:38%;height:2px;background:linear-gradient(90deg,#2f6595,transparent);box-shadow:none;transform:rotate(-24deg);transform-origin:left center}
+.capability-tile:nth-child(3) .tile-visual>b::before{display:none}
+.capability-tile:nth-child(3) .tile-visual>b::after{content:"ACTIVE PROBE";right:10%;top:15px}
+.capability-tile:nth-child(3) .tile-visual>i:nth-child(1){left:31%!important;top:30%!important}
+.capability-tile:nth-child(3) .tile-visual>i:nth-child(2){left:68%!important;top:36%!important}
+.capability-tile:nth-child(3) .tile-visual>i:nth-child(3){left:43%!important;top:74%!important}
+.capability-tile:nth-child(3) .tile-visual>i:nth-child(1)::before{content:"PORT"}
+.capability-tile:nth-child(3) .tile-visual>i:nth-child(2)::before{content:"PATH"}
+.capability-tile:nth-child(3) .tile-visual>i:nth-child(3)::before{content:"EDGE"}
+
+.capability-tile:nth-child(4) .tile-visual::before{
+  left:50%;right:auto;top:50%;width:128px;height:76px;border-radius:20px;
+  background:linear-gradient(145deg,rgba(255,255,255,.92),rgba(79,135,173,.1));
+  box-shadow:-13px -13px 0 rgba(255,255,255,.5),-13px -13px 0 1px rgba(45,95,138,.08),13px 13px 0 rgba(80,135,171,.055),13px 13px 0 1px rgba(45,95,138,.08),0 18px 34px rgba(39,79,124,.08);
+  transform:translate(-50%,-50%);
+}
+.capability-tile:nth-child(4) .tile-visual>b{left:50%!important;right:auto!important;top:15%!important;bottom:15%;width:3px;height:auto;background:linear-gradient(#274f7c,#69a0bd,#aa906f);box-shadow:0 0 0 4px rgba(255,255,255,.65);transform:translateX(-50%)}
+.capability-tile:nth-child(4) .tile-visual>b::before{display:none}
+.capability-tile:nth-child(4) .tile-visual>b::after{content:"PROOF STACK  /  VALID";left:16px;right:auto;top:auto;bottom:0}
+.capability-tile:nth-child(4) .tile-visual>i:nth-child(1){left:50%!important;top:24%!important}
+.capability-tile:nth-child(4) .tile-visual>i:nth-child(2){left:50%!important;top:50%!important}
+.capability-tile:nth-child(4) .tile-visual>i:nth-child(3){left:50%!important;top:76%!important}
+.capability-tile:nth-child(4) .tile-visual>i::before{left:calc(100% + 10px);top:50%;transform:translateY(-50%)}
+.capability-tile:nth-child(4) .tile-visual>i:nth-child(1)::before{content:"COMMIT"}
+.capability-tile:nth-child(4) .tile-visual>i:nth-child(2)::before{content:"PROVE"}
+.capability-tile:nth-child(4) .tile-visual>i:nth-child(3)::before{content:"VERIFY"}
+
+/* Project previews use a four-module architecture map. */
+:is(.project-preview__diagram,.work-preview__visual)::before{left:12%;right:12%;top:50%;width:auto;height:64%;border-radius:26px;background:linear-gradient(135deg,rgba(255,255,255,.8),rgba(70,128,164,.08));transform:translateY(-50%)}
+:is(.project-preview__diagram,.work-preview__visual)>b{left:24%!important;right:24%!important;top:50%!important;height:2px;background:linear-gradient(90deg,#315f8d,#7da4b9,#aa906f);box-shadow:none}
+:is(.project-preview__diagram,.work-preview__visual)>b::before{left:50%;top:-92px;width:1px;height:184px;background:linear-gradient(transparent,#5687a8,transparent);animation:none}
+:is(.project-preview__diagram,.work-preview__visual)>b::after{content:"VERIFIED SYSTEM MAP";top:14px}
+:is(.project-preview__diagram,.work-preview__visual)>i:nth-child(1){left:24%!important;top:30%!important}
+:is(.project-preview__diagram,.work-preview__visual)>i:nth-child(2){left:76%!important;top:30%!important}
+:is(.project-preview__diagram,.work-preview__visual)>i:nth-child(3){left:24%!important;top:70%!important}
+:is(.project-preview__diagram,.work-preview__visual)>i:nth-child(4){left:76%!important;top:70%!important}
+:is(.project-preview__diagram,.work-preview__visual)>i:nth-child(1)::before{content:"CORE"}
+:is(.project-preview__diagram,.work-preview__visual)>i:nth-child(2)::before{content:"GATEWAY"}
+:is(.project-preview__diagram,.work-preview__visual)>i:nth-child(3)::before{content:"STATE"}
+:is(.project-preview__diagram,.work-preview__visual)>i:nth-child(4)::before{content:"EDGE"}
+
+/* Research keeps an exploratory field rather than a delivery pipeline. */
+:is(.research-graph,.lab-preview__graph)::before{left:50%;right:auto;top:50%;width:170px;height:170px;border-radius:50%;background:repeating-radial-gradient(circle,transparent 0 26px,rgba(53,102,140,.1) 27px 28px);transform:translate(-50%,-50%)}
+:is(.research-graph,.lab-preview__graph)>b{left:12%!important;right:9%!important;top:54%!important;height:2px;background:linear-gradient(90deg,#315f8d,transparent 38%,#6f9eb8,transparent 72%,#aa906f);box-shadow:none;transform:rotate(-8deg)}
+:is(.research-graph,.lab-preview__graph)>b::before{display:none}
+:is(.research-graph,.lab-preview__graph)>b::after{content:"RESEARCH FIELD  /  EVOLVING";top:15px}
+:is(.research-graph,.lab-preview__graph)>i:nth-child(1){left:14%!important;top:68%!important}
+:is(.research-graph,.lab-preview__graph)>i:nth-child(2){left:42%!important;top:25%!important}
+:is(.research-graph,.lab-preview__graph)>i:nth-child(3){left:70%!important;top:60%!important}
+:is(.research-graph,.lab-preview__graph)>i:nth-child(4){left:88%!important;top:22%!important}
+:is(.research-graph,.lab-preview__graph)>i:nth-child(1)::before{content:"SIGNAL"}
+:is(.research-graph,.lab-preview__graph)>i:nth-child(2)::before{content:"MODEL"}
+:is(.research-graph,.lab-preview__graph)>i:nth-child(3)::before{content:"PROOF"}
+:is(.research-graph,.lab-preview__graph)>i:nth-child(4)::before{content:"FRONTIER"}
+
+/* Service detail reads as progressively deeper system layers. */
+.service-detail__diagram::before{left:12%;right:12%;top:50%;width:auto;height:58%;border-radius:26px;background:repeating-linear-gradient(180deg,rgba(255,255,255,.7) 0 28px,rgba(61,112,149,.07) 29px 30px);transform:translateY(-50%)}
+.service-detail__diagram>b{left:18%!important;right:18%!important;top:50%!important;height:2px;background:linear-gradient(90deg,#315f8d,#7ea7ba,#aa906f);box-shadow:none;transform:rotate(10deg)}
+.service-detail__diagram>b::before{display:none}.service-detail__diagram>b::after{content:"SURFACE  →  RUNTIME  →  CHAIN";top:16px}
+.service-detail__diagram>i:nth-child(1){left:20%!important;top:34%!important}.service-detail__diagram>i:nth-child(2){left:50%!important;top:50%!important}.service-detail__diagram>i:nth-child(3){left:80%!important;top:66%!important}
+.service-detail__diagram>i:nth-child(1)::before{content:"SURFACE"}.service-detail__diagram>i:nth-child(2)::before{content:"RUNTIME"}.service-detail__diagram>i:nth-child(3)::before{content:"CHAIN"}
+
+/* Audit flow returns to a true moving scanner. */
+.flow-preview__scan::before{left:50%;right:auto;top:50%;width:144px;height:144px;border-radius:34px;background:linear-gradient(145deg,rgba(255,255,255,.85),rgba(54,111,150,.1));box-shadow:0 0 0 18px rgba(54,111,150,.035),0 18px 38px rgba(39,79,124,.1);transform:translate(-50%,-50%) rotate(45deg)}
+.flow-preview__scan>b{left:8%!important;right:8%!important;height:4px;background:linear-gradient(90deg,transparent,#3574a3,#fff,#3574a3,transparent);box-shadow:0 0 18px rgba(53,116,163,.32)}
+.flow-preview__scan>b::before{display:none}.flow-preview__scan>b::after{content:"ACTIVE SECURITY SCAN";top:13px}
+.flow-preview__scan>i::before{display:none}.flow-preview__scan>i:nth-child(1){left:28%!important;top:32%!important}.flow-preview__scan>i:nth-child(2){left:70%!important;top:40%!important}.flow-preview__scan>i:nth-child(3){left:52%!important;top:74%!important}
+
+/* Flow of Audit: a single verification core with phase-driven inspection. */
+.flow-preview__scan{
+  position:relative;
+  isolation:isolate;
+  min-height:320px;
+  overflow:hidden;
+  border:1px solid rgba(255,255,255,.88);
+  background:
+    radial-gradient(circle at 50% 46%,rgba(55,120,165,.2),transparent 24%),
+    radial-gradient(circle at 74% 62%,rgba(183,154,116,.12),transparent 20%),
+    linear-gradient(145deg,#f9fbfa,#e8edef);
+  box-shadow:inset 0 1px 0 #fff,0 24px 55px rgba(43,66,86,.07);
+}
+.flow-preview__scan::before{
+  content:"";
+  position:absolute;
+  z-index:0;
+  left:50%;
+  right:auto;
+  top:48%;
+  width:248px;
+  height:248px;
+  border:1px solid rgba(46,91,130,.13);
+  border-radius:50%;
+  background:conic-gradient(from 210deg,rgba(45,102,146,.08),transparent 20%,rgba(45,102,146,.16),transparent 51%,rgba(183,154,116,.12),transparent 78%);
+  box-shadow:0 0 0 28px rgba(48,100,142,.025),0 0 0 68px rgba(48,100,142,.018);
+  transform:translate(-50%,-50%);
+}
+.flow-preview__scan::after{
+  content:"";
+  position:absolute;
+  z-index:0;
+  inset:0;
+  opacity:.42;
+  background-image:
+    linear-gradient(rgba(42,78,108,.055) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(42,78,108,.055) 1px,transparent 1px),
+    radial-gradient(circle,rgba(42,78,108,.2) .7px,transparent .8px);
+  background-size:36px 36px,36px 36px,18px 18px;
+  -webkit-mask-image:radial-gradient(circle at center,#000,transparent 78%);
+  mask-image:radial-gradient(circle at center,#000,transparent 78%);
+}
+.audit-core{
+  position:absolute;
+  z-index:3;
+  left:50%;
+  top:48%;
+  width:152px;
+  height:152px;
+  display:grid;
+  place-items:center;
+  clip-path:polygon(25% 5%,75% 5%,97% 50%,75% 95%,25% 95%,3% 50%);
+  color:#fff;
+  background:linear-gradient(145deg,#1f426d 0%,#356f9e 52%,#6b96ad 100%);
+  box-shadow:0 30px 55px rgba(31,66,109,.24);
+  transform:translate(-50%,-50%) rotate(var(--core-rotation));
+  transition:transform .7s var(--ease-out),background .5s ease;
+}
+.audit-core::before{
+  content:"";
+  position:absolute;
+  inset:13px;
+  border:1px solid rgba(255,255,255,.4);
+  clip-path:inherit;
+}
+.audit-core::after{
+  content:"";
+  position:absolute;
+  inset:31px;
+  border:1px solid rgba(255,255,255,.22);
+  border-radius:50%;
+  box-shadow:inset 0 0 28px rgba(255,255,255,.12);
+}
+.audit-core__facet{position:absolute;width:54%;height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.38),transparent)}
+.audit-core__facet--one{transform:rotate(56deg)}.audit-core__facet--two{transform:rotate(-56deg)}
+.audit-core__label{position:relative;z-index:2;font:600 16px/1 var(--mono);letter-spacing:.13em}
+.audit-orbit{position:absolute;z-index:1;left:50%;top:48%;border:1px dashed rgba(41,83,121,.2);border-radius:50%;transform:translate(-50%,-50%)}
+.audit-orbit--outer{width:292px;height:292px;animation:audit-orbit-turn 20s linear infinite}.audit-orbit--inner{width:205px;height:205px;border-style:solid;border-color:rgba(41,83,121,.1)}
+.audit-scan-plane{position:absolute;z-index:5;left:5%;right:5%;top:var(--scan-y);height:2px;background:linear-gradient(90deg,transparent,#3e7eaa 18%,#fff 50%,#3e7eaa 82%,transparent);box-shadow:0 0 16px rgba(52,119,170,.46),0 0 44px rgba(52,119,170,.22);transition:top .65s var(--ease-out)}
+.audit-scan-plane::before{content:"";position:absolute;left:0;right:0;top:50%;height:72px;background:linear-gradient(180deg,transparent,rgba(63,133,177,.1),transparent);transform:translateY(-50%)}
+.audit-scan-plane>span{position:absolute;right:2%;top:12px;color:rgba(35,70,101,.65);font:600 7px/1 var(--mono);letter-spacing:.15em;white-space:nowrap}
+.audit-marker{position:absolute;z-index:6;left:63%;top:45%;display:flex;align-items:center;gap:8px;padding:7px 10px;border:1px solid rgba(192,91,68,.2);border-radius:999px;color:#9e503e;background:rgba(255,248,245,.84);box-shadow:0 10px 24px rgba(150,79,62,.12);transition:top .6s var(--ease-out),color .4s,border-color .4s,background .4s}
+.audit-marker>span{width:7px;height:7px;border-radius:50%;background:#c86754;box-shadow:0 0 0 5px rgba(200,103,84,.13)}.audit-marker>small{font:600 7px/1 var(--mono);letter-spacing:.12em}
+.audit-telemetry{position:absolute;z-index:6;left:20px;bottom:18px;display:flex;align-items:center;gap:9px;padding:8px 11px;border:1px solid rgba(42,78,108,.12);border-radius:999px;background:rgba(255,255,255,.7);box-shadow:0 8px 24px rgba(43,66,86,.06);backdrop-filter:blur(10px)}
+.audit-telemetry>span,.audit-telemetry>em{font:600 7px/1 var(--mono);letter-spacing:.11em}.audit-telemetry>span{color:#2e608c}.audit-telemetry>em{color:var(--text-muted);font-style:normal}
+.flow-preview__scan[data-state="mapping"] .audit-marker{opacity:.5;left:68%;top:56%}
+.flow-preview__scan[data-state="resolved"] .audit-core{background:linear-gradient(145deg,#244d7e,#4385ad 56%,#8ba9b3)}
+.flow-preview__scan[data-state="resolved"] .audit-marker{left:64%;top:54%;color:#2d6c83;border-color:rgba(45,108,131,.2);background:rgba(244,251,251,.88)}
+.flow-preview__scan[data-state="resolved"] .audit-marker>span{background:#4e91aa;box-shadow:0 0 0 5px rgba(78,145,170,.14)}
+@keyframes audit-orbit-turn{to{transform:translate(-50%,-50%) rotate(360deg)}}
+@media(max-width:720px){.flow-preview__scan{min-height:280px}.flow-preview__scan::before{width:205px;height:205px}.audit-core{width:126px;height:126px}.audit-orbit--outer{width:238px;height:238px}.audit-orbit--inner{width:170px;height:170px}.audit-marker{left:60%;padding:6px 8px}.audit-telemetry{left:12px;bottom:12px}.audit-telemetry>em{display:none}}
+
+/* Simplified capability art: strong symbols, soft material, no diagram notation. */
+.capability-tile .tile-visual--simple{
+  min-height:190px;
+  display:grid;
+  place-items:center;
+  overflow:hidden;
+  border:1px solid rgba(255,255,255,.82);
+  border-radius:26px;
+  background:linear-gradient(145deg,rgba(255,255,255,.72),rgba(226,232,233,.46));
+  box-shadow:inset 0 1px 0 #fff,0 20px 42px rgba(48,67,82,.05);
+}
+.capability-tile .tile-visual--simple::before{
+  content:"";
+  position:absolute;
+  z-index:1;
+  left:50%;
+  right:auto;
+  top:50%;
+  width:132px;
+  height:132px;
+  border:1px solid rgba(47,91,128,.12);
+  border-radius:38px;
+  background:linear-gradient(145deg,rgba(255,255,255,.92),rgba(73,133,171,.12));
+  box-shadow:0 22px 44px rgba(40,72,99,.1),inset 0 0 0 10px rgba(255,255,255,.36);
+  transform:translate(-50%,-50%) rotate(-8deg);
+}
+.capability-tile .tile-visual--simple::after{
+  content:"";
+  position:absolute;
+  z-index:2;
+  left:50%;
+  top:50%;
+  inset:auto;
+  width:72px;
+  height:72px;
+  opacity:1;
+  border:1px solid rgba(45,92,129,.12);
+  border-radius:24px;
+  background:rgba(255,255,255,.38);
+  -webkit-mask-image:none;
+  mask-image:none;
+  transform:translate(-50%,-50%) rotate(8deg);
+}
+.tile-visual--simple>.tile-visual__glyph{
+  position:relative;
+  z-index:4;
+  width:62px;
+  height:62px;
+  color:#2d6090;
+  stroke-width:1.25;
+  filter:drop-shadow(0 10px 16px rgba(37,83,125,.16));
+}
+.tile-visual--simple>.tile-visual__shape{
+  position:absolute;
+  z-index:5;
+  width:10px;
+  height:10px;
+  border-radius:50%;
+  background:#ae916e;
+  box-shadow:0 0 0 7px rgba(174,145,110,.12);
+}
+.capability-tile:nth-child(1) .tile-visual--simple::before{clip-path:polygon(25% 4%,75% 4%,98% 50%,75% 96%,25% 96%,2% 50%);border-radius:0;transform:translate(-50%,-50%)}
+.capability-tile:nth-child(1) .tile-visual__shape{right:18%;top:20%}
+.capability-tile:nth-child(2) .tile-visual--simple{background:linear-gradient(145deg,rgba(255,255,255,.76),rgba(222,232,235,.5))}
+.capability-tile:nth-child(2) .tile-visual--simple::before{border-radius:50%;transform:translate(-50%,-50%)}
+.capability-tile:nth-child(2) .tile-visual--simple::after{border-radius:50%;box-shadow:0 0 0 22px rgba(67,126,164,.045)}
+.capability-tile:nth-child(2) .tile-visual__shape{left:19%;bottom:21%;box-shadow:0 0 0 7px rgba(174,145,110,.1),150px -90px 0 -2px #5d93b4}
+.capability-tile:nth-child(3) .tile-visual--simple::before{border-radius:50% 50% 42% 42%;transform:translate(-50%,-50%) rotate(45deg)}
+.capability-tile:nth-child(3) .tile-visual--simple::after{border-radius:50%;transform:translate(-50%,-50%)}
+.capability-tile:nth-child(3) .tile-visual__shape{right:20%;bottom:23%;background:#c86754;box-shadow:0 0 0 7px rgba(200,103,84,.1)}
+.capability-tile:nth-child(4) .tile-visual--simple::before{width:118px;height:88px;border-radius:28px;box-shadow:-14px -14px 0 rgba(255,255,255,.5),14px 14px 0 rgba(67,126,164,.07),0 22px 44px rgba(40,72,99,.1);transform:translate(-50%,-50%)}
+.capability-tile:nth-child(4) .tile-visual--simple::after{width:86px;height:58px;border-radius:20px;transform:translate(-50%,-50%)}
+.capability-tile:nth-child(4) .tile-visual__shape{left:21%;top:22%}
+.tile-head small{color:var(--text-muted);font:600 8px/1 var(--mono);letter-spacing:.12em}
+@media(max-width:720px){.capability-tile .tile-visual--simple{min-height:175px}.capability-tile .tile-visual--simple::before{width:118px;height:118px}.tile-visual--simple>.tile-visual__glyph{width:54px;height:54px}}
+
+/* Research preview: one clear material study instead of a mathematical graph. */
+.lab-preview{min-height:620px}
+.lab-preview__object{
+  position:relative;
+  flex:1;
+  min-height:250px;
+  display:grid;
+  place-items:center;
+  overflow:hidden;
+  margin:26px 0 32px;
+  border:1px solid rgba(255,255,255,.88);
+  border-radius:30px;
+  background:linear-gradient(145deg,rgba(255,255,255,.82),rgba(222,230,232,.58));
+  box-shadow:inset 0 1px 0 #fff,0 24px 48px rgba(42,64,82,.06);
+}
+.lab-preview__object::before{
+  content:"";
+  position:absolute;
+  width:46%;
+  aspect-ratio:1.35;
+  border:1px solid rgba(43,91,130,.15);
+  border-radius:38px 16px 38px 16px;
+  background:linear-gradient(145deg,rgba(255,255,255,.94),rgba(66,126,166,.13));
+  box-shadow:18px 24px 48px rgba(40,76,103,.1),inset 0 0 0 14px rgba(255,255,255,.24);
+  transform:rotate(-7deg);
+  transition:border-radius .5s var(--ease-out),transform .5s var(--ease-out);
+}
+.lab-preview__object::after{
+  content:"RESEARCH / ACTIVE";
+  position:absolute;
+  left:24px;
+  bottom:20px;
+  color:var(--text-muted);
+  font:600 7px/1 var(--mono);
+  letter-spacing:.14em;
+}
+.lab-preview__material{
+  position:relative;
+  z-index:2;
+  width:112px;
+  height:112px;
+  display:grid;
+  place-items:center;
+  border:1px solid rgba(45,96,138,.16);
+  border-radius:28px;
+  color:#2d6090;
+  background:rgba(255,255,255,.68);
+  box-shadow:0 18px 34px rgba(37,78,111,.11);
+  transform:rotate(4deg);
+}
+.lab-preview__material svg{width:52px;height:52px;stroke-width:1.35;transform:rotate(-4deg)}
+.lab-preview__object>i{
+  position:absolute;
+  z-index:3;
+  right:18%;
+  top:20%;
+  width:30px;
+  height:8px;
+  border:0;
+  border-radius:2px;
+  background:#ae916e;
+  box-shadow:0 9px 22px rgba(174,145,110,.2);
+}
+.lab-preview__object--2::before{border-radius:50px 50px 18px 18px;transform:rotate(5deg)}
+.lab-preview__object--3::before{border-radius:18px 48px;transform:rotate(-3deg) skewX(-4deg)}
+.lab-preview__object--4::before{width:52%;aspect-ratio:1.7;border-radius:20px;transform:rotate(2deg)}
+.lab-preview__object--2>i{right:22%;top:69%;background:#5c8eaa}
+.lab-preview__object--3>i{right:72%;top:24%;background:#c06754}
+.lab-preview__object--4>i{right:16%;top:28%;width:46px;background:#456f98}
+
+/* Audit flow: an eight-step lane crossed by one moving vertical inspection beam. */
+.flow-preview__scan{
+  min-height:300px;
+  background:linear-gradient(145deg,#fbfcfb,#e9eef0);
+}
+.flow-preview__scan::before{
+  content:"";
+  position:absolute;
+  z-index:0;
+  inset:20% 7%;
+  width:auto;
+  height:auto;
+  border:1px solid rgba(44,87,122,.12);
+  border-radius:24px;
+  background:linear-gradient(180deg,rgba(255,255,255,.72),rgba(220,230,234,.34));
+  box-shadow:inset 0 1px 0 #fff,0 20px 40px rgba(41,69,89,.06);
+  transform:none;
+}
+.flow-preview__scan::after{
+  content:"";
+  position:absolute;
+  z-index:0;
+  inset:20% 7%;
+  opacity:1;
+  background:repeating-linear-gradient(90deg,transparent 0 calc(12.5% - 1px),rgba(43,83,115,.075) calc(12.5% - 1px) 12.5%);
+  -webkit-mask-image:linear-gradient(180deg,transparent,#000 18%,#000 82%,transparent);
+  mask-image:linear-gradient(180deg,transparent,#000 18%,#000 82%,transparent);
+}
+.audit-lane{
+  position:absolute;
+  z-index:2;
+  inset:20% 7%;
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
+  padding:20px 0 18px;
+}
+.audit-lane::before{
+  content:"";
+  position:absolute;
+  left:0;
+  right:0;
+  top:50%;
+  height:1px;
+  background:linear-gradient(90deg,rgba(45,90,126,.12),rgba(45,90,126,.36),rgba(45,90,126,.12));
+}
+.audit-lane__steps{display:grid;grid-template-columns:repeat(8,1fr);align-items:start}
+.audit-lane__steps>span{
+  color:rgba(49,72,91,.32);
+  font:600 7px/1 var(--mono);
+  letter-spacing:.1em;
+  text-align:center;
+  transition:color .45s var(--ease-out);
+}
+.audit-lane__steps>span.is-passed{color:#376e98}
+.audit-lane__state{
+  display:flex;
+  justify-content:space-between;
+  align-items:end;
+  padding:0 18px;
+}
+.audit-lane__state strong,.audit-lane__state span{font:600 8px/1 var(--mono);letter-spacing:.13em}
+.audit-lane__state strong{color:#2f638f}.audit-lane__state span{color:var(--text-muted)}
+.audit-scan-plane{
+  position:absolute;
+  z-index:5;
+  left:var(--scan-x);
+  right:auto;
+  top:8%;
+  bottom:8%;
+  width:2px;
+  height:auto;
+  background:linear-gradient(180deg,transparent,#3e7eaa 14%,#fff 50%,#3e7eaa 86%,transparent);
+  box-shadow:0 0 16px rgba(52,119,170,.46),0 0 44px rgba(52,119,170,.2);
+  transition:left .65s var(--ease-out);
+}
+.audit-scan-plane::before{
+  content:"";
+  position:absolute;
+  left:50%;
+  right:auto;
+  top:0;
+  bottom:0;
+  width:72px;
+  height:auto;
+  background:linear-gradient(90deg,transparent,rgba(63,133,177,.11),transparent);
+  transform:translateX(-50%);
+}
+.audit-scan-plane::after{
+  content:"";
+  position:absolute;
+  left:50%;
+  top:50%;
+  width:12px;
+  height:12px;
+  border:2px solid #fff;
+  border-radius:2px;
+  background:#3d7da7;
+  box-shadow:0 0 0 1px rgba(43,94,132,.25),0 8px 18px rgba(45,91,126,.2);
+  transform:translate(-50%,-50%) rotate(45deg);
+}
+.audit-scan-plane>span{
+  position:absolute;
+  left:12px;
+  right:auto;
+  top:8px;
+  color:#315f85;
+  font:600 7px/1 var(--mono);
+  letter-spacing:.15em;
+  white-space:nowrap;
+}
+.audit-telemetry{left:18px;bottom:16px;border-radius:8px}
+.flow-preview__scan[data-state="resolved"] .audit-scan-plane{background:linear-gradient(180deg,transparent,#43819b 14%,#fff 50%,#43819b 86%,transparent)}
+.flow-preview__scan[data-state="resolved"] .audit-scan-plane::after{background:#4e91aa}
+@media(max-width:720px){
+  .lab-preview{min-height:540px}
+  .lab-preview__object{min-height:210px;margin:22px 0 26px}
+  .lab-preview__object::before{width:62%}
+  .lab-preview__material{width:90px;height:90px}
+  .lab-preview__material svg{width:42px;height:42px}
+  .flow-preview__scan{min-height:250px}
+  .audit-lane__state{padding:0 10px}.audit-lane__state span{display:none}
+  .audit-scan-plane>span{left:8px;font-size:6px}
+  .audit-telemetry{left:10px;bottom:10px}
+}
+
+@media(prefers-reduced-motion:reduce){.audit-scan-plane{transition:none}.lab-preview__object::before{transition:none}}

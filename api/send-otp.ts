@@ -33,8 +33,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
     const payload = await response.json();
     return res.status(response.status).json(payload);
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('OTP Error:', error);
-    return res.status(500).json({ error: 'Failed to send verification code', detail: error.message });
+    return res.status(500).json({ error: 'Failed to send verification code', detail: error instanceof Error ? error.message : 'Unknown error' });
   }
 }
