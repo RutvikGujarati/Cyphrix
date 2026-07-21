@@ -50,7 +50,6 @@ export default function HomePage() {
             </motion.div>
             <MaskedHeading as="h1"><span>Fluid Security for</span><em>Digital Systems</em></MaskedHeading>
             <motion.p initial={{ opacity: 0, y: reduced ? 0 : 18 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: reduced ? 0 : 0.48, duration: 0.68 }}>
-              Smart-contract audits, security testing, and Web3 engineering—built to move at product speed.
             </motion.p>
             <motion.div className="hero-actions" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: reduced ? 0 : 0.62 }}>
               <button className="button button--primary" onMouseEnter={() => focusScene(1, 1)} onMouseLeave={() => focusScene(null)} onClick={() => navigate("/request-audit")} data-cursor="Audit">
