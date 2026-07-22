@@ -40,15 +40,10 @@ export default function FlowOfAuditPage() {
       <section className="flow-inspector"><div className="container flow-inspector__grid">
         <article className="flow-preview">
           <header><span>PHASE {current.id} / 8</span><b>ACTIVE</b></header>
-          <div className="flow-preview__scan" data-state={sceneState} style={scanStyle} aria-hidden="true">
-            <div className="audit-lane">
-              <div className="audit-lane__steps">
-                {steps.map((step, index) => <span className={index <= active ? "is-passed" : ""} key={step.id}>0{step.id}</span>)}
-              </div>
-              <div className="audit-lane__state"><strong>{traceLabel}</strong><span>{traceStatus}</span></div>
-            </div>
+          <div className="flow-preview__scan coding-icon-visual" data-state={sceneState} style={scanStyle} aria-hidden="true">
+            <Icon className="audit-step-glyph" />
             <div className="audit-scan-plane"><span>PHASE 0{current.id}</span></div>
-            <div className="audit-telemetry"><span>{sceneState === "resolved" ? "VERIFIED" : "REVIEWING"}</span><em>{traceStatus}</em></div>
+            <div className="audit-telemetry"><span>{traceLabel}</span><em>{traceStatus}</em></div>
           </div>
           <Icon size={28}/><h2>{current.title}</h2><p>{current.body}</p>
           <ul>{current.details.map((detail)=><li key={detail}>{detail}</li>)}</ul>

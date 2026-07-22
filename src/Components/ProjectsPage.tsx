@@ -1,5 +1,5 @@
 import { AnimatePresence, motion } from "framer-motion";
-import { ArrowUpRight, ExternalLink, X } from "lucide-react";
+import { ArrowUpRight, Braces, Code2, ExternalLink, ShieldCheck, Terminal, X } from "lucide-react";
 import { useEffect, useState } from "react";
 import projects from "../Data/projects.json";
 import AuditList from "./AuditList";
@@ -8,6 +8,7 @@ import SecurityCTA from "./SecurityCTA";
 import Testimonials from "./Testimonials";
 
 type Project = (typeof projects)[number];
+const projectIcons = [Code2, Braces, Terminal, ShieldCheck] as const;
 
 export default function ProjectsPage() {
   const [active, setActive] = useState(0);
@@ -21,6 +22,7 @@ export default function ProjectsPage() {
   }, [selected]);
 
   const project = projects[active];
+  const ProjectIcon = projectIcons[active % projectIcons.length];
   return (
     <div className="projects-page route-experience">
       <header className="page-hero route-hero">
@@ -35,7 +37,7 @@ export default function ProjectsPage() {
         <div className="container work-showcase__grid">
           <article className="work-preview">
             <header><span>CASE 0{active + 1}</span><b>ACTIVE PREVIEW</b></header>
-            <div className="work-preview__visual" aria-hidden="true"><i /><i /><i /><i /><b /></div>
+            <div className="work-preview__visual coding-icon-visual" aria-hidden="true"><ProjectIcon /></div>
             <h2>{project.title}</h2>
             <p>{project.tagline}</p>
             <footer>{project.techStack.slice(0, 4).map((tech) => <span key={tech}>{tech}</span>)}</footer>

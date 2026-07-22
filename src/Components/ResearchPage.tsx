@@ -1,4 +1,4 @@
-import { ArrowUpRight, Binary, Cpu, FlaskConical, Globe, Lock, Shield, Zap } from "lucide-react";
+import { ArrowUpRight, Binary, Braces, Code2, Cpu, Globe, Lock, Shield, Terminal, Zap } from "lucide-react";
 import { useState } from "react";
 import research from "../Data/research.json";
 import { MaskedHeading, TechnicalLabel } from "./Experience";
@@ -17,7 +17,7 @@ const phases = [
   ["03", "Verify", "Auditor and governance interfaces"],
 ] as const;
 
-const researchIcons = [FlaskConical, Binary, Shield, Cpu] as const;
+const researchIcons = [Code2, Braces, Shield, Terminal] as const;
 
 export default function ResearchPage() {
   const [active, setActive] = useState(0);
@@ -33,10 +33,7 @@ export default function ResearchPage() {
         </div>
         <article className="lab-preview">
           <header><span>{research[active].category}</span><b>{research[active].status}</b></header>
-          <div className={`lab-preview__object lab-preview__object--${(active % researchIcons.length) + 1}`} aria-hidden="true">
-            <span className="lab-preview__material"><ResearchIcon /></span>
-            <i />
-          </div>
+          <div className="lab-preview__object coding-icon-visual" aria-hidden="true"><ResearchIcon /></div>
           <h2>{research[active].title}</h2><p>{research[active].description}</p>
           <footer>{research[active].tags.map((tag) => <span key={tag}>{tag}</span>)}</footer>
         </article>

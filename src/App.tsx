@@ -9,6 +9,7 @@ import { SecurityExperienceProvider } from './experience/SecurityExperience';
 import './living-system.css';
 import './route-experience.css';
 import './visual-polish.css';
+import './immersive-redesign.css';
 
 const ContactPage = lazy(() => import('./Components/ContactPage'));
 const ProjectsPage = lazy(() => import('./Components/ProjectsPage'));
