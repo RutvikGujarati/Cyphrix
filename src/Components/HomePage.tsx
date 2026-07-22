@@ -115,11 +115,19 @@ export default function HomePage() {
             className="hero-context"
             initial={{ opacity: 0, y: reduced ? 0 : 18 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: reduced ? 0 : .34, duration: .7 }}
+            transition={{ delay: reduced ? 0 : 0.34, duration: 0.7 }}
           >
             <span>Independent security engineering</span>
-            <p>We inspect the paths attackers look for—and the assumptions automated tools miss.</p>
-            <div><i /><i /><b>CONTINUOUS REVIEW</b><small>01</small></div>
+            <p>
+              We inspect the paths attackers look for—and the assumptions
+              automated tools miss.
+            </p>
+            <div>
+              <i />
+              <i />
+              <b>CONTINUOUS REVIEW</b>
+              <small>01</small>
+            </div>
           </motion.aside>
 
           <div className="hero-copy">
@@ -139,7 +147,10 @@ export default function HomePage() {
               initial={{ opacity: 0, y: reduced ? 0 : 18 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: reduced ? 0 : 0.48, duration: 0.68 }}
-            >Smart-contract audits, adversarial testing, and Web3 engineering for teams shipping critical systems.</motion.p>
+            >
+              Smart-contract audits, adversarial testing, and Web3 engineering
+              for teams shipping critical systems.
+            </motion.p>
             <motion.div
               className="hero-actions"
               initial={{ opacity: 0 }}
@@ -169,27 +180,38 @@ export default function HomePage() {
             className="hero-proof"
             initial={{ opacity: 0, y: reduced ? 0 : 18 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: reduced ? 0 : .68, duration: .7 }}
+            transition={{ delay: reduced ? 0 : 0.68, duration: 0.7 }}
           >
-            <p>Manual analysis backed by focused tooling, clear remediation, and verified delivery.</p>
+            <p>
+              Manual analysis backed by focused tooling, clear remediation, and
+              verified delivery.
+            </p>
           </motion.div>
           <motion.button
             className="hero-process"
             onClick={() => navigate("/flowofaudit")}
             initial={{ opacity: 0, y: reduced ? 0 : 18 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: reduced ? 0 : .82, duration: .7 }}
+            transition={{ delay: reduced ? 0 : 0.82, duration: 0.7 }}
           >
-            <span>Active assurance</span><strong>Explore our audit flow</strong><ArrowUpRight />
+            <span>Active assurance</span>
+            <strong>Explore our audit flow</strong>
+            <ArrowUpRight />
           </motion.button>
           <motion.div
             className="hero-trust"
             initial={{ opacity: 0, y: reduced ? 0 : 18 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: reduced ? 0 : .96, duration: .7 }}
+            transition={{ delay: reduced ? 0 : 0.96, duration: 0.7 }}
           >
-            <div><strong>10+</strong><span>Protocols audited</span></div>
-            <div><strong>0</strong><span>Post-audit exploits</span></div>
+            <div>
+              <strong>10+</strong>
+              <span>Protocols audited</span>
+            </div>
+            <div>
+              <strong>0</strong>
+              <span>Post-audit exploits</span>
+            </div>
           </motion.div>
           <div className="scroll-cue" aria-hidden="true">
             <span>Explore Cyphrix</span>
@@ -316,7 +338,12 @@ export default function HomePage() {
                 <span>MODULE 0{activeProject + 1}</span>
                 <b>VERIFIED</b>
               </div>
-              <div className="project-preview__diagram coding-icon-visual" aria-hidden="true"><ActiveProjectIcon /></div>
+              <div
+                className="project-preview__diagram coding-icon-visual"
+                aria-hidden="true"
+              >
+                <ActiveProjectIcon />
+              </div>
               <h3>{projects[activeProject].title}</h3>
               <p>{projects[activeProject].tagline}</p>
               <footer>
@@ -471,7 +498,10 @@ export default function HomePage() {
               Explore the partnership <ArrowUpRight size={15} />
             </button>
           </div>
-          <div className="alliance-map coding-icon-visual" aria-hidden="true"><Network /><span>Partner network</span></div>
+          <div className="alliance-map coding-icon-visual" aria-hidden="true">
+            <Network />
+            <span>Partner network</span>
+          </div>
         </div>
       </ExperienceSection>
 
