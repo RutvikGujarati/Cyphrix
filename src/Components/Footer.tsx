@@ -1,5 +1,12 @@
 import React from 'react';
-import { Github, Twitter, Linkedin, Instagram } from 'lucide-react';
+import { Github, Instagram, Linkedin, Mail } from 'lucide-react';
+
+const footerLinks = [
+    { label: 'Email Cyphrix', href: 'mailto:cyphrixsupport@cyphrixtech.com', Icon: Mail },
+    { label: 'Cyphrix website source on GitHub', href: 'https://github.com/RutvikGujarati/Cyphrix', Icon: Github },
+    { label: 'Cyphrix on LinkedIn', href: 'https://www.linkedin.com/company/cyphrixtechnologies/', Icon: Linkedin },
+    { label: 'Cyphrix on Instagram', href: 'https://www.instagram.com/cyphrixtechnologies/', Icon: Instagram },
+];
 
 const Footer: React.FC = () => {
     return (
@@ -11,7 +18,7 @@ const Footer: React.FC = () => {
                 flexWrap: 'wrap', 
                 gap: '20px' 
             }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '32px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: '16px 32px' }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                         <img src="/Cyphrix.svg" alt="Cyphrix" style={{ height: '32px', width: 'auto' }} />
                         <span style={{ fontWeight: '900', letterSpacing: '0.1em', fontSize: '18px' }}>CYPHRIX</span>
@@ -21,11 +28,19 @@ const Footer: React.FC = () => {
                     </span>
                 </div>
                 
-                <div className="footer-socials" style={{ display: 'flex', alignItems: 'center', gap: '32px' }}>
-                    <a href="#" style={{ color: 'var(--accent-blue)', transition: '0.3s' }}><Twitter size={20} /></a>
-                    <a href="#" style={{ color: 'var(--accent-blue)', transition: '0.3s' }}><Github size={20} /></a>
-                    <a href="https://www.linkedin.com/company/cyphrixtechnologies/about/" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--accent-blue)', transition: '0.3s' }}><Linkedin size={20} /></a>
-                    <a href="https://www.instagram.com/cyphrixtechnologies?igsh=MXZoOTA1eWZlOXpoeg==" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--accent-blue)', transition: '0.3s' }}><Instagram size={20} /></a>
+                <div className="footer-socials" style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                    {footerLinks.map(({ label, href, Icon }) => (
+                        <a
+                            key={href}
+                            href={href}
+                            target={href.startsWith('https:') ? '_blank' : undefined}
+                            rel={href.startsWith('https:') ? 'noopener noreferrer' : undefined}
+                            aria-label={label}
+                            style={{ display: 'grid', placeItems: 'center', width: '44px', height: '44px', color: 'var(--accent-blue)' }}
+                        >
+                            <Icon size={20} aria-hidden="true" />
+                        </a>
+                    ))}
                 </div>
             </div>
         </footer>

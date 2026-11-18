@@ -19,10 +19,15 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  // Scroll to top on route change
+  const { pathname, hash } = location;
   useEffect(() => {
-    window.scrollTo(0, 0);
-  }, [location.pathname]);
+    const section = hash && document.getElementById(hash.slice(1));
+    if (section) {
+      section.scrollIntoView();
+    } else {
+      window.scrollTo(0, 0);
+    }
+  }, [pathname, hash]);
 
   const handleNavigate = (page: 'home' | 'projects' | 'contact' | 'research' | 'audit' | 'services' | 'flowofaudit' | 'partnerwithus') => {
     if (page === 'home') navigate('/');

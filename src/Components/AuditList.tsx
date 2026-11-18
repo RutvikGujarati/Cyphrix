@@ -3,7 +3,9 @@ import auditsData from '../Data/audits.json';
 import { ExternalLink, FileText } from 'lucide-react';
 import { motion } from 'framer-motion';
 
-const AuditItem = memo(({ audit }: { audit: any }) => (
+type Audit = (typeof auditsData)[number];
+
+const AuditItem = memo(({ audit }: { audit: Audit }) => (
     <motion.div 
         
         whileInView={{ opacity: 1, y: 0 }}
@@ -28,10 +30,10 @@ const AuditItem = memo(({ audit }: { audit: any }) => (
         </div>
 
         <div style={{ display: 'flex', gap: '12px', flex: 1, justifyContent: 'center' }}>
-            {audit.issues?.critical > 0 && (
+            {audit.issues && audit.issues.critical > 0 && (
                 <span className="tag" style={{ color: '#ff4d4d', borderColor: 'rgba(255, 77, 77, 0.2)', background: 'rgba(255, 77, 77, 0.05)' }}>{audit.issues.critical} CRITICAL</span>
             )}
-            {audit.issues?.high > 0 && (
+            {audit.issues && audit.issues.high > 0 && (
                 <span className="tag" style={{ color: '#ffb800', borderColor: 'rgba(255, 184, 0, 0.2)', background: 'rgba(255, 184, 0, 0.05)' }}>{audit.issues.high} HIGH</span>
             )}
             {audit.issues?.critical === 0 && audit.issues?.high === 0 && (
@@ -45,6 +47,7 @@ const AuditItem = memo(({ audit }: { audit: any }) => (
                 target="_blank" 
                 rel="noopener noreferrer" 
                 className="tag"
+                aria-label={`Open ${audit.protocol}`}
                 style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer', transition: '0.3s' }}
             >
                 REPORT <ExternalLink size={14} />

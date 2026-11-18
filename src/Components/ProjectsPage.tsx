@@ -272,8 +272,10 @@ const ProjectsPage: React.FC = () => {
 
       {/* Audit & Testimonials */}
       <div
+        id="security-reports"
         style={{
           padding: "100px 0",
+          scrollMarginTop: "80px",
           background: "rgba(0, 255, 204, 0.02)",
           borderTop: "1px solid var(--border)",
         }}

@@ -241,13 +241,22 @@ const ContactPage = () => {
                                 upwork: 'https://www.upwork.com/freelancers/~01584c56637012678c',
                                 specialty: 'Formal verification, Invariant testing, DeFi logic vulnerability research.',
                                 accent: 'var(--accent-blue)'
+                            },
+                            {
+                                name: 'Shristi Vyas',
+                                seed: 'Shristi Vyas',
+                                linkedin: 'https://www.linkedin.com/in/shristi-vyas-b8535b196/',
+                                accent: 'var(--accent-mint)'
                             }
-                        ].map((member, idx) => (
-                            <div className="col-md-6 col-lg-5" key={idx}>
+                        ].map((member) => (
+                            <div className="col-md-6 col-lg-4 d-flex" key={member.name}>
                                 <motion.div 
                                     className="service-card" 
                                     style={{ 
                                         padding: '0', 
+                                        width: '100%',
+                                        display: 'flex',
+                                        flexDirection: 'column',
                                         overflow: 'hidden', 
                                         background: 'rgba(13, 17, 23, 0.8)',
                                         border: '1px solid rgba(255, 255, 255, 0.05)',
@@ -266,38 +275,26 @@ const ContactPage = () => {
                                                 background: 'var(--bg)', border: `2px solid ${member.accent}33`,
                                                 padding: '6px', boxShadow: `0 10px 30px -10px ${member.accent}66`
                                             }}>
-                                                <img src={`https://api.dicebear.com/9.x/identicon/svg?seed=${member.seed}`} alt={member.name} style={{ width: '100%', height: '100%' }} />
+                                                <img src={`https://api.dicebear.com/9.x/identicon/svg?seed=${encodeURIComponent(member.seed)}`} alt="" style={{ width: '100%', height: '100%' }} />
                                             </div>
                                         </div>
                                       
                                     </div>
 
                                     {/* CARD CONTENT */}
-                                    <div style={{ padding: '60px 40px 40px' }}>
+                                    <div style={{ padding: '60px clamp(20px, 3vw, 40px) 40px', flex: 1, display: 'flex', flexDirection: 'column' }}>
                                         <h3 style={{ fontSize: '28px', fontWeight: '900', marginBottom: '8px', letterSpacing: '-0.01em' }}>{member.name}</h3>
-                                        <div style={{ fontSize: '12px', color: member.accent, fontWeight: '800', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '24px' }}>{member.role}</div>
-                                        
-                                        <p style={{ fontSize: '14px', color: 'var(--text-muted)', lineHeight: '1.7', marginBottom: '32px', minHeight: '50px' }}>
-                                            {member.specialty}
-                                        </p>
-
-
-                                        {/* DUAL CTAS */}
-                                        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
-                                            <button 
-                                                className="btn-ghost" 
-                                                style={{ width: '100%', fontSize: '10px', gap: '8px', padding: '12px 0' }}
-                                                onClick={() => window.open(member.linkedin, '_blank')}
-                                            >
-                                                <Linkedin size={14} /> LINKEDIN
-                                            </button>
-                                            <button 
-                                                className="btn-ghost" 
-                                                style={{ width: '100%', fontSize: '10px', gap: '8px', padding: '12px 0' }}
-                                                onClick={() => window.open(member.upwork, '_blank')}
-                                            >
-                                                <ExternalLink size={14} /> UPWORK
-                                            </button>
+                                        {member.role && <div style={{ fontSize: '12px', color: member.accent, fontWeight: '800', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '24px' }}>{member.role}</div>}
+                                        {member.specialty && <p style={{ fontSize: '14px', color: 'var(--text-muted)', lineHeight: '1.7' }}>{member.specialty}</p>}
+                                        <div className="profile-links">
+                                            <a className="btn-ghost" href={member.linkedin} target="_blank" rel="noopener noreferrer" aria-label={`${member.name} on LinkedIn`}>
+                                                <Linkedin size={14} aria-hidden="true" /> LinkedIn
+                                            </a>
+                                            {member.upwork && (
+                                                <a className="btn-ghost" href={member.upwork} target="_blank" rel="noopener noreferrer" aria-label={`${member.name} on Upwork`}>
+                                                    <ExternalLink size={14} aria-hidden="true" /> Upwork
+                                                </a>
+                                            )}
                                         </div>
                                     </div>
                                 </motion.div>
