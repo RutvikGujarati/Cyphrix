@@ -245,6 +245,7 @@ const ContactPage = () => {
                             {
                                 name: 'Shristi Vyas',
                                 seed: 'Shristi Vyas',
+                                role: 'Penetration Tester',
                                 linkedin: 'https://www.linkedin.com/in/shristi-vyas-b8535b196/',
                                 accent: 'var(--accent-mint)'
                             }
