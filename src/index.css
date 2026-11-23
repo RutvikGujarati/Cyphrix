@@ -37,6 +37,25 @@ body {
   color: var(--text-muted);
 }
 
+.nav-bar a,
+.bottom-nav a,
+.hero a,
+.cta-section a {
+  text-decoration: none;
+}
+
+.nav-bar .logo {
+  color: var(--text);
+}
+
+a.btn-primary,
+a.btn-ghost,
+a.nav-cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .homepage .hero > .container {
   animation: hero-enter 400ms ease-out both;
 }

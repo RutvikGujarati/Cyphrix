@@ -1,11 +1,11 @@
-import { StrictMode } from 'react'
-import { createRoot } from 'react-dom/client'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import './index.css'
-import App from './App.tsx'
+import { mountParticles } from './particles'
 
-createRoot(document.getElementById('root')!).render(
-  <StrictMode>
-    <App />
-  </StrictMode>,
-)
+const root = document.getElementById('root')!;
+if (window.location.pathname === '/' && root.dataset.prerendered === 'true') {
+  const canvas = document.querySelector<HTMLCanvasElement>('[data-particles]');
+  if (canvas) mountParticles(canvas);
+} else {
+  void import('./client');
+}

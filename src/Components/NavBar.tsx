@@ -24,7 +24,9 @@ const Header: React.FC<HeaderProps> = ({ onNavigate }) => {
         return location.pathname.includes(page);
     };
 
-    const handleNav = (page: 'home' | 'projects' | 'contact' | 'research' | 'audit' | 'services' | 'flowofaudit' | 'partnerwithus') => {
+    const handleNav = (event: React.MouseEvent<HTMLAnchorElement>, page: 'home' | 'projects' | 'contact' | 'research' | 'audit' | 'services' | 'flowofaudit' | 'partnerwithus') => {
+        if (event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+        event.preventDefault();
         onNavigate(page);
     };
 
@@ -33,52 +35,52 @@ const Header: React.FC<HeaderProps> = ({ onNavigate }) => {
             {/* Desktop / Top Nav */}
             <nav className="nav-bar">
                 <div className="container nav-inner">
-                    <div className="logo" onClick={() => handleNav('home')} style={{ cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '16px' }}>
+                    <a className="logo" href="/" onClick={(event) => handleNav(event, 'home')} style={{ cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '16px' }}>
                         <img src="/Cyphrix.svg" alt="Cyphrix" width="40" height="40" />
                         <span style={{ fontWeight: '900', fontSize: '20px', letterSpacing: '0.05em' }}>CYPHRIX</span>
-                    </div>
+                    </a>
                     
                     <div className="nav-links">
-                        <button className={isActive('services') ? 'active' : ''} onClick={() => handleNav('services')}>Services</button>
-                        <button className={isActive('projects') ? 'active' : ''} onClick={() => handleNav('projects')}>Projects</button>
-                        <button className={isActive('research') ? 'active' : ''} onClick={() => handleNav('research')}>R&D</button>
-                        <button className={isActive('flowofaudit') ? 'active' : ''} onClick={() => handleNav('flowofaudit')}>Flow of Audit</button>
-                        <button className={isActive('partnerwithus') ? 'active' : ''} onClick={() => handleNav('partnerwithus')}>Partner Alliance</button>
-                        <button className={isActive('contact') ? 'active' : ''} onClick={() => handleNav('contact')}>Contact</button>
+                        <a className={isActive('services') ? 'active' : ''} href="/services" onClick={(event) => handleNav(event, 'services')}>Services</a>
+                        <a className={isActive('projects') ? 'active' : ''} href="/projects" onClick={(event) => handleNav(event, 'projects')}>Projects</a>
+                        <a className={isActive('research') ? 'active' : ''} href="/research" onClick={(event) => handleNav(event, 'research')}>R&D</a>
+                        <a className={isActive('flowofaudit') ? 'active' : ''} href="/flowofaudit" onClick={(event) => handleNav(event, 'flowofaudit')}>Flow of Audit</a>
+                        <a className={isActive('partnerwithus') ? 'active' : ''} href="/partnerwithus" onClick={(event) => handleNav(event, 'partnerwithus')}>Partner Alliance</a>
+                        <a className={isActive('contact') ? 'active' : ''} href="/inquiry" onClick={(event) => handleNav(event, 'contact')}>Contact</a>
                     </div>
 
                     <div className="nav-actions">
-                        <button className="nav-cta" onClick={() => handleNav('audit')}>Request Audit →</button>
+                        <a className="nav-cta" href="/request-audit" onClick={(event) => handleNav(event, 'audit')}>Request Audit →</a>
                     </div>
                 </div>
             </nav>
 
             {/* Mobile Bottom Nav - Optimized for all 7 primary sections */}
             <div className="bottom-nav">
-                <button className={isActive('home') ? 'active' : ''} onClick={() => handleNav('home')}>
+                <a className={isActive('home') ? 'active' : ''} href="/" onClick={(event) => handleNav(event, 'home')}>
                     <Home size={18} />
                     <span>Home</span>
-                </button>
-                <button className={isActive('services') ? 'active' : ''} onClick={() => handleNav('services')}>
+                </a>
+                <a className={isActive('services') ? 'active' : ''} href="/services" onClick={(event) => handleNav(event, 'services')}>
                     <LayoutGrid size={18} />
                     <span>Services</span>
-                </button>
-                <button className={isActive('projects') ? 'active' : ''} onClick={() => handleNav('projects')}>
+                </a>
+                <a className={isActive('projects') ? 'active' : ''} href="/projects" onClick={(event) => handleNav(event, 'projects')}>
                     <Briefcase size={18} />
                     <span>Work</span>
-                </button>
-                <button className={isActive('research') ? 'active' : ''} onClick={() => handleNav('research')}>
+                </a>
+                <a className={isActive('research') ? 'active' : ''} href="/research" onClick={(event) => handleNav(event, 'research')}>
                     <FlaskConical size={18} />
                     <span>R&D</span>
-                </button>
-                <button className={isActive('flowofaudit') ? 'active' : ''} onClick={() => handleNav('flowofaudit')}>
+                </a>
+                <a className={isActive('flowofaudit') ? 'active' : ''} href="/flowofaudit" onClick={(event) => handleNav(event, 'flowofaudit')}>
                     <Settings size={18} />
                     <span>Audit</span>
-                </button>
-                <button className={isActive('contact') ? 'active' : ''} onClick={() => handleNav('contact')}>
+                </a>
+                <a className={isActive('contact') ? 'active' : ''} href="/inquiry" onClick={(event) => handleNav(event, 'contact')}>
                     <Mail size={18} />
                     <span>Mail</span>
-                </button>
+                </a>
             </div>
         </>
     );

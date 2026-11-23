@@ -51,18 +51,18 @@ const HomePage: React.FC = () => {
               marginTop: "48px",
             }}
           >
-            <button
+            <a
               className="btn-primary"
-              onClick={() => (window.location.href = "/request-audit")}
+              href="/request-audit"
             >
               Request Security Audit
-            </button>
-            <button
+            </a>
+            <a
               className="btn-ghost"
-              onClick={() => (window.location.href = "/projects")}
+              href="/projects"
             >
               View Case Studies
-            </button>
+            </a>
           </div>
 
           <div
@@ -364,13 +364,13 @@ const HomePage: React.FC = () => {
             security and high-performance infrastructure.
           </p>
           <div style={{ display: "flex", justifyContent: "center" }}>
-            <button
+            <a
               className="nav-cta"
               style={{ padding: "16px 48px", fontSize: "14px" }}
-              onClick={() => (window.location.href = "/request-audit")}
+              href="/request-audit"
             >
               Request Free Scope Review
-            </button>
+            </a>
           </div>
         </div>
       </section>

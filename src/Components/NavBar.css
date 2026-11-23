@@ -34,7 +34,7 @@ nav {
   gap: 32px;
 }
 
-.nav-links button {
+.nav-links a {
   background: none;
   border: none;
   color: var(--text-muted);
@@ -46,12 +46,12 @@ nav {
   transition: 0.3s;
 }
 
-.nav-links button:hover,
-.nav-links button.active {
+.nav-links a:hover,
+.nav-links a.active {
   color: var(--accent-mint);
 }
 
-.nav-links button.active::after {
+.nav-links a.active::after {
   content: '';
   position: absolute;
   bottom: 0;
@@ -105,7 +105,7 @@ nav {
   padding-bottom: env(safe-area-inset-bottom);
 }
 
-.bottom-nav button {
+.bottom-nav a {
   background: none;
   border: none;
   color: var(--text-muted);
@@ -123,15 +123,15 @@ nav {
   min-width: 0;
 }
 
-.bottom-nav button.active {
+.bottom-nav a.active {
   color: var(--accent-mint);
 }
 
-.bottom-nav button svg {
+.bottom-nav a svg {
   transition: transform 0.3s;
 }
 
-.bottom-nav button.active svg {
+.bottom-nav a.active svg {
   transform: translateY(-2px);
   filter: drop-shadow(0 0 5px var(--accent-mint));
 }

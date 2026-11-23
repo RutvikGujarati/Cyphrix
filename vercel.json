@@ -21,8 +21,12 @@
             "destination": "/api/$1"
         },
         {
-            "source": "/(.*)",
+            "source": "/",
             "destination": "/index.html"
+        },
+        {
+            "source": "/(.*)",
+            "destination": "/app.html"
         }
     ]
 }
