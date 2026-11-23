@@ -13,6 +13,7 @@ export function mountParticles(canvas: HTMLCanvasElement) {
     let elapsed = 0;
     let width = 0;
     let height = 0;
+    let scrollY = window.scrollY;
 
     function resize() {
         width = window.innerWidth;
@@ -36,7 +37,7 @@ export function mountParticles(canvas: HTMLCanvasElement) {
         for (const particle of particles) {
             const depth = 10 - (particle.z * cosine - particle.x * sine);
             const x = width / 2 + (particle.x * cosine + particle.z * sine) * scale / depth;
-            const y = height / 2 - (particle.y - window.scrollY * 0.0004) * scale / depth;
+            const y = height / 2 - (particle.y - scrollY * 0.0004) * scale / depth;
             context!.beginPath();
             context!.arc(x, y, Math.max(0.4, 0.015 * scale / depth), 0, Math.PI * 2);
             context!.fill();
@@ -55,14 +56,20 @@ export function mountParticles(canvas: HTMLCanvasElement) {
         restart();
     }
 
+    function onScroll() {
+        scrollY = window.scrollY;
+    }
+
     resize();
     restart();
     window.addEventListener('resize', onResize);
+    window.addEventListener('scroll', onScroll, { passive: true });
     document.addEventListener('visibilitychange', restart);
     motion.addEventListener('change', restart);
     return () => {
         cancelAnimationFrame(frame);
         window.removeEventListener('resize', onResize);
+        window.removeEventListener('scroll', onScroll);
         document.removeEventListener('visibilitychange', restart);
         motion.removeEventListener('change', restart);
     };

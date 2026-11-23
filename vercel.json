@@ -10,7 +10,7 @@
                 { "key": "X-Content-Type-Options", "value": "nosniff" },
                 { "key": "Referrer-Policy", "value": "strict-origin-when-cross-origin" },
                 { "key": "X-Frame-Options", "value": "DENY" },
-                { "key": "Content-Security-Policy", "value": "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:; connect-src 'self' https://cyphrixtech-server.vercel.app; object-src 'none'; base-uri 'self'; frame-ancestors 'none'; form-action 'self'; upgrade-insecure-requests" },
+                { "key": "Content-Security-Policy", "value": "default-src 'self'; script-src 'self' 'sha256-FLyIZyd4Ex+n2KbA1UWThFp+7qbWH7k3yqQXdvKH0jU='; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:; connect-src 'self' https://cyphrixtech-server.vercel.app; object-src 'none'; base-uri 'self'; frame-ancestors 'none'; form-action 'self'; upgrade-insecure-requests" },
                 { "key": "Cross-Origin-Opener-Policy", "value": "same-origin-allow-popups" }
             ]
         }
