@@ -3,6 +3,7 @@ import Header from './Components/NavBar';
 import HomePage from './Components/HomePage';
 import { lazy, Suspense, useEffect, useState } from 'react';
 import Footer from './Components/Footer';
+import PageMetadata from './Components/PageMetadata';
 const ContactPage = lazy(() => import('./Components/ContactPage'));
 const ProjectsPage = lazy(() => import('./Components/ProjectsPage'));
 const ResearchPage = lazy(() => import('./Components/ResearchPage'));
@@ -72,6 +73,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
 function App() {
   return (
     <Router>
+      <PageMetadata />
       <Layout>
         <Suspense fallback={<div className="route-loading" role="status">Loading page…</div>}>
         <Routes>

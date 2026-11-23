@@ -1,6 +1,6 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 import nodemailer from 'nodemailer';
-import { contactEmailHtml, auditEmailHtml } from './email-template';
+import { contactEmailHtml, auditEmailHtml } from './email-template.js';
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 

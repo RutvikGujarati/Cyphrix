@@ -28,8 +28,8 @@ const HomePage: React.FC = () => {
             Enterprise Smart Contract Security
           </span>
           <h1>
-            Secure the Future of{" "}
-            <span className="text-gradient">Decentralized Web</span>
+            Smart Contract Audits &amp;{" "}
+            <span className="text-gradient">Blockchain Security</span>
           </h1>
           <p
             style={{
@@ -42,6 +42,12 @@ const HomePage: React.FC = () => {
             Cyphrix builds industrial-grade blockchain infrastructure and
             rigorous security architectures — so your protocol ships without
             compromise.
+          </p>
+          <p className="home-scope">
+            Review Solidity, Rust and Move contracts, test web applications and APIs,
+            and assess the infrastructure around your protocol. Start with your
+            codebase, deployment plans and security requirements so the review can
+            focus on the systems you intend to ship.
           </p>
           <div
             style={{
@@ -182,7 +188,7 @@ const HomePage: React.FC = () => {
           >
             <span className="section-label">Institutional Defense</span>
             <h2>
-              Advanced <span className="text-gradient">Protocol Integrity</span>
+              Blockchain <span className="text-gradient">Security Engineering</span>
             </h2>
           </div>
 
@@ -291,8 +297,14 @@ const HomePage: React.FC = () => {
           >
             <span className="section-label">Capabilities</span>
             <h2>
-              Engineered <span className="text-gradient">Resilience</span>
+              Smart Contract &amp; <span className="text-gradient">Web3 Services</span>
             </h2>
+            <p className="home-scope">
+              Explore our <a href="/services">development, security and testing services</a>,
+              follow the <a href="/flowofaudit">audit methodology</a>, or read the{' '}
+              <a href="/projects#security-reports">published security reports</a> to see
+              how findings and recommendations are documented.
+            </p>
           </div>
 
           <div

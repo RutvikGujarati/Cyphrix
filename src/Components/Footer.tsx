@@ -20,7 +20,7 @@ const Footer: React.FC = () => {
             }}>
                 <div style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: '16px 32px' }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                        <img src="/Cyphrix.svg" alt="" width="32" height="32" />
+                        <span className="brand-symbol brand-symbol--small" aria-hidden="true" />
                         <span style={{ fontWeight: '900', letterSpacing: '0.1em', fontSize: '18px' }}>CYPHRIX</span>
                     </div>
                     <span style={{ fontSize: '12px', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>

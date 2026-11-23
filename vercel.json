@@ -24,6 +24,13 @@
             "source": "/",
             "destination": "/index.html"
         },
+        { "source": "/services", "destination": "/services/index.html" },
+        { "source": "/projects", "destination": "/projects/index.html" },
+        { "source": "/research", "destination": "/research/index.html" },
+        { "source": "/inquiry", "destination": "/inquiry/index.html" },
+        { "source": "/request-audit", "destination": "/request-audit/index.html" },
+        { "source": "/flowofaudit", "destination": "/flowofaudit/index.html" },
+        { "source": "/partnerwithus", "destination": "/partnerwithus/index.html" },
         {
             "source": "/(.*)",
             "destination": "/app.html"
