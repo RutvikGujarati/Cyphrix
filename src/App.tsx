@@ -1,25 +1,34 @@
 import { BrowserRouter as Router, Routes, Route, useNavigate, useLocation } from 'react-router-dom';
-import 'bootstrap/dist/css/bootstrap.min.css';
 import Header from './Components/NavBar';
 import HomePage from './Components/HomePage';
-import ContactPage from './Components/ContactPage';
-import ProjectsPage from './Components/ProjectsPage';
-import { useEffect } from 'react';
+import { lazy, Suspense, useEffect, useState } from 'react';
 import Footer from './Components/Footer';
-import ResearchPage from './Components/ResearchPage';
+const ContactPage = lazy(() => import('./Components/ContactPage'));
+const ProjectsPage = lazy(() => import('./Components/ProjectsPage'));
+const ResearchPage = lazy(() => import('./Components/ResearchPage'));
+const RequestAuditPage = lazy(() => import('./Components/RequestAuditPage'));
+const ServicesPage = lazy(() => import('./Components/ServicesPage'));
+const FlowOfAuditPage = lazy(() => import('./Components/FlowOfAuditPage'));
+const PartnerWithUsPage = lazy(() => import('./Components/PartnerWithUsPage'));
+const ParticleBackground = lazy(() => import('./Components/ParticleBackground'));
 
-import RequestAuditPage from './Components/RequestAuditPage';
-import ServicesPage from './Components/ServicesPage';
-import FlowOfAuditPage from './Components/FlowOfAuditPage';
-import PartnerWithUsPage from './Components/PartnerWithUsPage';
-import ThreeBackground from './Components/ThreeBackground';
+function Background() {
+  const [ready, setReady] = useState(false);
+  useEffect(() => {
+    const motion = window.matchMedia('(prefers-reduced-motion: reduce)');
+    if (motion.matches) return;
+    if (typeof window.requestIdleCallback === 'function') {
+      const id = window.requestIdleCallback(() => setReady(true));
+      return () => window.cancelIdleCallback(id);
+    }
+    const id = window.setTimeout(() => setReady(true), 1000);
+    return () => window.clearTimeout(id);
+  }, []);
+  return ready ? <Suspense fallback={null}><ParticleBackground /></Suspense> : null;
+}
 
-// Wrapper to inject navigation into Header pending refactor
-const Layout = ({ children }: { children: React.ReactNode }) => {
-  const navigate = useNavigate();
-  const location = useLocation();
-
-  const { pathname, hash } = location;
+function ScrollToSection() {
+  const { pathname, hash } = useLocation();
   useEffect(() => {
     const section = hash && document.getElementById(hash.slice(1));
     if (section) {
@@ -28,6 +37,12 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
       window.scrollTo(0, 0);
     }
   }, [pathname, hash]);
+  return null;
+}
+
+// Wrapper to inject navigation into Header pending refactor
+const Layout = ({ children }: { children: React.ReactNode }) => {
+  const navigate = useNavigate();
 
   const handleNavigate = (page: 'home' | 'projects' | 'contact' | 'research' | 'audit' | 'services' | 'flowofaudit' | 'partnerwithus') => {
     if (page === 'home') navigate('/');
@@ -42,7 +57,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
 
   return (
     <div className="app-container min-vh-100">
-      <ThreeBackground />
+      <Background />
       <div className="bg-layer-extra"></div>
       <div className="bg-layer-nodes"></div>
       <Header onNavigate={handleNavigate} />
@@ -58,6 +73,7 @@ function App() {
   return (
     <Router>
       <Layout>
+        <Suspense fallback={<div className="route-loading" role="status">Loading page…</div>}>
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/projects" element={<ProjectsPage />} />
@@ -68,6 +84,8 @@ function App() {
           <Route path="/flowofaudit" element={<FlowOfAuditPage />} />
           <Route path="/partnerwithus" element={<PartnerWithUsPage />} />
         </Routes>
+        <ScrollToSection />
+        </Suspense>
       </Layout>
     </Router>
   );

@@ -34,7 +34,7 @@ const Header: React.FC<HeaderProps> = ({ onNavigate }) => {
             <nav className="nav-bar">
                 <div className="container nav-inner">
                     <div className="logo" onClick={() => handleNav('home')} style={{ cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '16px' }}>
-                        <img src="/Cyphrix.svg" alt="Cyphrix" style={{ height: '40px', width: 'auto' }} />
+                        <img src="/Cyphrix.svg" alt="Cyphrix" width="40" height="40" />
                         <span style={{ fontWeight: '900', fontSize: '20px', letterSpacing: '0.05em' }}>CYPHRIX</span>
                     </div>
                     

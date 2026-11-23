@@ -25,7 +25,33 @@ body {
   overflow-x: hidden;
   position: relative;
   cursor: auto;
+  --bs-body-color: var(--text);
+  --bs-body-bg: var(--bg);
   /* Hide default cursor */
+}
+
+.route-loading {
+  min-height: 70vh;
+  display: grid;
+  place-items: center;
+  color: var(--text-muted);
+}
+
+.homepage .hero > .container {
+  animation: hero-enter 400ms ease-out both;
+}
+
+@keyframes hero-enter {
+  from { transform: translateY(10px); }
+  to { transform: translateY(0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation: none !important;
+    transition: none !important;
+    scroll-behavior: auto !important;
+  }
 }
 
 /* Custom Cursor Styles */

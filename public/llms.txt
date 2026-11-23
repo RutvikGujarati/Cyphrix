@@ -1,0 +1,14 @@
+# Cyphrix Technologies
+
+> Blockchain and cybersecurity engineering, smart-contract audits, Web3 infrastructure, and penetration testing.
+
+## Services and work
+- [Services](https://www.cyphrixtech.com/services): Engineering and security services.
+- [Projects and security reports](https://www.cyphrixtech.com/projects#security-reports): Case studies and published assessment reports.
+- [Audit methodology](https://www.cyphrixtech.com/flowofaudit): Audit scope, review, remediation, and validation.
+- [Research](https://www.cyphrixtech.com/research): Blockchain security research.
+
+## Contact
+- [Team and inquiries](https://www.cyphrixtech.com/inquiry): Contact the team.
+- [Request an audit](https://www.cyphrixtech.com/request-audit): Submit an audit request.
+- [Partner alliance](https://www.cyphrixtech.com/partnerwithus): Partnership information.

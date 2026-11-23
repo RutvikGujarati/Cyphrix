@@ -1,5 +1,4 @@
 import React from "react";
-import { motion } from "framer-motion";
 import {
   Binary,
   Network,
@@ -10,25 +9,6 @@ import {
 } from "lucide-react";
 
 const HomePage: React.FC = () => {
-  const revealVariant = {
-    hidden: { opacity: 0, y: 10 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: { duration: 0.4, ease: "easeOut" },
-    },
-  };
-
-  const containerVariant = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.05,
-      },
-    },
-  };
-
   return (
     <div className="homepage">
       {/* HERO */}
@@ -41,10 +21,8 @@ const HomePage: React.FC = () => {
           overflow: "hidden",
         }}
       >
-        <motion.div
+        <div
           className="container"
-          animate="visible"
-          variants={revealVariant}
         >
           <span className="section-label">
             Enterprise Smart Contract Security
@@ -87,7 +65,7 @@ const HomePage: React.FC = () => {
             </button>
           </div>
 
-          <motion.div
+          <div
             style={{
               display: "grid",
               gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))",
@@ -96,13 +74,9 @@ const HomePage: React.FC = () => {
               borderTop: "1px solid var(--border)",
               paddingTop: "60px",
             }}
-            animate="visible"
-            variants={containerVariant}
           >
-            <motion.div
+            <div
               className="stat"
-              animate="visible"
-              variants={revealVariant}
             >
               <div
                 style={{
@@ -123,11 +97,9 @@ const HomePage: React.FC = () => {
               >
                 Assets Protected
               </div>
-            </motion.div>
-            <motion.div
+            </div>
+            <div
               className="stat"
-              animate="visible"
-              variants={revealVariant}
             >
               <div
                 style={{
@@ -148,11 +120,9 @@ const HomePage: React.FC = () => {
               >
                 Protocols Audited
               </div>
-            </motion.div>
-            <motion.div
+            </div>
+            <div
               className="stat"
-              animate="visible"
-              variants={revealVariant}
             >
               <div
                 style={{ fontSize: "40px", fontWeight: "800", color: "#fff" }}
@@ -169,11 +139,9 @@ const HomePage: React.FC = () => {
               >
                 Post-Audit Exploits
               </div>
-            </motion.div>
-            <motion.div
+            </div>
+            <div
               className="stat"
-              animate="visible"
-              variants={revealVariant}
             >
               <div
                 style={{
@@ -194,9 +162,9 @@ const HomePage: React.FC = () => {
               >
                 Response Time
               </div>
-            </motion.div>
-          </motion.div>
-        </motion.div>
+            </div>
+          </div>
+        </div>
       </section>
 
       {/* ADVANCED INTEGRITY (RESTORED DETAILS) */}
@@ -209,22 +177,18 @@ const HomePage: React.FC = () => {
         }}
       >
         <div className="container">
-          <motion.div
+          <div
             style={{ textAlign: "center", marginBottom: "80px" }}
-            animate="visible"
-            variants={revealVariant}
           >
             <span className="section-label">Institutional Defense</span>
             <h2>
               Advanced <span className="text-gradient">Protocol Integrity</span>
             </h2>
-          </motion.div>
+          </div>
 
           <div className="services-grid">
-            <motion.div
+            <div
               className="service-card"
-              animate="visible"
-              variants={revealVariant}
             >
               <div className="s-icon">
                 <Binary />
@@ -239,7 +203,7 @@ const HomePage: React.FC = () => {
                   display: "flex",
                   gap: "16px",
                   marginTop: "auto",
-                  opacity: 0.6,
+                  opacity: 1,
                   fontSize: "11px",
                   fontWeight: "800",
                   letterSpacing: "0.1em",
@@ -252,12 +216,10 @@ const HomePage: React.FC = () => {
                   [ GAS OPTIMIZATION ]
                 </span>
               </div>
-            </motion.div>
+            </div>
 
-            <motion.div
+            <div
               className="service-card"
-              animate="visible"
-              variants={revealVariant}
             >
               <div className="s-icon">
                 <Lock />
@@ -272,7 +234,7 @@ const HomePage: React.FC = () => {
                   display: "flex",
                   gap: "16px",
                   marginTop: "auto",
-                  opacity: 0.6,
+                  opacity: 1,
                   fontSize: "11px",
                   fontWeight: "800",
                   letterSpacing: "0.1em",
@@ -285,12 +247,10 @@ const HomePage: React.FC = () => {
                   [ BFT ANALYSIS ]
                 </span>
               </div>
-            </motion.div>
+            </div>
 
-            <motion.div
+            <div
               className="service-card"
-              animate="visible"
-              variants={revealVariant}
             >
               <div className="s-icon">
                 <Activity />
@@ -306,7 +266,7 @@ const HomePage: React.FC = () => {
                   flexWrap: "wrap",
                   gap: "12px",
                   marginTop: "auto",
-                  opacity: 0.6,
+                  opacity: 1,
                   fontSize: "10px",
                   fontWeight: "800",
                   letterSpacing: "0.05em",
@@ -318,7 +278,7 @@ const HomePage: React.FC = () => {
                 <span>•</span>
                 <span>GOVERNANCE</span>
               </div>
-            </motion.div>
+            </div>
           </div>
         </div>
       </section>
@@ -326,21 +286,17 @@ const HomePage: React.FC = () => {
       {/* SERVICES */}
       <section style={{ padding: "120px 0" }}>
         <div className="container">
-          <motion.div
+          <div
             style={{ textAlign: "center", marginBottom: "80px" }}
-            animate="visible"
-            variants={revealVariant}
           >
             <span className="section-label">Capabilities</span>
             <h2>
               Engineered <span className="text-gradient">Resilience</span>
             </h2>
-          </motion.div>
+          </div>
 
-          <motion.div
+          <div
             className="services-grid"
-            animate="visible"
-            variants={containerVariant}
           >
             {[
               {
@@ -368,11 +324,9 @@ const HomePage: React.FC = () => {
                 tags: ["zkSNARKs", "Circom"],
               },
             ].map((s, i) => (
-              <motion.div
+              <div
                 className="service-card"
                 key={i}
-                animate="visible"
-                variants={revealVariant}
               >
                 <div className="s-icon">{s.icon}</div>
                 <h3>{s.title}</h3>
@@ -384,18 +338,16 @@ const HomePage: React.FC = () => {
                     </span>
                   ))}
                 </div>
-              </motion.div>
+              </div>
             ))}
-          </motion.div>
+          </div>
         </div>
       </section>
 
       {/* CTA */}
-      <motion.section
+      <section
         className="cta-section"
         style={{ textAlign: "center" }}
-        animate="visible"
-        variants={revealVariant}
       >
         <div className="container">
           <span className="section-label">Get Started</span>
@@ -421,7 +373,7 @@ const HomePage: React.FC = () => {
             </button>
           </div>
         </div>
-      </motion.section>
+      </section>
     </div>
   );
 };

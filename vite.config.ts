@@ -6,6 +6,9 @@ export default defineConfig(({ mode }) => {
   const apiTarget = env.VITE_API_BASE_URL?.trim() || 'http://localhost:8080';
   return {
     plugins: [react()],
+    build: {
+      sourcemap: true,
+    },
     server: {
       proxy: {
         '/api': { target: apiTarget, changeOrigin: true },

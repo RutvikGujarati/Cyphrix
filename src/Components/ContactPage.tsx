@@ -276,7 +276,7 @@ const ContactPage = () => {
                                                 background: 'var(--bg)', border: `2px solid ${member.accent}33`,
                                                 padding: '6px', boxShadow: `0 10px 30px -10px ${member.accent}66`
                                             }}>
-                                                <img src={`https://api.dicebear.com/9.x/identicon/svg?seed=${encodeURIComponent(member.seed)}`} alt="" style={{ width: '100%', height: '100%' }} />
+                                                <img src={`https://api.dicebear.com/9.x/identicon/svg?seed=${encodeURIComponent(member.seed)}`} alt="" width="84" height="84" loading="lazy" decoding="async" style={{ width: '100%', height: '100%' }} />
                                             </div>
                                         </div>
                                       
